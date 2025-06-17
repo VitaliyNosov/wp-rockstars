@@ -1136,7 +1136,8 @@ get_header(); ?>
   <!-- ====== Pricing Section End -->
 
   <!-- ====== Blog Section Start -->
-  <section id="blog" class="bg-primary bg-opacity-5 pt-[120px] pb-20">
+
+  <!-- <section id="blog" class="bg-primary bg-opacity-5 pt-[120px] pb-20">
     <div class="container">
       <div class="flex flex-wrap mx-[-16px]">
         <div class="w-full px-4">
@@ -1286,7 +1287,135 @@ get_header(); ?>
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
+
+  <?php
+// Сначала пытаемся получить посты из категории 'front-page-three-last-posts'
+$args_category = array(
+    'post_type' => 'post',
+    'posts_per_page' => 3,
+    'post_status' => 'publish',
+    'category_name' => 'lasts-posts',
+    'orderby' => 'date',
+    'order' => 'DESC',
+    'no_found_rows' => true,
+    'update_post_meta_cache' => false,
+    'update_post_term_cache' => false
+);
+
+$category_posts = new WP_Query($args_category);
+
+// Если в категории нет постов, получаем последние 3 поста
+if (!$category_posts->have_posts()) {
+    wp_reset_postdata(); // Сбрасываем данные предыдущего запроса
+    
+    $args_latest = array(
+        'post_type' => 'post',
+        'posts_per_page' => 3,
+        'post_status' => 'publish',
+        'orderby' => 'date',
+        'order' => 'DESC',
+        'no_found_rows' => true,
+        'update_post_meta_cache' => false,
+        'update_post_term_cache' => false
+    );
+    $posts_query = new WP_Query($args_latest);
+} else {
+    $posts_query = $category_posts;
+}
+
+if ($posts_query->have_posts()) : ?>
+
+<section id="blog" class="bg-primary bg-opacity-5 pt-[120px] pb-20">
+    <div class="container">
+        <div class="flex flex-wrap mx-[-16px]">
+            <div class="w-full px-4">
+                <div class="mx-auto max-w-[570px] text-center mb-[100px] wow fadeInUp" data-wow-delay=".1s">
+                    <h2 class="text-black dark:text-white font-bold text-3xl sm:text-4xl md:text-[45px] mb-4">
+                        <?php _e('Our latest blogs', 'textdomain'); ?>
+                    </h2>
+                    <p class="text-body-color text-base md:text-lg leading-relaxed md:leading-relaxed">
+                        <?php _e('Check out our latest articles and useful tips', 'textdomain'); ?>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap mx-[-16px] justify-center">
+            <?php 
+            $delay = 0.1;
+            $post_count = 0; // Счетчик постов
+            while ($posts_query->have_posts() && $post_count < 3) : 
+                $posts_query->the_post();
+                $post_count++; // Увеличиваем счетчик
+                $categories = get_the_category();
+                $first_category = !empty($categories) ? $categories[0]->name : 'Блог';
+            ?>
+            <div class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 px-4">
+                <div class="relative bg-white dark:bg-dark shadow-one rounded-md overflow-hidden mb-10 wow fadeInUp"
+                    data-wow-delay="<?php echo $delay; ?>s">
+                    <a href="<?php the_permalink(); ?>" class="w-full block relative">
+                        <span class="absolute top-6 right-6 bg-primary rounded-full inline-flex items-center justify-center py-2 px-4 font-semibold text-sm text-white">
+                            <?php echo esc_html($first_category); ?>
+                        </span>
+                        <?php if (has_post_thumbnail()) : ?>
+                            <?php the_post_thumbnail('medium', array('class' => 'w-full', 'alt' => get_the_title())); ?>
+                        <?php else : ?>
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/default-blog.jpg" alt="<?php the_title(); ?>" class="w-full" />
+                        <?php endif; ?>
+                    </a>
+                    <div class="p-6 sm:p-8 md:py-8 md:px-6 lg:p-8 xl:py-8 xl:px-5 2xl:p-8">
+                        <h3>
+                            <a href="<?php the_permalink(); ?>"
+                                class="font-bold text-black dark:text-white text-xl sm:text-2xl block mb-4 hover:text-primary dark:hover:text-primary">
+                                <?php the_title(); ?>
+                            </a>
+                        </h3>
+                        <p class="text-base text-body-color font-medium pb-6 mb-6 border-b border-body-color border-opacity-10 dark:border-white dark:border-opacity-10">
+                            <?php echo wp_trim_words(get_the_excerpt(), 20, '...'); ?>
+                        </p>
+                        <div class="flex items-center">
+                            <div class="flex items-center pr-5 mr-5 xl:pr-3 2xl:pr-5 xl:mr-3 2xl:mr-5 border-r border-body-color border-opacity-10 dark:border-white dark:border-opacity-10">
+                                <div class="max-w-[40px] w-full h-[40px] rounded-full overflow-hidden mr-4">
+                                    <?php echo get_avatar(get_the_author_meta('ID'), 40, '', get_the_author(), array('class' => 'w-full')); ?>
+                                </div>
+                                <div class="w-full">
+                                    <h4 class="text-sm font-medium text-dark dark:text-white mb-1">
+                                        <?php _e('Автор:', 'textdomain'); ?>
+                                        <a href="<?php echo get_author_posts_url(get_the_author_meta('ID')); ?>"
+                                            class="text-dark dark:text-white hover:text-primary dark:hover:text-primary">
+                                            <?php the_author(); ?>
+                                        </a>
+                                    </h4>
+                                    <p class="text-xs text-body-color">
+                                        <?php 
+                                        $author_description = get_the_author_meta('description');
+                                        echo !empty($author_description) ? esc_html($author_description) : __('Автор блогу', 'textdomain');
+                                        ?>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="inline-block">
+                                <h4 class="text-sm font-medium text-dark dark:text-white mb-1"><?php _e('Дата', 'textdomain'); ?></h4>
+                                <p class="text-xs text-body-color"><?php echo get_the_date('j M, Y'); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php 
+            $delay += 0.05;
+            endwhile; 
+            ?>
+        </div>
+    </div>
+</section>
+
+<?php 
+endif;
+wp_reset_postdata();
+?>
+
   <!-- ====== Blog Section End -->
 
   <!-- ====== Contact Section Start -->
