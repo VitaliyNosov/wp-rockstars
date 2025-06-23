@@ -164,3 +164,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updatePosition();
 });
+
+
+// Перехватываем стандартный alert и заменяем его на SweetAlert2
+
+window.alert = function(message) {
+  Swal.fire({
+    toast: true,
+    position: 'bottom-start',
+    icon: false,
+    title: message,
+    showConfirmButton: false,
+    timer: 3000,
+    customClass: {
+      popup: 'custom-toast'
+    }
+  });
+};
+
