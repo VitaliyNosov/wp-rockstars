@@ -159,3 +159,15 @@ body {
       margin: 20px;
   }
   }
+
+/* custom alert */
+
+.swal2-popup.custom-toast {
+  background-color: #000;
+  border: 1px solid #2E3038;
+  color: #FFFFEF;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  box-shadow: none;
+}

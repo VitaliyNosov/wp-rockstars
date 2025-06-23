@@ -1137,158 +1137,6 @@ get_header(); ?>
 
   <!-- ====== Blog Section Start -->
 
-  <!-- <section id="blog" class="bg-primary bg-opacity-5 pt-[120px] pb-20">
-    <div class="container">
-      <div class="flex flex-wrap mx-[-16px]">
-        <div class="w-full px-4">
-          <div class="mx-auto max-w-[570px] text-center mb-[100px] wow fadeInUp" data-wow-delay=".1s">
-            <h2 class="text-black dark:text-white font-bold text-3xl sm:text-4xl md:text-[45px] mb-4">Our Latest Blogs
-            </h2>
-            <p class="text-body-color text-base md:text-lg leading-relaxed md:leading-relaxed">
-              There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration
-              in some form.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex flex-wrap mx-[-16px] justify-center">
-        <div class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 px-4">
-          <div class="relative bg-white dark:bg-dark shadow-one rounded-md overflow-hidden mb-10 wow fadeInUp"
-            data-wow-delay=".1s">
-            <a href="javascript:void(0)" class="w-full block relative">
-              <span
-                class="absolute top-6 right-6 bg-primary rounded-full inline-flex items-center justify-center py-2 px-4 font-semibold text-sm text-white">
-                Computer
-              </span>
-              <img src="http://localhost:8081/wp-content/uploads/2025/06/blog-02.jpg" alt="image" class="w-full" />
-            </a>
-            <div class="p-6 sm:p-8 md:py-8 md:px-6 lg:p-8 xl:py-8 xl:px-5 2xl:p-8">
-              <h3>
-                <a href="javascript:void(0)"
-                  class="font-bold text-black dark:text-white text-xl sm:text-2xl block mb-4 hover:text-primary dark:hover:text-primary">
-                  Best UI components for modern websites
-                </a>
-              </h3>
-              <p
-                class="text-base text-body-color font-medium pb-6 mb-6 border-b border-body-color border-opacity-10 dark:border-white dark:border-opacity-10">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sit amet dictum neque, laoreet dolor.
-              </p>
-              <div class="flex items-center">
-                <div
-                  class="flex items-center pr-5 mr-5 xl:pr-3 2xl:pr-5 xl:mr-3 2xl:mr-5 border-r border-body-color border-opacity-10 dark:border-white dark:border-opacity-10">
-                  <div class="max-w-[40px] w-full h-[40px] rounded-full overflow-hidden mr-4">
-                    <img src="http://localhost:8081/wp-content/uploads/2025/06/author-01.png" alt="author" class="w-full" />
-                  </div>
-                  <div class="w-full">
-                    <h4 class="text-sm font-medium text-dark dark:text-white mb-1">
-                      By
-                      <a href="javascript:void(0)"
-                        class="text-dark dark:text-white hover:text-primary dark:hover:text-primary"> Samuyl Joshi </a>
-                    </h4>
-                    <p class="text-xs text-body-color">Graphic Designer</p>
-                  </div>
-                </div>
-                <div class="inline-block">
-                  <h4 class="text-sm font-medium text-dark dark:text-white mb-1">Date</h4>
-                  <p class="text-xs text-body-color">15 Dec, 2023</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 px-4">
-          <div class="relative bg-white dark:bg-dark shadow-one rounded-md overflow-hidden mb-10 wow fadeInUp"
-            data-wow-delay=".15s">
-            <a href="javascript:void(0)" class="w-full block relative">
-              <span
-                class="absolute top-6 right-6 bg-primary rounded-full inline-flex items-center justify-center py-2 px-4 font-semibold text-sm text-white">
-                Design
-              </span>
-              <img src="http://localhost:8081/wp-content/uploads/2025/06/blog-01.jpg" alt="image" class="w-full" />
-            </a>
-            <div class="p-6 sm:p-8 md:py-8 md:px-6 lg:p-8 xl:py-8 xl:px-5 2xl:p-8">
-              <h3>
-                <a href="javascript:void(0)"
-                  class="font-bold text-black dark:text-white text-xl sm:text-2xl block mb-4 hover:text-primary dark:hover:text-primary">
-                  9 simple ways to improve your design skills
-                </a>
-              </h3>
-              <p
-                class="text-base text-body-color font-medium pb-6 mb-6 border-b border-body-color border-opacity-10 dark:border-white dark:border-opacity-10">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sit amet dictum neque, laoreet dolor.
-              </p>
-              <div class="flex items-center">
-                <div
-                  class="flex items-center pr-5 mr-5 xl:pr-3 2xl:pr-5 xl:mr-3 2xl:mr-5 border-r border-body-color border-opacity-10 dark:border-white dark:border-opacity-10">
-                  <div class="max-w-[40px] w-full h-[40px] rounded-full overflow-hidden mr-4">
-                    <img src="http://localhost:8081/wp-content/uploads/2025/06/author-02.png" alt="author" class="w-full" />
-                  </div>
-                  <div class="w-full">
-                    <h4 class="text-sm font-medium text-dark dark:text-white mb-1">
-                      By
-                      <a href="javascript:void(0)"
-                        class="text-dark dark:text-white hover:text-primary dark:hover:text-primary"> Musharof Chy </a>
-                    </h4>
-                    <p class="text-xs text-body-color">Content Writer</p>
-                  </div>
-                </div>
-                <div class="inline-block">
-                  <h4 class="text-sm font-medium text-dark dark:text-white mb-1">Date</h4>
-                  <p class="text-xs text-body-color">15 Dec, 2023</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 px-4">
-          <div class="relative bg-white dark:bg-dark shadow-one rounded-md overflow-hidden mb-10 wow fadeInUp"
-            data-wow-delay=".2s">
-            <a href="javascript:void(0)" class="w-full block relative">
-              <span
-                class="absolute top-6 right-6 bg-primary rounded-full inline-flex items-center justify-center py-2 px-4 font-semibold text-sm text-white">
-                Computer
-              </span>
-              <img src="http://localhost:8081/wp-content/uploads/2025/06/blog-03.jpg" alt="image" class="w-full" />
-            </a>
-            <div class="p-6 sm:p-8 md:py-8 md:px-6 lg:p-8 xl:py-8 xl:px-5 2xl:p-8">
-              <h3>
-                <a href="javascript:void(0)"
-                  class="font-bold text-black dark:text-white text-xl sm:text-2xl block mb-4 hover:text-primary dark:hover:text-primary">
-                  Tips to quickly improve your coding speed.
-                </a>
-              </h3>
-              <p
-                class="text-base text-body-color font-medium pb-6 mb-6 border-b border-body-color border-opacity-10 dark:border-white dark:border-opacity-10">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sit amet dictum neque, laoreet dolor.
-              </p>
-              <div class="flex items-center">
-                <div
-                  class="flex items-center pr-5 mr-5 xl:pr-3 2xl:pr-5 xl:mr-3 2xl:mr-5 border-r border-body-color border-opacity-10 dark:border-white dark:border-opacity-10">
-                  <div class="max-w-[40px] w-full h-[40px] rounded-full overflow-hidden mr-4">
-                    <img src="http://localhost:8081/wp-content/uploads/2025/06/auth-03.png" alt="author" class="w-full" />
-                  </div>
-                  <div class="w-full">
-                    <h4 class="text-sm font-medium text-dark dark:text-white mb-1">
-                      By
-                      <a href="javascript:void(0)"
-                        class="text-dark dark:text-white hover:text-primary dark:hover:text-primary"> Lethium Deo </a>
-                    </h4>
-                    <p class="text-xs text-body-color">Graphic Designer</p>
-                  </div>
-                </div>
-                <div class="inline-block">
-                  <h4 class="text-sm font-medium text-dark dark:text-white mb-1">Date</h4>
-                  <p class="text-xs text-body-color">15 Dec, 2023</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section> -->
-
   <?php
 // Сначала пытаемся получить посты из категории 'front-page-three-last-posts'
 $args_category = array(
@@ -1431,40 +1279,44 @@ wp_reset_postdata();
               Help? Open a Ticket</h2>
             <p class="text-body-color text-base font-medium mb-12">Our support team will get back to you ASAP via email.
             </p>
-            <form>
-              <div class="flex flex-wrap mx-[-16px]">
-                <div class="w-full md:w-1/2 px-4">
-                  <div class="mb-8">
-                    <label for="name" class="block text-sm font-medium text-dark dark:text-white mb-3"> Your Name
-                    </label>
-                    <input type="text" placeholder="Enter your name"
-                      class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary" />
-                  </div>
-                </div>
-                <div class="w-full md:w-1/2 px-4">
-                  <div class="mb-8">
-                    <label for="email" class="block text-sm font-medium text-dark dark:text-white mb-3"> Your Email
-                    </label>
-                    <input type="email" placeholder="Enter your email"
-                      class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary" />
-                  </div>
-                </div>
-                <div class="w-full px-4">
-                  <div class="mb-8">
-                    <label for="message" class="block text-sm font-medium text-dark dark:text-white mb-3"> Your Message
-                    </label>
-                    <textarea name="message" rows="5" placeholder="Enter your Message"
-                      class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary resize-none"></textarea>
-                  </div>
-                </div>
-                <div class="w-full px-4">
-                  <a href="javascript:void(0)"
-                    class="text-base font-medium text-white bg-primary py-4 px-9 hover:bg-opacity-80 hover:shadow-signUp rounded-md transition duration-300 ease-in-out">
-                    Submit Ticket
-                  </a>
-                </div>
-              </div>
-            </form>
+
+            <!-- form ticket admin  -->
+
+            <form id="wp-custom-contact-form" class="wp-custom-form">
+  <div class="flex flex-wrap mx-[-16px]">
+    <div class="w-full md:w-1/2 px-4">
+      <div class="mb-8">
+        <label for="wp-custom-name" class="block text-sm font-medium text-dark dark:text-white mb-3"> Your Name
+        </label>
+        <input type="text" id="wp-custom-name" name="wp-custom-name" placeholder="Enter your name"
+          class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary" />
+      </div>
+    </div>
+    <div class="w-full md:w-1/2 px-4">
+      <div class="mb-8">
+        <label for="wp-custom-email" class="block text-sm font-medium text-dark dark:text-white mb-3"> Your Email
+        </label>
+        <input type="email" id="wp-custom-email" name="wp-custom-email" placeholder="Enter your email"
+          class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary" />
+      </div>
+    </div>
+    <div class="w-full px-4">
+      <div class="mb-8">
+        <label for="wp-custom-message" class="block text-sm font-medium text-dark dark:text-white mb-3"> Your Message
+        </label>
+        <textarea id="wp-custom-message" name="wp-custom-message" rows="5" placeholder="Enter your Message"
+          class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary resize-none"></textarea>
+      </div>
+    </div>
+    <div class="w-full px-4">
+      <button type="submit" id="wp-custom-submit" name="wp-custom-submit"
+        class="text-base font-medium text-white bg-primary py-4 px-9 hover:bg-opacity-80 hover:shadow-signUp rounded-md transition duration-300 ease-in-out">
+        Submit Ticket
+      </button>
+    </div>
+  </div>
+</form>
+
           </div>
         </div>
         <div class="w-full lg:w-4/12 px-4">
