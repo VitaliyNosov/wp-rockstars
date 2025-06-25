@@ -165,7 +165,8 @@ body {
 .swal2-popup.custom-toast {
   background-color: #000;
   border: 1px solid #2E3038;
-  color: #FFFFEF;
+  /* color: #FFFFEF; */
+  color: #971408;
   font-size: 14px;
   padding: 8px 16px;
   border-radius: 4px;
