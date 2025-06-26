@@ -625,185 +625,7 @@ function wp_custom_debug_info() {
 
 
 
-// кака быка
-
-
-// add_filter('the_content', 'add_speech_player');
-
-// function add_speech_player($content) {
-//     if (!is_singular('post')) return $content;
-
-//     $post_text = strip_tags($content); // очищаем от HTML
-//     $post_text = esc_js($post_text);   // безопасно для вставки в JS
-
-//     $script = <<<HTML
-// <div style="margin-bottom:20px;">
-//   <button onclick="speakArticle()" style="padding:8px 16px; background:#111; color:white; border:none; cursor:pointer;">🔊 Озвучить статью</button>
-// </div>
-// <script>
-//   function speakArticle() {
-//     const text = "$post_text";
-//     const utterance = new SpeechSynthesisUtterance(text);
-//     utterance.lang = "ru-RU"; // можно изменить на "uk-UA" или "en-US"
-//     utterance.rate = 1; // скорость речи
-//     speechSynthesis.speak(utterance);
-//   }
-// </script>
-// HTML;
-
-//     return $script . $content;
-// }
-
-
-// 2
-
-
-// add_filter('the_content', 'add_tts_wave_blocks_progress_fixed');
-
-// function add_tts_wave_blocks_progress_fixed($content) {
-//     if (!is_singular('post')) return $content;
-
-//     $post_text = wp_strip_all_tags($content);
-//     $post_text = esc_js($post_text);
-//     $tts_lang = 'ru-RU';
-
-//     $script = <<<HTML
-// <style>
-//   .wave-progress-wrapper {
-//     width: 100%;
-//     height: 40px;
-//     display: flex;
-//     gap: 1px;
-//     overflow: hidden;
-//     user-select: none;
-//   }
-//   .wave-block {
-//     width: 2px;
-//     background: #3b82f6;
-//     border-radius: 2px;
-//     transform-origin: bottom center;
-//     animation: wavePulse 1.2s ease-in-out infinite;
-//     height: 20%;
-//   }
-//   .wave-block:nth-child(odd) {
-//     animation-delay: 0s;
-//   }
-//   .wave-block:nth-child(even) {
-//     animation-delay: 0.6s;
-//   }
-
-//   @keyframes wavePulse {
-//     0%, 100% { transform: scaleY(1); }
-//     50% { transform: scaleY(2.5); }
-//   }
-// </style>
-
-// <div style="width:100%; max-width:100%; margin-bottom:24px; padding:16px; background:#111; color:#fff; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3);">
-//   <div style="display:flex; align-items:center; justify-between; gap:12px; flex-wrap:wrap;">
-//     <div style="font-size:1.125rem; font-weight:600; display:flex; align-items:center; gap:8px; flex-grow:1;">
-//       <span>🔊</span><span>Озвучить статью</span>
-//     </div>
-//     <button id="tts-play" aria-live="polite" aria-pressed="false" style="background:#2563eb; color:#fff; border:none; border-radius:6px; padding:8px 16px; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:8px; white-space: nowrap;">
-//       ▶️ Воспроизвести
-//     </button>
-//   </div>
-//   <div class="wave-progress-wrapper" id="wave-progress-wrapper" aria-label="Прогресс озвучки" aria-live="polite" aria-atomic="true"></div>
-// </div>
-
-// <script>
-//   (function(){
-//     const playBtn = document.getElementById('tts-play');
-//     const waveWrapper = document.getElementById('wave-progress-wrapper');
-//     const ttsLang = "$tts_lang";
-
-//     // Создаём блоки при загрузке и ресайзе
-//     function createBlocks() {
-//       waveWrapper.innerHTML = '';
-//       const wrapperWidth = waveWrapper.clientWidth || 600;
-//       const blockWidth = 2;
-//       const blockGap = 1;
-//       const maxBlocks = Math.floor(wrapperWidth / (blockWidth + blockGap));
-//       for(let i = 0; i < maxBlocks; i++) {
-//         const block = document.createElement('div');
-//         block.className = 'wave-block';
-//         block.style.height = '20%';
-//         block.style.visibility = 'hidden';
-//         waveWrapper.appendChild(block);
-//       }
-//       return maxBlocks;
-//     }
-
-//     let maxBlocks = createBlocks();
-
-//     window.addEventListener('resize', () => {
-//       maxBlocks = createBlocks();
-//     });
-
-//     let utterance = null;
-//     let timer = null;
-
-//     function setPlayingState(isPlaying) {
-//       playBtn.setAttribute('aria-pressed', isPlaying);
-//       if (isPlaying) {
-//         playBtn.textContent = '⏸️ Стоп';
-//       } else {
-//         playBtn.textContent = '▶️ Воспроизвести';
-//         // скрываем все блоки при остановке
-//         for (let b of waveWrapper.children) {
-//           b.style.visibility = 'hidden';
-//         }
-//       }
-//     }
-
-//     playBtn.onclick = () => {
-//       if (speechSynthesis.speaking) {
-//         speechSynthesis.cancel();
-//         clearInterval(timer);
-//         setPlayingState(false);
-//         return;
-//       }
-
-//       const text = "$post_text";
-//       utterance = new SpeechSynthesisUtterance(text);
-//       utterance.lang = ttsLang;
-//       utterance.rate = 1;
-
-//       const avgReadingSpeed = 13; // символов в секунду
-//       const duration = (text.length / avgReadingSpeed) * 1000;
-
-//       let start = Date.now();
-//       setPlayingState(true);
-
-//       speechSynthesis.speak(utterance);
-
-//       timer = setInterval(() => {
-//         let elapsed = Date.now() - start;
-//         let progress = Math.min(elapsed / duration, 1);
-//         let visibleBlocksCount = Math.floor(progress * maxBlocks);
-
-//         for (let i = 0; i < maxBlocks; i++) {
-//           waveWrapper.children[i].style.visibility = i < visibleBlocksCount ? 'visible' : 'hidden';
-//         }
-
-//         if (progress >= 1) {
-//           clearInterval(timer);
-//           setPlayingState(false);
-//         }
-//       }, 100);
-
-//       utterance.onend = () => {
-//         clearInterval(timer);
-//         setPlayingState(false);
-//       }
-//     };
-//   })();
-// </script>
-// HTML;
-
-//     return $script . $content;
-// }
-
-
+// audio play posts 
 
 add_filter('the_content', 'add_tts_audio_wave_progress');
 
@@ -811,148 +633,328 @@ function add_tts_audio_wave_progress($content) {
     if (!is_singular('post')) return $content;
 
     $post_text = wp_strip_all_tags($content);
+    $post_text = preg_replace('/\s+/', ' ', trim($post_text)); // Нормализация пробелов
     $post_text = esc_js($post_text);
-    $tts_lang = 'ru-RU';
 
     $script = <<<HTML
 <style>
   .wave-progress-wrapper {
     width: 100%;
-    height: 40px;
+    height: 64px;
     display: flex;
     gap: 1px;
     overflow: hidden;
     user-select: none;
     align-items: flex-end;
+    background: transparent;
   }
   .wave-block {
     width: 2px;
     background: #3b82f6;
     border-radius: 2px;
     transform-origin: bottom center;
+    transition: height 0.1s ease-out;
+  }
+  .tts-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .tts-button {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  .tts-button:hover {
+    background: #1d4ed8;
+  }
+  .tts-button:disabled {
+    background: #6b7280;
+    cursor: not-allowed;
   }
 </style>
 
-<div style="width:100%; max-width:100%; margin-bottom:24px; padding:16px; background:#111; color:#fff; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3);">
+<div style="width:100%; max-width:100%; margin-bottom:24px; padding:16px; background:#000; border:1px solid #2E3038; color:#fff; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3);">
   <div style="display:flex; align-items:center; justify-between; gap:12px; flex-wrap:wrap;">
     <div style="font-size:1.125rem; font-weight:600; display:flex; align-items:center; gap:8px; flex-grow:1;">
-      <span>🔊</span><span>Озвучить статью</span>
+      <span>🔊</span><span>Voice the article</span>
     </div>
-    <button id="tts-play" aria-live="polite" aria-pressed="false" style="background:#2563eb; color:#fff; border:none; border-radius:6px; padding:8px 16px; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:8px; white-space: nowrap;">
-      ▶️ Воспроизвести
-    </button>
+    <div class="tts-controls">
+      <button id="tts-toggle" class="tts-button">▶️ Play</button>
+      <button id="tts-stop" class="tts-button" style="display:none;">⏹️ Stop</button>
+    </div>
   </div>
   <div class="wave-progress-wrapper" id="wave-progress-wrapper" aria-label="Прогресс озвучки" aria-live="polite" aria-atomic="true"></div>
 </div>
 
 <script>
-  (function(){
-    const playBtn = document.getElementById('tts-play');
-    const waveWrapper = document.getElementById('wave-progress-wrapper');
-    const ttsLang = "$tts_lang";
+(function(){
+  const toggleBtn = document.getElementById('tts-toggle');
+  const stopBtn = document.getElementById('tts-stop');
+  const waveWrapper = document.getElementById('wave-progress-wrapper');
 
-    const blockWidth = 2;
-    const blockGap = 1;
-    let maxBlocks = 0;
-    let blocks = [];
+  const blockWidth = 2;
+  const blockGap = 1;
+  let maxBlocks = 0;
+  let blocks = [];
+  let utterance = null;
+  let timer = null;
+  let startTime = 0;
+  let totalDuration = 0;
+  let pausedTime = 0;
+  let isPaused = false;
+  let isSpeaking = false;
+  let selectedVoice = null;
+  let textChunks = [];
+  let currentChunkIndex = 0;
+  let chunkStartTimes = [];
 
-    function createBlocks() {
-      waveWrapper.innerHTML = '';
-      const wrapperWidth = waveWrapper.clientWidth || 600;
-      maxBlocks = Math.floor(wrapperWidth / (blockWidth + blockGap));
-      blocks = [];
-      for(let i = 0; i < maxBlocks; i++) {
-        const block = document.createElement('div');
-        block.className = 'wave-block';
-        block.style.height = '10px';
-        block.style.visibility = 'hidden';
-        waveWrapper.appendChild(block);
-        blocks.push(block);
-      }
-    }
+  const text = "$post_text";
 
-    createBlocks();
-    window.addEventListener('resize', () => {
-      createBlocks();
-    });
-
-    let utterance = null;
-    let timer = null;
-    let startTime = 0;
-    let duration = 0;
-
-    // Функция для генерации "высоты" по волнообразной функции
-    // Используем синус с разной фазой для каждой полоски
-    function getWaveHeight(i, time) {
-      const baseHeight = 10; // минимальная высота
-      const amplitude = 30; // амплитуда колебаний
-      const speed = 0.005; // скорость анимации
-      return baseHeight + amplitude * Math.abs(Math.sin(time * speed + i));
-    }
-
-    function setPlayingState(isPlaying) {
-      playBtn.setAttribute('aria-pressed', isPlaying);
-      if (isPlaying) {
-        playBtn.textContent = '⏸️ Стоп';
+  // Разбиваем текст на части для лучшей работы с разными языками
+  function splitTextIntoChunks(text, maxLength = 300) {
+    const chunks = [];
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    
+    let currentChunk = '';
+    for (const sentence of sentences) {
+      if (currentChunk.length + sentence.length > maxLength && currentChunk.length > 0) {
+        chunks.push(currentChunk.trim());
+        currentChunk = sentence.trim();
       } else {
-        playBtn.textContent = '▶️ Воспроизвести';
-        blocks.forEach(block => block.style.visibility = 'hidden');
+        currentChunk += (currentChunk.length > 0 ? '. ' : '') + sentence.trim();
       }
     }
+    
+    if (currentChunk.length > 0) {
+      chunks.push(currentChunk.trim());
+    }
+    
+    return chunks.length > 0 ? chunks : [text];
+  }
 
-    playBtn.onclick = () => {
-      if (speechSynthesis.speaking) {
-        speechSynthesis.cancel();
-        clearInterval(timer);
-        setPlayingState(false);
-        return;
+  function createBlocks() {
+    waveWrapper.innerHTML = '';
+    const wrapperWidth = waveWrapper.clientWidth || 600;
+    maxBlocks = Math.floor(wrapperWidth / (blockWidth + blockGap));
+    blocks = [];
+    
+    for (let i = 0; i < maxBlocks; i++) {
+      const block = document.createElement('div');
+      block.className = 'wave-block';
+      block.style.height = Math.floor(Math.random() * 60 + 4) + 'px';
+      block.style.visibility = 'hidden';
+      waveWrapper.appendChild(block);
+      blocks.push(block);
+    }
+  }
+
+  function updateProgress() {
+    if (!isSpeaking) return;
+    
+    const now = Date.now();
+    const elapsed = (now - startTime) + pausedTime;
+    const progress = Math.min(elapsed / totalDuration, 1);
+    const visibleBlocks = Math.floor(progress * maxBlocks);
+    
+    for (let i = 0; i < maxBlocks; i++) {
+      blocks[i].style.visibility = i < visibleBlocks ? 'visible' : 'hidden';
+    }
+    
+    if (progress >= 1) {
+      stopSpeech();
+    }
+  }
+
+  function detectVoice() {
+    return new Promise((resolve) => {
+      const setVoice = () => {
+        const voices = speechSynthesis.getVoices();
+        if (voices.length === 0) return;
+        
+        // Определяем язык страницы
+        const pageLanguage = document.documentElement.lang || 
+                           navigator.language || 
+                           navigator.userLanguage || 
+                           'en-US';
+        
+        // Ищем голос для языка страницы
+        let voice = voices.find(v => v.lang === pageLanguage);
+        
+        // Если не найден точный, ищем по основному языку
+        if (!voice) {
+          const mainLang = pageLanguage.split('-')[0];
+          voice = voices.find(v => v.lang.startsWith(mainLang));
+        }
+        
+        // Если все еще не найден, берем первый доступный
+        if (!voice) {
+          voice = voices.find(v => v.default) || voices[0];
+        }
+        
+        selectedVoice = voice;
+        resolve();
+      };
+
+      if (speechSynthesis.getVoices().length > 0) {
+        setVoice();
+      } else {
+        speechSynthesis.onvoiceschanged = setVoice;
       }
+    });
+  }
 
-      const text = "$post_text";
-      utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = ttsLang;
-      utterance.rate = 1;
+  function calculateDuration(text) {
+    // Более точный расчет длительности для разных языков
+    const wordsPerMinute = selectedVoice && selectedVoice.lang.startsWith('ru') ? 180 : 200;
+    const words = text.split(/\s+/).length;
+    return (words / wordsPerMinute) * 60 * 1000; // в миллисекундах
+  }
 
-      const avgReadingSpeed = 13; // символов в секунду
-      duration = (text.length / avgReadingSpeed) * 1000;
+  function speakChunk(chunkIndex) {
+    if (chunkIndex >= textChunks.length) {
+      stopSpeech();
+      return;
+    }
 
-      startTime = Date.now();
-      setPlayingState(true);
+    currentChunkIndex = chunkIndex;
+    utterance = new SpeechSynthesisUtterance(textChunks[chunkIndex]);
+    
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+      utterance.lang = selectedVoice.lang;
+    }
+    
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
 
-      speechSynthesis.speak(utterance);
-
-      timer = setInterval(() => {
-        let elapsed = Date.now() - startTime;
-        let progress = Math.min(elapsed / duration, 1);
-        let visibleBlocksCount = Math.floor(progress * maxBlocks);
-
-        for (let i = 0; i < maxBlocks; i++) {
-          if(i < visibleBlocksCount){
-            blocks[i].style.visibility = 'visible';
-            // анимируем высоту волны
-            blocks[i].style.height = getWaveHeight(i, elapsed) + 'px';
-          } else {
-            blocks[i].style.visibility = 'hidden';
-          }
-        }
-
-        if(progress >= 1){
-          clearInterval(timer);
-          setPlayingState(false);
-        }
-      }, 50);
-
-      utterance.onend = () => {
-        clearInterval(timer);
-        setPlayingState(false);
+    utterance.onend = () => {
+      if (isSpeaking && currentChunkIndex < textChunks.length - 1) {
+        // Небольшая пауза между частями
+        setTimeout(() => speakChunk(currentChunkIndex + 1), 100);
+      } else {
+        stopSpeech();
       }
     };
-  })();
+
+    utterance.onerror = (event) => {
+      console.error('Speech synthesis error:', event);
+      stopSpeech();
+    };
+
+    speechSynthesis.speak(utterance);
+  }
+
+  function startSpeech() {
+    if (!selectedVoice) return;
+
+    textChunks = splitTextIntoChunks(text);
+    totalDuration = calculateDuration(text);
+    
+    if (!isPaused) {
+      startTime = Date.now();
+      pausedTime = 0;
+      currentChunkIndex = 0;
+    } else {
+      startTime = Date.now();
+      isPaused = false;
+    }
+
+    isSpeaking = true;
+    timer = setInterval(updateProgress, 100);
+    
+    speakChunk(currentChunkIndex);
+    
+    toggleBtn.textContent = '⏸️ Pause';
+    stopBtn.style.display = 'inline-block';
+  }
+
+  function pauseSpeech() {
+    if (speechSynthesis.speaking) {
+      speechSynthesis.pause();
+      clearInterval(timer);
+      pausedTime += Date.now() - startTime;
+      isPaused = true;
+      isSpeaking = false;
+      toggleBtn.textContent = '▶️ Continue';
+    }
+  }
+
+  function resumeSpeech() {
+    if (speechSynthesis.paused) {
+      speechSynthesis.resume();
+      startTime = Date.now();
+      isSpeaking = true;
+      timer = setInterval(updateProgress, 100);
+      toggleBtn.textContent = '⏸️ Pause';
+    }
+  }
+
+  function stopSpeech() {
+    speechSynthesis.cancel();
+    clearInterval(timer);
+    
+    isSpeaking = false;
+    isPaused = false;
+    pausedTime = 0;
+    currentChunkIndex = 0;
+    
+    // Скрываем все блоки прогресса
+    for (let i = 0; i < maxBlocks; i++) {
+      blocks[i].style.visibility = 'hidden';
+    }
+    
+    toggleBtn.textContent = '▶️ Play';
+    stopBtn.style.display = 'none';
+  }
+
+  // Обработчики событий
+  toggleBtn.onclick = () => {
+    if (!selectedVoice) {
+      detectVoice().then(() => {
+        if (selectedVoice) toggleBtn.onclick();
+      });
+      return;
+    }
+
+    if (isSpeaking) {
+      pauseSpeech();
+    } else if (isPaused) {
+      resumeSpeech();
+    } else {
+      startSpeech();
+    }
+  };
+
+  stopBtn.onclick = stopSpeech;
+
+  // Инициализация
+  createBlocks();
+  detectVoice();
+
+  // Пересоздаем блоки при изменении размера окна
+  window.addEventListener('resize', createBlocks);
+
+  // Останавливаем при уходе со страницы
+  window.addEventListener('beforeunload', stopSpeech);
+})();
 </script>
 HTML;
 
     return $script . $content;
 }
+
+
+
+
+
+
 
 
 
