@@ -37,22 +37,42 @@ function theme_setup() {
     ));
     
     // Add theme support for custom logo
+
     add_theme_support('custom-logo');
 }
 add_action('after_setup_theme', 'theme_setup');
 
+
+// Carbon libs
+
+use Carbon_Fields\Carbon_Fields;
+
+add_action( 'after_setup_theme', function() {
+    require_once __DIR__ . '/vendor/autoload.php'; // путь к autoload.php
+
+    Carbon_Fields::boot();
+
+    require_once get_template_directory() . '/inc/carbon-fields-init.php'; // путь подкорректируй под себя
+});
+
+
 // Enqueue styles and scripts
+
 function theme_enqueue_assets() {
+
     // Enqueue main stylesheet
+
     wp_enqueue_style('theme-style-tailwind', get_template_directory_uri() . '/common/css/style.css', [], '1.0');
     wp_enqueue_style('theme-style-mod-tailwind', get_template_directory_uri() . '/common/css/style-mod.css', [], '1.0');
 
  
     // Enqueue JavaScript files - in footer
+
     wp_enqueue_script('build-js', get_template_directory_uri() . '/common/js/bundle.js', array(), '1.0', true);
     wp_enqueue_script('custom-js', get_template_directory_uri() . '/common/js/custom.js', array(), '1.0', true);
 
     wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', [], null, true);
+
     // Аналогично для других библиотек
 
 
@@ -61,6 +81,7 @@ function theme_enqueue_assets() {
 add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
 
 // Register widget areas
+
 function theme_widgets_init() {
     register_sidebar([
         'name'          => __('Sidebar', 'your-theme-textdomain'),
@@ -111,6 +132,7 @@ add_filter('excerpt_length', 'custom_excerpt_length');
 // WordPress Ticket System - Debug Version for functions.php
 
 // 1. Register Custom Post Type 'Ticket'
+
 function wp_custom_register_ticket_post_type() {
     $args = array(
         'labels' => array(
@@ -143,6 +165,7 @@ function wp_custom_register_ticket_post_type() {
 add_action('init', 'wp_custom_register_ticket_post_type');
 
 // 2. Add custom columns to admin list
+
 function wp_custom_ticket_columns($columns) {
     $new_columns = array(
         'cb' => $columns['cb'],
@@ -157,6 +180,7 @@ function wp_custom_ticket_columns($columns) {
 add_filter('manage_ticket_posts_columns', 'wp_custom_ticket_columns');
 
 // 3. Fill custom columns with data
+
 function wp_custom_ticket_column_content($column, $post_id) {
     switch ($column) {
         case 'sender_name':
@@ -174,6 +198,7 @@ function wp_custom_ticket_column_content($column, $post_id) {
 add_action('manage_ticket_posts_custom_column', 'wp_custom_ticket_column_content', 10, 2);
 
 // 4. Add meta box to show ticket details in admin
+
 function wp_custom_ticket_meta_box() {
     add_meta_box(
         'wp-custom-ticket-details',
@@ -203,29 +228,34 @@ function wp_custom_ticket_meta_box_callback($post) {
 }
 
 // 5. AJAX handler for form submission
+
 function wp_custom_handle_ticket_submission() {
     // Debug logging
     error_log('WP Custom Ticket: AJAX handler called');
     
     // Check if nonce exists
+
     if (!isset($_POST['nonce'])) {
         error_log('WP Custom Ticket: No nonce provided');
         wp_send_json_error('No nonce provided');
     }
     
     // Verify nonce
+
     if (!wp_verify_nonce($_POST['nonce'], 'wp_custom_ticket_nonce')) {
         error_log('WP Custom Ticket: Nonce verification failed');
         wp_send_json_error('Security check failed');
     }
     
     // Check if required fields exist
+
     if (!isset($_POST['name']) || !isset($_POST['email']) || !isset($_POST['message'])) {
         error_log('WP Custom Ticket: Missing required fields');
         wp_send_json_error('Missing required fields');
     }
     
     // Sanitize input data
+
     $name = sanitize_text_field($_POST['name']);
     $email = sanitize_email($_POST['email']);
     $message = sanitize_textarea_field($_POST['message']);
@@ -233,6 +263,7 @@ function wp_custom_handle_ticket_submission() {
     error_log('WP Custom Ticket: Processing - Name: ' . $name . ', Email: ' . $email);
     
     // Validate data
+
     if (empty($name) || empty($email) || empty($message)) {
         error_log('WP Custom Ticket: Empty fields after sanitization');
         wp_send_json_error('All fields are required');
@@ -244,6 +275,7 @@ function wp_custom_handle_ticket_submission() {
     }
     
     // Create ticket post
+
     $post_data = array(
         'post_title' => 'Ticket from ' . $name,
         'post_content' => $message,
@@ -260,6 +292,7 @@ function wp_custom_handle_ticket_submission() {
     }
     
     // Add meta data
+
     update_post_meta($post_id, '_wp_custom_sender_name', $name);
     update_post_meta($post_id, '_wp_custom_sender_email', $email);
     update_post_meta($post_id, '_wp_custom_message', $message);
@@ -273,18 +306,23 @@ add_action('wp_ajax_wp_custom_submit_ticket', 'wp_custom_handle_ticket_submissio
 add_action('wp_ajax_nopriv_wp_custom_submit_ticket', 'wp_custom_handle_ticket_submission');
 
 // 6. Enqueue scripts and styles - SIMPLIFIED VERSION
+
 function wp_custom_enqueue_ticket_scripts() {
+
     // Only load on pages that have the form
+
     if (!is_admin()) {
         wp_enqueue_script('jquery');
         
         // Localize script for AJAX
+
         wp_localize_script('jquery', 'wp_custom_ajax', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('wp_custom_ticket_nonce')
         ));
         
         // Add inline script
+
         wp_add_inline_script('jquery', '
         jQuery(document).ready(function($) {
             console.log("WP Custom Ticket: jQuery loaded");
@@ -410,6 +448,7 @@ function wp_custom_enqueue_ticket_scripts() {
 add_action('wp_enqueue_scripts', 'wp_custom_enqueue_ticket_scripts');
 
 // 7. Admin page styling for tickets
+
 function wp_custom_ticket_admin_styles() {
     $screen = get_current_screen();
     if ($screen && ($screen->post_type === 'ticket' || $screen->id === 'edit-ticket')) {
@@ -496,6 +535,7 @@ function wp_custom_ticket_admin_styles() {
         }
         
         /* Ticket details meta box styling */
+
         #wp-custom-ticket-details .inside {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
@@ -527,6 +567,7 @@ function wp_custom_ticket_admin_styles() {
         }
         
         /* Page title styling */
+
         .wrap h1.wp-heading-inline {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
@@ -537,6 +578,7 @@ function wp_custom_ticket_admin_styles() {
         }
         
         /* Add new button styling */
+
         .page-title-action {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white !important;
@@ -555,6 +597,7 @@ function wp_custom_ticket_admin_styles() {
         }
         
         /* Search box styling */
+
         .search-box input[type="search"] {
             background: #2d2d2d;
             border: 1px solid #404040;
@@ -575,6 +618,7 @@ function wp_custom_ticket_admin_styles() {
         }
         
         /* Pagination styling */
+
         .tablenav .tablenav-pages a {
             background: #2d2d2d;
             color: #64b5f6;
@@ -588,6 +632,7 @@ function wp_custom_ticket_admin_styles() {
         }
         
         /* Status indicators */
+
         .ticket-status {
             display: inline-block;
             padding: 4px 8px;
@@ -717,6 +762,7 @@ function add_tts_audio_wave_progress($content) {
   const text = "$post_text";
 
   // Разбиваем текст на части для лучшей работы с разными языками
+
   function splitTextIntoChunks(text, maxLength = 300) {
     const chunks = [];
     const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
@@ -778,21 +824,25 @@ function add_tts_audio_wave_progress($content) {
         if (voices.length === 0) return;
         
         // Определяем язык страницы
+
         const pageLanguage = document.documentElement.lang || 
                            navigator.language || 
                            navigator.userLanguage || 
                            'en-US';
         
         // Ищем голос для языка страницы
+
         let voice = voices.find(v => v.lang === pageLanguage);
         
         // Если не найден точный, ищем по основному языку
+
         if (!voice) {
           const mainLang = pageLanguage.split('-')[0];
           voice = voices.find(v => v.lang.startsWith(mainLang));
         }
         
         // Если все еще не найден, берем первый доступный
+
         if (!voice) {
           voice = voices.find(v => v.default) || voices[0];
         }
@@ -810,7 +860,9 @@ function add_tts_audio_wave_progress($content) {
   }
 
   function calculateDuration(text) {
+
     // Более точный расчет длительности для разных языков
+
     const wordsPerMinute = selectedVoice && selectedVoice.lang.startsWith('ru') ? 180 : 200;
     const words = text.split(/\s+/).length;
     return (words / wordsPerMinute) * 60 * 1000; // в миллисекундах
@@ -836,7 +888,9 @@ function add_tts_audio_wave_progress($content) {
 
     utterance.onend = () => {
       if (isSpeaking && currentChunkIndex < textChunks.length - 1) {
+
         // Небольшая пауза между частями
+
         setTimeout(() => speakChunk(currentChunkIndex + 1), 100);
       } else {
         stopSpeech();
@@ -906,6 +960,7 @@ function add_tts_audio_wave_progress($content) {
     currentChunkIndex = 0;
     
     // Скрываем все блоки прогресса
+
     for (let i = 0; i < maxBlocks; i++) {
       blocks[i].style.visibility = 'hidden';
     }
@@ -915,6 +970,7 @@ function add_tts_audio_wave_progress($content) {
   }
 
   // Обработчики событий
+
   toggleBtn.onclick = () => {
     if (!selectedVoice) {
       detectVoice().then(() => {
@@ -935,13 +991,16 @@ function add_tts_audio_wave_progress($content) {
   stopBtn.onclick = stopSpeech;
 
   // Инициализация
+
   createBlocks();
   detectVoice();
 
   // Пересоздаем блоки при изменении размера окна
+
   window.addEventListener('resize', createBlocks);
 
   // Останавливаем при уходе со страницы
+
   window.addEventListener('beforeunload', stopSpeech);
 })();
 </script>
