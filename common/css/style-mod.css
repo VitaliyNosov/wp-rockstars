@@ -110,6 +110,10 @@ body {
     border: 1px solid #2E3038;
     cursor: grab;
     position: relative;
+    transition: 0.3s;
+  }
+  .slide:hover{
+    border: 1px solid #25367C;
   }
   .slide:active {
     cursor: grabbing;

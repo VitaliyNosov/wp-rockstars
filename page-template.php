@@ -3,7 +3,7 @@
 /**
  * custom template file for Rock Stars theme.
  *
- * Template Name: Custom Template
+ * Template Name: Page Template Custom
  *
  * @package Rock_Star
  */
@@ -370,6 +370,10 @@ get_header(); ?>
 </div>
 
 
+<!-- portfolio slider -->
+
+<!-- <div class="portfolio-slider-block"></div>
+
 <div class="slider-container" id="sliderContainer">
   <div id="sliderTrack" class="slider-track" >
     <a href="#" class="slide"><img src="http://localhost:8081/wp-content/uploads/2025/06/dfgdfg1.png" alt="Проект 1" /></a>
@@ -383,6 +387,39 @@ get_header(); ?>
   <button id="prevBtn" aria-label="Предыдущий слайд"><</button>
   <button id="nextBtn" aria-label="Следующий слайд">></button>
 </div>
+
+</div> -->
+
+<?php
+$page_id = get_the_ID();
+$slides = carbon_get_post_meta($page_id, 'portfolio_slides');
+
+if ($slides && is_array($slides)) : ?>
+    <div class="portfolio-slider-block"></div>
+
+    <div class="slider-container" id="sliderContainer">
+        <div id="sliderTrack" class="slider-track">
+            <?php foreach ($slides as $slide) :
+                $img_id = $slide['slide_image'];
+                $url = esc_url($slide['slide_url'] ?: '#');
+                $alt = esc_attr($slide['slide_alt'] ?: '');
+                $img_html = wp_get_attachment_image($img_id, 'full', false, ['alt' => $alt]);
+            ?>
+                <a href="<?php echo $url; ?>" class="slide">
+                    <?php echo $img_html; ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <div class="slider-buttons">
+        <button id="prevBtn" aria-label="Предыдущий слайд"><</button>
+        <button id="nextBtn" aria-label="Следующий слайд">></button>
+    </div>
+<?php endif; ?>
+
+
+<!-- portfolio slider -->
 
 
   <!-- ====== Porfolio block End --->
