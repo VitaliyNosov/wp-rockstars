@@ -526,380 +526,216 @@ $benefits = carbon_get_post_meta(get_the_ID(), 'benefits_list');
 
   <!-- ====== Pricing Section Start -->
 
-  <section id="pricing" class="relative z-10 pt-[120px] pb-20">
+<?php
+
+// Проверяем, включена ли секция
+if (!carbon_get_theme_option('pricing_section_enabled')) {
+    return;
+}
+
+// Получаем данные из Carbon Fields
+$section_title = carbon_get_theme_option('pricing_section_title');
+$section_description = carbon_get_theme_option('pricing_section_description');
+$monthly_label = carbon_get_theme_option('pricing_monthly_label');
+$yearly_label = carbon_get_theme_option('pricing_yearly_label');
+$pricing_plans = carbon_get_theme_option('pricing_plans');
+?>
+
+<section id="pricing" class="relative z-10 pt-[120px] pb-20">
     <div class="container">
-      <div class="flex flex-wrap mx-[-16px]">
-        <div class="w-full px-4">
-          <div class="mx-auto max-w-[655px] text-center mb-[100px] wow fadeInUp" data-wow-delay=".1s">
-            <h2 class="text-black dark:text-white font-bold text-3xl sm:text-4xl md:text-[45px] mb-4">Simple and
-              Affordable Pricing</h2>
-            <p class="text-body-color text-base md:text-lg leading-relaxed md:leading-relaxed max-w-[570px] mx-auto">
-              There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration
-              in some form.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex flex-wrap mx-[-16px]">
-        <div class="w-full px-4">
-          <div class="flex justify-center mb-16 wow fadeInUp" data-wow-delay=".1s">
-            <span class="text-dark dark:text-white text-base font-semibold mr-4 monthly cursor-pointer"> Monthly </span>
-            <label for="togglePlan" class="flex items-center cursor-pointer">
-              <div class="relative">
-                <input id="togglePlan" type="checkbox" class="sr-only" />
-                <div class="w-14 h-5 bg-[#1D2144] rounded-full shadow-inner"></div>
-                <div
-                  class="dot absolute w-7 h-7 bg-primary rounded-full shadow-switch-1 left-0 top-[-4px] transition flex items-center justify-center">
-                  <span class="active w-4 h-4 rounded-full bg-white"></span>
+        <div class="flex flex-wrap mx-[-16px]">
+            <div class="w-full px-4">
+                <div class="mx-auto max-w-[655px] text-center mb-[100px] wow fadeInUp" data-wow-delay=".1s">
+                    <?php if ($section_title): ?>
+                        <h2 class="text-black dark:text-white font-bold text-3xl sm:text-4xl md:text-[45px] mb-4">
+                            <?php echo esc_html($section_title); ?>
+                        </h2>
+                    <?php endif; ?>
+                    
+                    <?php if ($section_description): ?>
+                        <p class="text-body-color text-base md:text-lg leading-relaxed md:leading-relaxed max-w-[570px] mx-auto">
+                            <?php echo esc_html($section_description); ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
-              </div>
-            </label>
-            <span class="text-dark dark:text-white text-base font-semibold ml-4 yearly cursor-pointer"> Yearly </span>
-          </div>
+            </div>
         </div>
-      </div>
 
-      <div class="flex flex-wrap mx-[-16px]">
-        <div class="w-full md:w-1/2 lg:w-1/3 px-4">
-          <div class="relative z-10 bg-white dark:bg-[#1D2144] shadow-signUp px-8 py-10 rounded-md mb-10 wow fadeInUp"
-            data-wow-delay=".1s">
-            <div class="flex justify-between items-center">
-              <h3 class="font-bold text-black dark:text-white text-3xl mb-2 price">
-                $<span class="amount">40</span>
-                <span class="text-dark dark:text-body-color time">/mo</span>
-              </h3>
-              <h4 class="text-white font-bold text-xl mb-2">Lite</h4>
+        <!-- Переключатель месячно/годично -->
+        <div class="flex flex-wrap mx-[-16px]">
+            <div class="w-full px-4">
+                <div class="flex justify-center mb-16 wow fadeInUp" data-wow-delay=".1s">
+                    <span class="text-dark dark:text-white text-base font-semibold mr-4 monthly cursor-pointer">
+                        <?php echo esc_html($monthly_label ?: 'Monthly'); ?>
+                    </span>
+                    <label for="togglePlan" class="flex items-center cursor-pointer">
+                        <div class="relative">
+                            <input id="togglePlan" type="checkbox" class="sr-only" />
+                            <div class="w-14 h-5 bg-[#1D2144] rounded-full shadow-inner"></div>
+                            <div class="dot absolute w-7 h-7 bg-primary rounded-full shadow-switch-1 left-0 top-[-4px] transition flex items-center justify-center">
+                                <span class="active w-4 h-4 rounded-full bg-white"></span>
+                            </div>
+                        </div>
+                    </label>
+                    <span class="text-dark dark:text-white text-base font-semibold ml-4 yearly cursor-pointer">
+                        <?php echo esc_html($yearly_label ?: 'Yearly'); ?>
+                    </span>
+                </div>
             </div>
-            <p class="text-base text-body-color mb-7">Lorem ipsum dolor sit amet adiscing elit Mauris egestas enim.</p>
-            <div
-              class="border-b border-body-color dark:border-white border-opacity-10 dark:border-opacity-10 pb-8 mb-8">
-              <a href="javascript:void(0)"
-                class="font-semibold text-base text-white bg-primary w-full flex items-center justify-center rounded-md p-3 hover:shadow-signUp hover:bg-opacity-80 transition duration-300 ease-in-out">
-                Start Free Trial
-              </a>
-            </div>
-            <div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">All UI Components</p>
-              </div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Use with Unlimited Projects</p>
-              </div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Commercial Use</p>
-              </div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Email Support</p>
-              </div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="8" viewBox="0 0 8 8" class="fill-current stroke-current">
-                    <path
-                      d="M1.40102 0.95486C1.27421 0.828319 1.07219 0.828354 0.945421 0.954965C0.818519 1.08171 0.818519 1.28389 0.945421 1.41063L0.945612 1.41083L3.54915 4.00184L0.955169 6.60202C0.955106 6.60209 0.95504 6.60215 0.954978 6.60222C0.828263 6.72897 0.82833 6.93101 0.955169 7.05769C1.01288 7.11533 1.09989 7.15024 1.17815 7.15024C1.25641 7.15024 1.34342 7.11533 1.40113 7.05769L1.29513 6.95156L1.40113 7.05769L4.00493 4.45706L6.59917 7.0575L6.59936 7.05769C6.65707 7.11533 6.74408 7.15024 6.82234 7.15024C6.9006 7.15024 6.98761 7.11533 7.04532 7.05769C7.17215 6.93102 7.17222 6.729 7.04553 6.60224C7.04546 6.60217 7.04539 6.6021 7.04532 6.60202L4.46051 4.00165L7.05507 1.4009C7.05511 1.40085 7.05516 1.4008 7.05521 1.40076L7.05526 1.40071L6.94907 1.29477L1.40102 0.95486ZM1.40102 0.95486C1.40106 0.954895 1.40109 0.95493 1.40113 0.954965L1.40102 0.95486Z"
-                      stroke-width="0.3" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Lifetime Access</p>
-              </div>
-              <div class="flex items-center">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="8" viewBox="0 0 8 8" class="fill-current stroke-current">
-                    <path
-                      d="M1.40102 0.95486C1.27421 0.828319 1.07219 0.828354 0.945421 0.954965C0.818519 1.08171 0.818519 1.28389 0.945421 1.41063L0.945612 1.41083L3.54915 4.00184L0.955169 6.60202C0.955106 6.60209 0.95504 6.60215 0.954978 6.60222C0.828263 6.72897 0.82833 6.93101 0.955169 7.05769C1.01288 7.11533 1.09989 7.15024 1.17815 7.15024C1.25641 7.15024 1.34342 7.11533 1.40113 7.05769L1.29513 6.95156L1.40113 7.05769L4.00493 4.45706L6.59917 7.0575L6.59936 7.05769C6.65707 7.11533 6.74408 7.15024 6.82234 7.15024C6.9006 7.15024 6.98761 7.11533 7.04532 7.05769C7.17215 6.93102 7.17222 6.729 7.04553 6.60224C7.04546 6.60217 7.04539 6.6021 7.04532 6.60202L4.46051 4.00165L7.05507 1.4009C7.05511 1.40085 7.05516 1.4008 7.05521 1.40076L7.05526 1.40071L6.94907 1.29477L1.40102 0.95486ZM1.40102 0.95486C1.40106 0.954895 1.40109 0.95493 1.40113 0.954965L1.40102 0.95486Z"
-                      stroke-width="0.3" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Free Lifetime Updates</p>
-              </div>
-            </div>
-            <div class="absolute bottom-0 right-0 z-[-1]">
-              <svg width="179" height="158" viewBox="0 0 179 158" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path opacity="0.5"
-                  d="M75.0002 63.256C115.229 82.3657 136.011 137.496 141.374 162.673C150.063 203.47 207.217 197.755 202.419 167.738C195.393 123.781 137.273 90.3579 75.0002 63.256Z"
-                  fill="url(#paint0_linear_70:153)" />
-                <path opacity="0.3"
-                  d="M178.255 0.150879C129.388 56.5969 134.648 155.224 143.387 197.482C157.547 265.958 65.9705 295.709 53.1024 246.401C34.2588 174.197 100.939 83.7223 178.255 0.150879Z"
-                  fill="url(#paint1_linear_70:153)" />
-                <defs>
-                  <linearGradient id="paint0_linear_70:153" x1="69.6694" y1="29.9033" x2="196.108" y2="83.2919"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#4A6CF7" stop-opacity="0.62" />
-                    <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
-                  </linearGradient>
-                  <linearGradient id="paint1_linear_70:153" x1="165.348" y1="-75.4466" x2="-3.75136" y2="103.645"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#4A6CF7" stop-opacity="0.62" />
-                    <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-          </div>
         </div>
-        <div class="w-full md:w-1/2 lg:w-1/3 px-4">
-          <div class="relative z-10 bg-white dark:bg-[#1D2144] shadow-signUp px-8 py-10 rounded-md mb-10 wow fadeInUp"
-            data-wow-delay=".15s">
-            <div class="flex justify-between items-center">
-              <h3 class="font-bold text-black dark:text-white text-3xl mb-2 price">
-                $<span class="amount">399</span>
-                <span class="text-dark dark:text-body-color time">/mo</span>
-              </h3>
-              <h4 class="text-white font-bold text-xl mb-2">Basic</h4>
+
+        <!-- Тарифные планы -->
+        <?php if (!empty($pricing_plans)): ?>
+            <div class="flex flex-wrap mx-[-16px]">
+                <?php 
+                $delay = 0.1;
+                foreach ($pricing_plans as $index => $plan): 
+                    $plan_name = $plan['plan_name'] ?? '';
+                    $monthly_price = $plan['plan_price_monthly'] ?? '0';
+                    $yearly_price = $plan['plan_price_yearly'] ?? '0';
+                    $description = $plan['plan_description'] ?? '';
+                    $button_text = $plan['plan_button_text'] ?? 'Start Free Trial';
+                    $button_url = $plan['plan_button_url'] ?? '#';
+                    $features = $plan['plan_features'] ?? array();
+                    $is_popular = !empty($plan['plan_is_popular']);
+                ?>
+                    <div class="w-full md:w-1/2 lg:w-1/3 px-4">
+                        <div class="relative z-10 bg-white dark:bg-[#1D2144] shadow-signUp px-8 py-10 rounded-md mb-10 wow fadeInUp" 
+                             data-wow-delay="<?php echo esc_attr($delay); ?>s">
+                             
+                            <?php if ($is_popular): ?>
+                                <div class="absolute top-[-16px] left-1/2 transform -translate-x-1/2">
+                                    <span class="bg-primary text-white px-4 py-2 rounded-full text-sm font-semibold custom-message-popular">
+                                        <?php _e('Popular', 'textdomain'); ?>
+                                    </span>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-bold text-black dark:text-white text-3xl mb-2 price">
+                                    $<span class="amount monthly-price"><?php echo esc_html($monthly_price); ?></span>
+                                    <span class="amount yearly-price" style="display: none;"><?php echo esc_html($yearly_price); ?></span>
+                                    <span class="text-dark dark:text-body-color time monthly-time">/mo</span>
+                                    <span class="text-dark dark:text-body-color time yearly-time" style="display: none;">/yr</span>
+                                </h3>
+                                <h4 class="text-white font-bold text-xl mb-2"><?php echo esc_html($plan_name); ?></h4>
+                            </div>
+                            
+                            <?php if ($description): ?>
+                                <p class="text-base text-body-color mb-7"><?php echo esc_html($description); ?></p>
+                            <?php endif; ?>
+                            
+                            <div class="border-b border-body-color dark:border-white border-opacity-10 dark:border-opacity-10 pb-8 mb-8">
+                                <a href="<?php echo esc_url($button_url); ?>" 
+                                   class="font-semibold text-base text-white bg-primary w-full flex items-center justify-center rounded-md p-3 hover:shadow-signUp hover:bg-opacity-80 transition duration-300 ease-in-out">
+                                    <?php echo esc_html($button_text); ?>
+                                </a>
+                            </div>
+                            
+                            <!-- Список возможностей -->
+                            <?php if (!empty($features)): ?>
+                                <div>
+                                    <?php foreach ($features as $feature_index => $feature): 
+                                        $feature_text = $feature['feature_text'] ?? '';
+                                        $feature_status = $feature['feature_status'] ?? 'included';
+                                        $is_last = ($feature_index === count($features) - 1);
+                                    ?>
+                                        <div class="flex items-center <?php echo !$is_last ? 'mb-3' : ''; ?>">
+                                            <span class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
+                                                <?php if ($feature_status === 'included'): ?>
+                                                    <!-- Иконка галочки -->
+                                                    <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
+                                                        <path d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
+                                                    </svg>
+                                                <?php else: ?>
+                                                    <!-- Иконка крестика -->
+                                                    <svg width="8" height="8" viewBox="0 0 8 8" class="fill-current stroke-current">
+                                                        <path d="M1.40102 0.95486C1.27421 0.828319 1.07219 0.828354 0.945421 0.954965C0.818519 1.08171 0.818519 1.28389 0.945421 1.41063L0.945612 1.41083L3.54915 4.00184L0.955169 6.60202C0.955106 6.60209 0.95504 6.60215 0.954978 6.60222C0.828263 6.72897 0.82833 6.93101 0.955169 7.05769C1.01288 7.11533 1.09989 7.15024 1.17815 7.15024C1.25641 7.15024 1.34342 7.11533 1.40113 7.05769L1.29513 6.95156L1.40113 7.05769L4.00493 4.45706L6.59917 7.0575L6.59936 7.05769C6.65707 7.11533 6.74408 7.15024 6.82234 7.15024C6.9006 7.15024 6.98761 7.11533 7.04532 7.05769C7.17215 6.93102 7.17222 6.729 7.04553 6.60224C7.04546 6.60217 7.04539 6.6021 7.04532 6.60202L4.46051 4.00165L7.05507 1.4009C7.05511 1.40085 7.05516 1.4008 7.05521 1.40076L7.05526 1.40071L6.94907 1.29477L1.40102 0.95486ZM1.40102 0.95486C1.40106 0.954895 1.40109 0.95493 1.40113 0.954965L1.40102 0.95486Z" stroke-width="0.3" />
+                                                    </svg>
+                                                <?php endif; ?>
+                                            </span>
+                                            <p class="text-base font-medium text-body-color m-0"><?php echo esc_html($feature_text); ?></p>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <!-- Декоративный элемент -->
+                            <div class="absolute bottom-0 right-0 z-[-1]">
+                                <svg width="179" height="158" viewBox="0 0 179 158" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path opacity="0.5" d="M75.0002 63.256C115.229 82.3657 136.011 137.496 141.374 162.673C150.063 203.47 207.217 197.755 202.419 167.738C195.393 123.781 137.273 90.3579 75.0002 63.256Z" fill="url(#paint0_linear_70:153)" />
+                                    <path opacity="0.3" d="M178.255 0.150879C129.388 56.5969 134.648 155.224 143.387 197.482C157.547 265.958 65.9705 295.709 53.1024 246.401C34.2588 174.197 100.939 83.7223 178.255 0.150879Z" fill="url(#paint1_linear_70:153)" />
+                                    <defs>
+                                        <linearGradient id="paint0_linear_70:153" x1="69.6694" y1="29.9033" x2="196.108" y2="83.2919" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#4A6CF7" stop-opacity="0.62" />
+                                            <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
+                                        </linearGradient>
+                                        <linearGradient id="paint1_linear_70:153" x1="165.348" y1="-75.4466" x2="-3.75136" y2="103.645" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#4A6CF7" stop-opacity="0.62" />
+                                            <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                <?php 
+                    $delay += 0.05;
+                endforeach; ?>
             </div>
-            <p class="text-base text-body-color mb-7">Lorem ipsum dolor sit amet adiscing elit Mauris egestas enim.</p>
-            <div
-              class="border-b border-body-color dark:border-white border-opacity-10 dark:border-opacity-10 pb-8 mb-8">
-              <a href="javascript:void(0)"
-                class="font-semibold text-base text-white bg-primary w-full flex items-center justify-center rounded-md p-3 hover:shadow-signUp hover:bg-opacity-80 transition duration-300 ease-in-out">
-                Start Free Trial
-              </a>
-            </div>
-            <div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">All UI Components</p>
-              </div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Use with Unlimited Projects</p>
-              </div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Commercial Use</p>
-              </div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Email Support</p>
-              </div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Lifetime Access</p>
-              </div>
-              <div class="flex items-center">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="8" viewBox="0 0 8 8" class="fill-current stroke-current">
-                    <path
-                      d="M1.40102 0.95486C1.27421 0.828319 1.07219 0.828354 0.945421 0.954965C0.818519 1.08171 0.818519 1.28389 0.945421 1.41063L0.945612 1.41083L3.54915 4.00184L0.955169 6.60202C0.955106 6.60209 0.95504 6.60215 0.954978 6.60222C0.828263 6.72897 0.82833 6.93101 0.955169 7.05769C1.01288 7.11533 1.09989 7.15024 1.17815 7.15024C1.25641 7.15024 1.34342 7.11533 1.40113 7.05769L1.29513 6.95156L1.40113 7.05769L4.00493 4.45706L6.59917 7.0575L6.59936 7.05769C6.65707 7.11533 6.74408 7.15024 6.82234 7.15024C6.9006 7.15024 6.98761 7.11533 7.04532 7.05769C7.17215 6.93102 7.17222 6.729 7.04553 6.60224C7.04546 6.60217 7.04539 6.6021 7.04532 6.60202L4.46051 4.00165L7.05507 1.4009C7.05511 1.40085 7.05516 1.4008 7.05521 1.40076L7.05526 1.40071L6.94907 1.29477L1.40102 0.95486ZM1.40102 0.95486C1.40106 0.954895 1.40109 0.95493 1.40113 0.954965L1.40102 0.95486Z"
-                      stroke-width="0.3" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Free Lifetime Updates</p>
-              </div>
-            </div>
-            <div class="absolute bottom-0 right-0 z-[-1]">
-              <svg width="179" height="158" viewBox="0 0 179 158" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path opacity="0.5"
-                  d="M75.0002 63.256C115.229 82.3657 136.011 137.496 141.374 162.673C150.063 203.47 207.217 197.755 202.419 167.738C195.393 123.781 137.273 90.3579 75.0002 63.256Z"
-                  fill="url(#paint0_linear_70:153)" />
-                <path opacity="0.3"
-                  d="M178.255 0.150879C129.388 56.5969 134.648 155.224 143.387 197.482C157.547 265.958 65.9705 295.709 53.1024 246.401C34.2588 174.197 100.939 83.7223 178.255 0.150879Z"
-                  fill="url(#paint1_linear_70:153)" />
-                <defs>
-                  <linearGradient id="paint0_linear_70:153" x1="69.6694" y1="29.9033" x2="196.108" y2="83.2919"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#4A6CF7" stop-opacity="0.62" />
-                    <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
-                  </linearGradient>
-                  <linearGradient id="paint1_linear_70:153" x1="165.348" y1="-75.4466" x2="-3.75136" y2="103.645"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#4A6CF7" stop-opacity="0.62" />
-                    <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div class="w-full md:w-1/2 lg:w-1/3 px-4">
-          <div class="relative z-10 bg-white dark:bg-[#1D2144] shadow-signUp px-8 py-10 rounded-md mb-10 wow fadeInUp"
-            data-wow-delay=".2s">
-            <div class="flex justify-between items-center">
-              <h3 class="font-bold text-black dark:text-white text-3xl mb-2 price">
-                $<span class="amount">589</span>
-                <span class="text-dark dark:text-body-color time">/mo</span>
-              </h3>
-              <h4 class="text-white font-bold text-xl mb-2">Plus</h4>
-            </div>
-            <p class="text-base text-body-color mb-7">Lorem ipsum dolor sit amet adiscing elit Mauris egestas enim.</p>
-            <div
-              class="border-b border-body-color dark:border-white border-opacity-10 dark:border-opacity-10 pb-8 mb-8">
-              <a href="javascript:void(0)"
-                class="font-semibold text-base text-white bg-primary w-full flex items-center justify-center rounded-md p-3 hover:shadow-signUp hover:bg-opacity-80 transition duration-300 ease-in-out">
-                Start Free Trial
-              </a>
-            </div>
-            <div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">All UI Components</p>
-              </div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Use with Unlimited Projects</p>
-              </div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Commercial Use</p>
-              </div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Email Support</p>
-              </div>
-              <div class="flex items-center mb-3">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Lifetime Access</p>
-              </div>
-              <div class="flex items-center">
-                <span
-                  class="bg-primary bg-opacity-10 text-primary max-w-[18px] w-full h-[18px] mr-3 flex items-center justify-center rounded-full">
-                  <svg width="8" height="6" viewBox="0 0 8 6" class="fill-current">
-                    <path
-                      d="M2.90567 6.00024C2.68031 6.00024 2.48715 5.92812 2.294 5.74764L0.169254 3.43784C-0.0560926 3.18523 -0.0560926 2.78827 0.169254 2.53566C0.39461 2.28298 0.74873 2.28298 0.974086 2.53566L2.90567 4.66497L7.02642 0.189715C7.25175 -0.062913 7.60585 -0.062913 7.83118 0.189715C8.0566 0.442354 8.0566 0.839355 7.83118 1.09198L3.54957 5.78375C3.32415 5.92812 3.09882 6.00024 2.90567 6.00024Z" />
-                  </svg>
-                </span>
-                <p class="text-base font-medium text-body-color m-0">Free Lifetime Updates</p>
-              </div>
-            </div>
-            <div class="absolute bottom-0 right-0 z-[-1]">
-              <svg width="179" height="158" viewBox="0 0 179 158" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path opacity="0.5"
-                  d="M75.0002 63.256C115.229 82.3657 136.011 137.496 141.374 162.673C150.063 203.47 207.217 197.755 202.419 167.738C195.393 123.781 137.273 90.3579 75.0002 63.256Z"
-                  fill="url(#paint0_linear_70:153)" />
-                <path opacity="0.3"
-                  d="M178.255 0.150879C129.388 56.5969 134.648 155.224 143.387 197.482C157.547 265.958 65.9705 295.709 53.1024 246.401C34.2588 174.197 100.939 83.7223 178.255 0.150879Z"
-                  fill="url(#paint1_linear_70:153)" />
-                <defs>
-                  <linearGradient id="paint0_linear_70:153" x1="69.6694" y1="29.9033" x2="196.108" y2="83.2919"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#4A6CF7" stop-opacity="0.62" />
-                    <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
-                  </linearGradient>
-                  <linearGradient id="paint1_linear_70:153" x1="165.348" y1="-75.4466" x2="-3.75136" y2="103.645"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#4A6CF7" stop-opacity="0.62" />
-                    <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
+        <?php endif; ?>
     </div>
 
+    <!-- Декоративный элемент слева внизу -->
     <div class="absolute left-0 bottom-0 z-[-1]">
-      <svg width="239" height="601" viewBox="0 0 239 601" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect opacity="0.3" x="-184.451" y="600.973" width="196" height="541.607" rx="2"
-          transform="rotate(-128.7 -184.451 600.973)" fill="url(#paint0_linear_93:235)" />
-        <rect opacity="0.3" x="-188.201" y="385.272" width="59.7544" height="541.607" rx="2"
-          transform="rotate(-128.7 -188.201 385.272)" fill="url(#paint1_linear_93:235)" />
-        <defs>
-          <linearGradient id="paint0_linear_93:235" x1="-90.1184" y1="420.414" x2="-90.1184" y2="1131.65"
-            gradientUnits="userSpaceOnUse">
-            <stop stop-color="#4A6CF7" />
-            <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
-          </linearGradient>
-          <linearGradient id="paint1_linear_93:235" x1="-159.441" y1="204.714" x2="-159.441" y2="915.952"
-            gradientUnits="userSpaceOnUse">
-            <stop stop-color="#4A6CF7" />
-            <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
-          </linearGradient>
-        </defs>
-      </svg>
+        <svg width="239" height="601" viewBox="0 0 239 601" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect opacity="0.3" x="-184.451" y="600.973" width="196" height="541.607" rx="2" transform="rotate(-128.7 -184.451 600.973)" fill="url(#paint0_linear_93:235)" />
+            <rect opacity="0.3" x="-188.201" y="385.272" width="59.7544" height="541.607" rx="2" transform="rotate(-128.7 -188.201 385.272)" fill="url(#paint1_linear_93:235)" />
+            <defs>
+                <linearGradient id="paint0_linear_93:235" x1="-90.1184" y1="420.414" x2="-90.1184" y2="1131.65" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#4A6CF7" />
+                    <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
+                </linearGradient>
+                <linearGradient id="paint1_linear_93:235" x1="-159.441" y1="204.714" x2="-159.441" y2="915.952" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#4A6CF7" />
+                    <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
+                </linearGradient>
+            </defs>
+        </svg>
     </div>
-  </section>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const togglePlan = document.getElementById('togglePlan');
+    const monthlyPrices = document.querySelectorAll('.monthly-price');
+    const yearlyPrices = document.querySelectorAll('.yearly-price');
+    const monthlyTimes = document.querySelectorAll('.monthly-time');
+    const yearlyTimes = document.querySelectorAll('.yearly-time');
+
+    if (togglePlan) {
+        togglePlan.addEventListener('change', function() {
+            const isYearly = this.checked;
+            
+            monthlyPrices.forEach(price => {
+                price.style.display = isYearly ? 'none' : 'inline';
+            });
+            
+            yearlyPrices.forEach(price => {
+                price.style.display = isYearly ? 'inline' : 'none';
+            });
+            
+            monthlyTimes.forEach(time => {
+                time.style.display = isYearly ? 'none' : 'inline';
+            });
+            
+            yearlyTimes.forEach(time => {
+                time.style.display = isYearly ? 'inline' : 'none';
+            });
+        });
+    }
+});
+</script>
 
   <!-- ====== Pricing Section End -->
 

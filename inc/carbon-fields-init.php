@@ -142,4 +142,148 @@ Container::make('theme_options', 'Отзывы')
 // Section eleven
 
 
+add_action('carbon_fields_register_fields', 'pricing_section_fields');
 
+function pricing_section_fields() {
+    Container::make('theme_options', __('Настройки ценообразования'))
+        ->set_page_menu_title(__('Ценообразование'))
+        ->set_page_menu_position(25)
+        ->add_tab(__('Основные настройки'), array(
+            Field::make('checkbox', 'pricing_section_enabled', __('Включить секцию ценообразования'))
+                ->set_default_value(true),
+                
+            Field::make('text', 'pricing_section_title', __('Заголовок секции'))
+                ->set_default_value('Simple and Affordable Pricing')
+                ->set_conditional_logic(array(
+                    array(
+                        'field' => 'pricing_section_enabled',
+                        'value' => true,
+                    )
+                )),
+                
+            Field::make('textarea', 'pricing_section_description', __('Описание секции'))
+                ->set_default_value('There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form.')
+                ->set_conditional_logic(array(
+                    array(
+                        'field' => 'pricing_section_enabled',
+                        'value' => true,
+                    )
+                )),
+                
+            Field::make('text', 'pricing_monthly_label', __('Текст "Месячно"'))
+                ->set_default_value('Monthly')
+                ->set_conditional_logic(array(
+                    array(
+                        'field' => 'pricing_section_enabled',
+                        'value' => true,
+                    )
+                )),
+                
+            Field::make('text', 'pricing_yearly_label', __('Текст "Годично"'))
+                ->set_default_value('Yearly')
+                ->set_conditional_logic(array(
+                    array(
+                        'field' => 'pricing_section_enabled',
+                        'value' => true,
+                    )
+                )),
+        ))
+        ->add_tab(__('Тарифные планы'), array(
+            Field::make('complex', 'pricing_plans', __('Тарифные планы'))
+                ->add_fields(array(
+                    Field::make('text', 'plan_name', __('Название плана'))
+                        ->set_width(50),
+                        
+                    Field::make('text', 'plan_price_monthly', __('Цена в месяц'))
+                        ->set_width(25),
+                        
+                    Field::make('text', 'plan_price_yearly', __('Цена в год'))
+                        ->set_width(25),
+                        
+                    Field::make('textarea', 'plan_description', __('Описание плана'))
+                        ->set_rows(3),
+                        
+                    Field::make('text', 'plan_button_text', __('Текст кнопки'))
+                        ->set_default_value('Start Free Trial')
+                        ->set_width(50),
+                        
+                    Field::make('text', 'plan_button_url', __('Ссылка кнопки'))
+                        ->set_width(50),
+                        
+                    Field::make('complex', 'plan_features', __('Возможности плана'))
+                        ->add_fields(array(
+                            Field::make('text', 'feature_text', __('Текст возможности')),
+                            Field::make('select', 'feature_status', __('Статус'))
+                                ->set_options(array(
+                                    'included' => __('Включено'),
+                                    'excluded' => __('Исключено'),
+                                ))
+                                ->set_default_value('included')
+                        ))
+                        ->set_header_template('<%- feature_text %>')
+                        ->set_collapsed(true),
+                        
+                    Field::make('checkbox', 'plan_is_popular', __('Популярный план'))
+                        ->set_help_text(__('Отметить как рекомендуемый план')),
+                ))
+                ->set_header_template('<%- plan_name %> - $<%- plan_price_monthly %>/мес')
+                ->set_collapsed(true)
+                ->set_default_value(array(
+                    array(
+                        'plan_name' => 'Lite',
+                        'plan_price_monthly' => '40',
+                        'plan_price_yearly' => '400',
+                        'plan_description' => 'Lorem ipsum dolor sit amet adiscing elit Mauris egestas enim.',
+                        'plan_button_text' => 'Start Free Trial',
+                        'plan_button_url' => '#',
+                        'plan_features' => array(
+                            array('feature_text' => 'All UI Components', 'feature_status' => 'included'),
+                            array('feature_text' => 'Use with Unlimited Projects', 'feature_status' => 'included'),
+                            array('feature_text' => 'Commercial Use', 'feature_status' => 'included'),
+                            array('feature_text' => 'Email Support', 'feature_status' => 'included'),
+                            array('feature_text' => 'Lifetime Access', 'feature_status' => 'excluded'),
+                            array('feature_text' => 'Free Lifetime Updates', 'feature_status' => 'excluded'),
+                        )
+                    ),
+                    array(
+                        'plan_name' => 'Basic',
+                        'plan_price_monthly' => '399',
+                        'plan_price_yearly' => '3990',
+                        'plan_description' => 'Lorem ipsum dolor sit amet adiscing elit Mauris egestas enim.',
+                        'plan_button_text' => 'Start Free Trial',
+                        'plan_button_url' => '#',
+                        'plan_is_popular' => true,
+                        'plan_features' => array(
+                            array('feature_text' => 'All UI Components', 'feature_status' => 'included'),
+                            array('feature_text' => 'Use with Unlimited Projects', 'feature_status' => 'included'),
+                            array('feature_text' => 'Commercial Use', 'feature_status' => 'included'),
+                            array('feature_text' => 'Email Support', 'feature_status' => 'included'),
+                            array('feature_text' => 'Lifetime Access', 'feature_status' => 'included'),
+                            array('feature_text' => 'Free Lifetime Updates', 'feature_status' => 'excluded'),
+                        )
+                    ),
+                    array(
+                        'plan_name' => 'Plus',
+                        'plan_price_monthly' => '589',
+                        'plan_price_yearly' => '5890',
+                        'plan_description' => 'Lorem ipsum dolor sit amet adiscing elit Mauris egestas enim.',
+                        'plan_button_text' => 'Start Free Trial',
+                        'plan_button_url' => '#',
+                        'plan_features' => array(
+                            array('feature_text' => 'All UI Components', 'feature_status' => 'included'),
+                            array('feature_text' => 'Use with Unlimited Projects', 'feature_status' => 'included'),
+                            array('feature_text' => 'Commercial Use', 'feature_status' => 'included'),
+                            array('feature_text' => 'Email Support', 'feature_status' => 'included'),
+                            array('feature_text' => 'Lifetime Access', 'feature_status' => 'included'),
+                            array('feature_text' => 'Free Lifetime Updates', 'feature_status' => 'included'),
+                        )
+                    ),
+                ))
+                ->set_conditional_logic(array(
+                    array(
+                        'field' => 'pricing_section_enabled',
+                        'value' => true,
+                    )
+                )),
+        ));
+}
