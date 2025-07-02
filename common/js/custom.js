@@ -182,3 +182,28 @@ window.alert = function(message) {
   });
 };
 
+
+// FAQ
+
+
+function wpToggleFaq(index) {
+    const currentAnswer = document.getElementById(`wp-answer-${index}`);
+    const currentArrow = document.getElementById(`wp-arrow-${index}`);
+
+    // Получаем все открытые элементы и закрываем их
+    document.querySelectorAll('.wp-faq-answer.open').forEach(answer => {
+        answer.classList.remove('open');
+    });
+
+    document.querySelectorAll('.wp-faq-arrow.wp-faq-rotate-180').forEach(arrow => {
+        arrow.classList.remove('wp-faq-rotate-180');
+    });
+
+    // Если текущий элемент не открыт — открыть его
+    if (!currentAnswer.classList.contains('open')) {
+        currentAnswer.classList.add('open');
+        currentArrow.classList.add('wp-faq-rotate-180');
+    }
+}
+
+

@@ -287,3 +287,28 @@ function pricing_section_fields() {
                 )),
         ));
 }
+
+// Section FAQ
+
+add_action('carbon_fields_register_fields', 'register_faq_admin_page');
+function register_faq_admin_page() {
+    Container::make('theme_options', 'FAQ')
+        ->set_icon('dashicons-editor-help')
+        ->set_page_menu_position(99)
+        ->add_fields([
+            Field::make('complex', 'faq_items', 'Список вопросов')
+                ->set_layout('tabbed-horizontal')
+                ->add_fields('faq_item', [
+                    Field::make('text', 'question', 'Вопрос'),
+                    Field::make('rich_text', 'answer', 'Ответ'),
+                ]),
+        ]);
+}
+
+function wp_faq_add_class_to_paragraphs($content) {
+    return preg_replace(
+        '/<p(.*?)>/i',
+        '<p class="text-body-color text-base md:text-lg leading-relaxed md:leading-relaxed"$1>',
+        $content
+    );
+}

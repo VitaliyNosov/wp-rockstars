@@ -424,3 +424,96 @@ body {
     position: absolute;
     top: -60px;
 }
+
+
+/* FAQ */
+
+.wp-faq-container{
+    max-width: 1200px;
+    margin: 200px auto 200px auto;
+}
+.wp-faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.wp-faq-answer.open {
+    max-height: 200px;
+    transition: max-height 0.3s ease-in;
+    padding-top: 0;
+    padding-bottom: 1.5rem;
+}
+.wp-faq-rotate-180 {
+    transform: rotate(180deg);
+}
+.wp-faq-transition {
+    transition: transform 0.3s ease;
+}
+
+.dark .wp-faq-item {
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #2E3038;
+    transition: all 0.3s ease;
+    background: #000000;
+}
+.wp-faq-item {
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #CECED0;
+    transition: all 0.3s ease;
+    background: white;
+}
+.wp-faq-item:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+.wp-faq-button {
+    width: 100%;
+    padding: 1.5rem;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 0.75rem;
+    outline: none;
+}
+.wp-faq-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    padding-right: 1rem;
+}
+
+.dark .wp-faq-arrow {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    stroke: #FFFFFF;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.wp-faq-arrow {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.wp-faq-content {
+    padding: 0 1.5rem;
+    line-height: 1.75;
+}
+
+
+
