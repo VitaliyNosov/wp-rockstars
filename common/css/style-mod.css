@@ -515,5 +515,10 @@ body {
     line-height: 1.75;
 }
 
-
-
+.earth_wrap{
+  margin-top: 50px;
+}
+.earth_wrap .earth-container{
+  width: 600px;
+  margin: 0 auto;
+}
