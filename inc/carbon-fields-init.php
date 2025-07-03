@@ -42,6 +42,32 @@ add_action('carbon_fields_register_fields', function () {
 
 // Section three  ??? - Нужно еще сделать!
 
+add_action('carbon_fields_register_fields', function () {
+    Container::make('post_meta', 'Видео секция')
+        ->where('post_type', '=', 'page')
+        ->add_fields([
+            Field::make('text', 'video_section_title', 'Заголовок')
+                ->set_default_value('We are ready to help'),
+
+            Field::make('textarea', 'video_section_description', 'Описание')
+                ->set_default_value('There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form.')
+                ->set_rows(4),
+
+            Field::make('image', 'video_preview_image', 'Превью для видео')
+                ->set_value_type('url'),
+
+            Field::make('text', 'video_youtube_url', 'Ссылка на YouTube видео')
+                ->set_help_text('Например: https://www.youtube.com/watch?v=6ZGxizUr99I'),
+
+            Field::make('image', 'video_background_shape', 'Фоновое изображение снизу')
+                ->set_value_type('url'),
+        ]);
+});
+
+add_action('after_setup_theme', function () {
+    \Carbon_Fields\Carbon_Fields::boot();
+});
+
 // Section five
 
 add_action('carbon_fields_register_fields', function () {

@@ -233,43 +233,63 @@ $features = carbon_get_post_meta(get_the_ID(), 'features_list');
 
   <!-- ====== Video Section Start -->
 
-  <section class="relative z-10 py-[120px]">
-    <div class="container">
-      <div class="flex flex-wrap mx-[-16px]">
-        <div class="w-full px-4">
-          <div class="mx-auto max-w-[570px] text-center mb-20 wow fadeInUp" data-wow-delay=".1s">
-            <h2 class="text-black dark:text-white font-bold text-3xl sm:text-4xl md:text-[45px] mb-4">We are ready to
-              help</h2>
-            <p class="text-body-color text-base md:text-lg leading-relaxed md:leading-relaxed">
-              There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration
-              in some form.
-            </p>
-          </div>
+  <?php
+$title       = carbon_get_the_post_meta('video_section_title');
+$description = carbon_get_the_post_meta('video_section_description');
+$video_url   = carbon_get_the_post_meta('video_youtube_url');
+$preview     = carbon_get_the_post_meta('video_preview_image');
+$bg_shape    = carbon_get_the_post_meta('video_background_shape');
+?>
+
+<section class="relative z-10 py-[120px]">
+  <div class="container">
+    <div class="flex flex-wrap mx-[-16px]">
+      <div class="w-full px-4">
+        <div class="mx-auto max-w-[570px] text-center mb-20 wow fadeInUp" data-wow-delay=".1s">
+          <h2 class="text-black dark:text-white font-bold text-3xl sm:text-4xl md:text-[45px] mb-4">
+            <?php echo esc_html($title); ?>
+          </h2>
+          <p class="text-body-color text-base md:text-lg leading-relaxed md:leading-relaxed">
+            <?php echo nl2br(esc_html($description)); ?>
+          </p>
         </div>
       </div>
-      <div class="flex flex-wrap mx-[-16px]">
-        <div class="w-full px-4">
-          <div class="mx-auto max-w-[770px] rounded-md overflow-hidden wow fadeInUp" data-wow-delay=".15s">
-            <div class="relative items-center justify-center">
-              <img src="http://localhost:8081/wp-content/uploads/2025/06/video.jpg" alt="video image" class="w-full h-full object-cover object-center" />
+    </div>
+    <div class="flex flex-wrap mx-[-16px]">
+      <div class="w-full px-4">
+        <div class="mx-auto max-w-[770px] rounded-md overflow-hidden wow fadeInUp" data-wow-delay=".15s">
+          <div class="relative items-center justify-center">
+            <?php if ($video_url && $preview): ?>
+              <img src="<?php echo esc_url($preview); ?>" alt="video preview" class="w-full h-full object-cover object-center" />
               <div class="absolute w-full h-full top-0 right-0 flex items-center justify-center">
-                <a href="javascript:void(0)"
-                  class="glightbox w-[70px] h-[70px] rounded-full flex items-center justify-center bg-white bg-opacity-75 text-primary hover:bg-opacity-100 transition">
-                  <svg width="16" height="18" viewBox="0 0 16 18" class="fill-current">
-                    <path
-                      d="M15.5 8.13397C16.1667 8.51888 16.1667 9.48112 15.5 9.86602L2 17.6603C1.33333 18.0452 0.499999 17.564 0.499999 16.7942L0.5 1.20577C0.5 0.43597 1.33333 -0.0451549 2 0.339745L15.5 8.13397Z" />
+                <a href="<?php echo esc_url($video_url); ?>"
+                   class="glightbox w-[70px] h-[70px] rounded-full flex items-center justify-center bg-white bg-opacity-75 text-primary hover:bg-opacity-100 transition"
+                   data-type="video" data-source="youtube" aria-label="Play video">
+                  <svg width="16" height="18" viewBox="0 0 16 18" class="fill-current" aria-hidden="true" focusable="false">
+                    <path d="M15.5 8.13397C16.1667 8.51888 16.1667 9.48112 15.5 9.86602L2 17.6603C1.33333 18.0452 0.499999 17.564 0.499999 16.7942L0.5 1.20577C0.5 0.43597 1.33333 -0.0451549 2 0.339745L15.5 8.13397Z" />
                   </svg>
                 </a>
               </div>
-            </div>
+            <?php elseif ($video_url): ?>
+              <a href="<?php echo esc_url($video_url); ?>"
+                 class="glightbox inline-block px-4 py-2 bg-primary text-white rounded"
+                 data-type="video" data-source="youtube" aria-label="Play video">
+                Смотреть видео
+              </a>
+            <?php else: ?>
+              <p>Видео не задано.</p>
+            <?php endif; ?>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  <?php if ($bg_shape): ?>
     <div class="absolute bottom-0 left-0 right-0 z-[-1]">
-      <img src="http://localhost:8081/wp-content/uploads/2025/06/shape.svg" alt="shape" class="w-full" />
+      <img src="<?php echo esc_url($bg_shape); ?>" alt="background shape" class="w-full" />
     </div>
-  </section>
+  <?php endif; ?>
+</section>
 
   <!-- ====== Video Section End -->
 

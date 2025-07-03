@@ -68,17 +68,23 @@ function theme_enqueue_assets() {
  
     // Enqueue JavaScript files - in footer
 
-    wp_enqueue_script('build-js', get_template_directory_uri() . '/common/js/bundle.js', array(), '1.0', true);
+    wp_enqueue_script('bundle-js', get_template_directory_uri() . '/common/js/bundle.js', array(), '1.0', true);
     wp_enqueue_script('custom-js', get_template_directory_uri() . '/common/js/custom.js', array(), '1.0', true);
-
     wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', [], null, true);
-
-    // Аналогично для других библиотек
-
+    wp_enqueue_style('glightbox-css', 'https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css', [], '3.2.0');
+    wp_enqueue_script('glightbox-js', 'https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js', [], '3.2.0', true);
+    // Инициализация в DOMContentLoaded
+    wp_add_inline_script('glightbox-js', '
+      document.addEventListener("DOMContentLoaded", function() {
+        const lightbox = GLightbox({ selector: ".glightbox" });
+      });
+    ');
 
 
 }
 add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
+
+
 
 // Register widget areas
 
