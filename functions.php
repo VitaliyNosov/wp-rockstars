@@ -52,7 +52,7 @@ add_action( 'after_setup_theme', function() {
 
     Carbon_Fields::boot();
 
-    require_once get_template_directory() . '/inc/carbon-fields-init.php'; // путь подкорректируй под себя
+    require_once get_template_directory() . '/inc/carbon-fields-init.php'; 
 });
 
 

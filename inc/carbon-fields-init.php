@@ -8,6 +8,7 @@ use Carbon_Fields\Field;
 add_action('carbon_fields_register_fields', function () {
     Container::make('post_meta', 'Content: Section one')
         ->where('post_type', '=', 'page')
+        ->where('post_template', '=', 'page-template-custom.php')
         ->add_fields([
             Field::make('text', 'hero_title', 'Title'),
             Field::make('textarea', 'hero_description', 'Description'),
@@ -25,6 +26,7 @@ add_action('carbon_fields_register_fields', function () {
 add_action('carbon_fields_register_fields', function () {
     Container::make('post_meta', 'Block: Main features')
         ->where('post_type', '=', 'page')
+        ->where('post_template', '=', 'page-template-custom.php')
         ->add_fields([
             Field::make('text', 'features_section_title', 'Section header'),
             Field::make('textarea', 'features_section_description', 'Section Description'),
@@ -45,6 +47,7 @@ add_action('carbon_fields_register_fields', function () {
 add_action('carbon_fields_register_fields', function () {
     Container::make('post_meta', 'Видео секция')
         ->where('post_type', '=', 'page')
+        ->where('post_template', '=', 'page-template-custom.php')
         ->add_fields([
             Field::make('text', 'video_section_title', 'Заголовок')
                 ->set_default_value('We are ready to help'),
@@ -73,6 +76,7 @@ add_action('after_setup_theme', function () {
 add_action('carbon_fields_register_fields', function () {
     Container::make('post_meta', 'Секция: Логотипы брендов')
         ->where('post_type', '=', 'page')
+        ->where('post_template', '=', 'page-template-custom.php')
         ->add_fields([
             Field::make('complex', 'brand_logos_list', 'Логотипы брендов')
                 ->set_collapsed(true)
@@ -89,7 +93,8 @@ add_action('carbon_fields_register_fields', function () {
 
 add_action('carbon_fields_register_fields', function () {
     Container::make('post_meta', 'Portfolio Slides')
-        ->where('post_type', '=', 'page')  // for pages
+        ->where('post_type', '=', 'page')
+        ->where('post_template', '=', 'page-template-custom.php')
         ->add_fields([
             Field::make('complex', 'portfolio_slides', 'Portfolio slides')
                 ->set_collapsed(true)
@@ -107,6 +112,7 @@ add_action('carbon_fields_register_fields', function () {
 add_action('carbon_fields_register_fields', function () {
     Container::make('post_meta', 'Секция: О компании (About)')
         ->where('post_type', '=', 'page')
+        ->where('post_template', '=', 'page-template-custom.php')
         ->add_fields([
             Field::make('text', 'about_title', 'Заголовок'),
             Field::make('textarea', 'about_subtitle', 'Подзаголовок'),
@@ -126,6 +132,7 @@ add_action('carbon_fields_register_fields', function () {
 add_action('carbon_fields_register_fields', function () {
     Container::make('post_meta', 'Секция: Преимущества с изображением слева')
         ->where('post_type', '=', 'page')
+        ->where('post_template', '=', 'page-template-custom.php')
         ->add_fields([
             Field::make('image', 'benefits_image', 'Изображение слева')->set_value_type('url'),
 
@@ -140,7 +147,7 @@ add_action('carbon_fields_register_fields', function () {
 });
 
 
-// Section ten
+// Section ten - это theme_options, не привязано к страницам
 
 Container::make('theme_options', 'Отзывы')
   ->add_fields([
@@ -165,8 +172,7 @@ Container::make('theme_options', 'Отзывы')
   ]);
 
 
-// Section eleven
-
+// Section eleven - это theme_options, не привязано к страницам
 
 add_action('carbon_fields_register_fields', 'pricing_section_fields');
 
@@ -314,7 +320,7 @@ function pricing_section_fields() {
         ));
 }
 
-// Section FAQ
+// Section FAQ - это theme_options, не привязано к страницам
 
 add_action('carbon_fields_register_fields', 'register_faq_admin_page');
 function register_faq_admin_page() {
