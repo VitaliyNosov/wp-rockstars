@@ -522,3 +522,44 @@ body {
   width: 600px;
   margin: 0 auto;
 }
+
+
+/* landigs style */
+
+.page-id-1548 .landing-margin-class{
+  margin-top: 120px;
+  margin-bottom: 80px;
+}
+
+.page-id-1548 .section-two{
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.page-id-1548 .header-landing-section{
+  margin-top: 150px;
+  margin-bottom: 50px;
+}
+
+.page-id-1548 .header-landing-section h2{
+  text-align: center;
+}
+
+.page-id-1548 .bg-gray-100{
+  border: 1px solid #2E3038;
+  background: none !important;
+}
+
+.page-id-1548 .grid  .bg-white{
+  border: 1px solid #2E3038;
+  background: none !important;
+}
+
+.page-id-1548 .border-gray-200{
+    --tw-border-opacity: 1;
+    border-color: #2E3038 !important;
+}
+
+.dark .page-id-1548 .custom-color-bage{
+  background-color: #2563EB !important;
+}

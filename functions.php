@@ -86,6 +86,30 @@ function theme_enqueue_assets() {
 add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
 
 
+ // Tailwind ui components CDN (runtime) page id 
+
+add_action('wp_enqueue_scripts', function () {
+    if (is_page(1548)) {
+        wp_enqueue_script(
+            'tailwind-cdn',
+            'https://cdn.tailwindcss.com',
+            [],
+            null,
+            false
+        );
+
+        wp_enqueue_script(
+            'preline-js',
+            'https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.js',
+            [],
+            null,
+            true
+        );
+    }
+});
+
+
+
 
 // Register widget areas
 
