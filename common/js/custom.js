@@ -342,3 +342,140 @@ var connections = [
 	[55.5914993286,37.2615013123, 40.080101013183594,116.58499908447266],
 	[55.5914993286,37.2615013123, 25.2527999878,55.3643989563],
 ];
+
+
+// cards blue line selected
+
+
+// Функция для переключения выбора карточек
+function initCardSelector() {
+    const cards = document.querySelectorAll('.pricing-card, [class*="border"][class*="rounded-xl"]');
+    
+    // Находим карточку с выделением по умолчанию (с border-2 и border-blue-600)
+    let selectedCard = document.querySelector('[class*="border-2"][class*="border-blue-600"]');
+    
+    // Сохраняем только классы выделения (border-2 border-blue-600)
+    const selectedBorderClasses = ['border-2', 'border-blue-600'];
+    
+    // Функция для выбора карточки
+    function selectCard(clickedCard) {
+        // Убираем выделение с текущей выбранной карточки
+        if (selectedCard) {
+            selectedCard.classList.remove(...selectedBorderClasses);
+            selectedCard.classList.add('border', 'border-gray-200');
+            // Добавляем dark классы обратно
+            if (selectedCard.classList.contains('dark:border-neutral-800') || 
+                document.documentElement.classList.contains('dark')) {
+                selectedCard.classList.add('dark:border-neutral-800');
+            }
+            
+            // Убираем синюю кнопку и возвращаем обычную
+            const prevButton = selectedCard.querySelector('a');
+            if (prevButton) {
+                prevButton.className = 'mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white dark:text-white shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800';
+            }
+            
+            // Убираем плашку с предыдущей карточки
+            const prevBadge = selectedCard.querySelector('.custom-color-bage');
+            if (prevBadge && prevBadge.parentElement) {
+                prevBadge.parentElement.remove();
+            }
+        }
+        
+        // Применяем классы выделения к clicked карточке
+        clickedCard.classList.remove('border', 'border-gray-200');
+        clickedCard.classList.add(...selectedBorderClasses);
+        
+        // Меняем кнопку на синюю
+        const button = clickedCard.querySelector('a');
+        if (button) {
+            button.className = 'mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none';
+        }
+        
+        // Добавляем плашку "Your choice"
+        const title = clickedCard.querySelector('h4');
+        if (title && !clickedCard.querySelector('.custom-color-bage')) {
+            const badge = document.createElement('p');
+            badge.className = 'mb-3';
+            badge.innerHTML = '<span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold bg-blue-100 text-blue-800 dark:bg-blue-600 dark:text-white custom-color-bage">Your choice</span>';
+            title.parentNode.insertBefore(badge, title);
+        }
+        
+        // Обновляем ссылку на выбранную карточку
+        selectedCard = clickedCard;
+    }
+    
+    // Добавляем обработчики клика на все карточки
+    cards.forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => selectCard(card));
+    });
+    
+    return {
+        getSelected: () => selectedCard,
+        select: (index) => {
+            if (cards[index]) {
+                selectCard(cards[index]);
+            }
+        }
+    };
+}
+
+// Простая версия без возврата объекта
+function setupCardSelection() {
+    const cards = document.querySelectorAll('.pricing-card, [class*="border"][class*="rounded-xl"]');
+    
+    // Классы для выделения
+    const selectedBorderClasses = ['border-2', 'border-blue-600'];
+    
+    cards.forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function() {
+            // Убрать выделение со всех карточек
+            cards.forEach(c => {
+                c.classList.remove(...selectedBorderClasses);
+                c.classList.add('border', 'border-gray-200');
+                if (c.classList.contains('dark:border-neutral-800')) {
+                    c.classList.add('dark:border-neutral-800');
+                }
+                
+                // Убираем синюю кнопку и возвращаем обычную
+                const button = c.querySelector('a');
+                if (button) {
+                    button.className = 'mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white dark:text-white shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800';
+                }
+                
+                // Убираем плашку с предыдущей карточки
+                const badge = c.querySelector('.custom-color-bage');
+                if (badge && badge.parentElement) {
+                    badge.parentElement.remove();
+                }
+            });
+            
+            // Добавить выделение к clicked карточке
+            this.classList.remove('border', 'border-gray-200');
+            this.classList.add(...selectedBorderClasses);
+            
+            // Меняем кнопку на синюю
+            const button = this.querySelector('a');
+            if (button) {
+                button.className = 'mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none';
+            }
+            
+            // Добавляем плашку "Your choice"
+            const title = this.querySelector('h4');
+            if (title && !this.querySelector('.custom-color-bage')) {
+                const badge = document.createElement('p');
+                badge.className = 'mb-3';
+                badge.innerHTML = '<span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold bg-blue-100 text-blue-800 dark:bg-blue-600 dark:text-white custom-color-bage">Your choice</span>';
+                title.parentNode.insertBefore(badge, title);
+            }
+        });
+    });
+}
+
+// Инициализация
+document.addEventListener('DOMContentLoaded', function() {
+    initCardSelector();
+    // или просто: setupCardSelection();
+});
