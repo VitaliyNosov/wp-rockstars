@@ -241,7 +241,7 @@ window.addEventListener( 'load', function() {
 			color : '#4A6CF7',
 			opacity: 0.35,
 			hairline: true,
-			offset: -0.5
+			offset: -0.9
 		};
 		
 		for ( var i in connections ) {			
@@ -254,8 +254,8 @@ window.addEventListener( 'load', function() {
 			sprites[i] = this.addSprite( {
 				image: home_url + '/wp-content/uploads/2025/07/hologram-shine.svg',
 				scale: 0.01,
-				offset: -0.5,
-				opacity: 0.5
+				offset: -0.9,
+				opacity: 0.9
 			} );
 			pulse( i );
 		}
@@ -479,3 +479,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initCardSelector();
     // или просто: setupCardSelection();
 });
+
+
+
+

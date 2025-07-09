@@ -1,3 +1,4 @@
+/* Для Chrome, Edge и Safari */
 #navbarCollapse .dark\:bg-dark .submenu{
     background-color: #1F2024 !important;
 }
@@ -515,12 +516,29 @@ body {
     line-height: 1.75;
 }
 
-.earth_wrap{
-  margin-top: 50px;
-}
+/* earth */
+
 .earth_wrap .earth-container{
   width: 600px;
   margin: 0 auto;
+}
+
+
+.earth-wrapp-bg{
+  padding-top: 50px;
+}
+
+#sky {
+  height: 100%;
+}
+
+.star {
+  box-shadow: 0px 0px 1px 1px rgba(255, 255, 255, 0.4);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  border-radius: 2px;
+  background-color: white;
 }
 
 
