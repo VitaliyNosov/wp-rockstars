@@ -523,7 +523,6 @@ body {
   margin: 0 auto;
 }
 
-
 .earth-wrapp-bg{
   padding-top: 50px;
 }
@@ -544,40 +543,50 @@ body {
 
 /* landigs style */
 
-.page-id-1548 .landing-margin-class{
+.landing-margin-class{
   margin-top: 120px;
   margin-bottom: 80px;
 }
 
-.page-id-1548 .section-two{
+.page-id-1548 , .page-id-1562 .section-two{
   margin-top: 50px;
   margin-bottom: 50px;
 }
 
-.page-id-1548 .header-landing-section{
+.page-id-1548 , .page-id-1562 .header-landing-section{
   margin-top: 150px;
   margin-bottom: 50px;
 }
 
-.page-id-1548 .header-landing-section h2{
+.page-id-1548 , .page-id-1562 .header-landing-section h2{
   text-align: center;
 }
 
-.page-id-1548 .bg-gray-100{
+.page-id-1548  .bg-gray-100{
   border: 1px solid #2E3038;
   background: none !important;
 }
 
-.page-id-1548 .grid  .bg-white{
+.page-id-1548  .grid  .bg-white{
   border: 1px solid #2E3038;
   background: none !important;
 }
 
-.page-id-1548 .border-gray-200{
+.page-id-1548  .border-gray-200{
+    --tw-border-opacity: 1;
+    border-color: #2E3038 !important;
+}
+
+.page-id-1562 .border-gray-200{
     --tw-border-opacity: 1;
     border-color: #2E3038 !important;
 }
 
 .dark .page-id-1548 .custom-color-bage{
   background-color: #2563EB !important;
+}
+
+/* Для активного пункта меню */
+.header .current-menu-item > a{
+  color: #2563EB;
 }

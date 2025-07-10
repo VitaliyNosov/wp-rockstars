@@ -87,10 +87,13 @@ function theme_enqueue_assets() {
 add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
 
 
- // Tailwind ui components CDN (runtime) page id 
+// Tailwind и Preline для лендингов
 
 add_action('wp_enqueue_scripts', function () {
-    if (is_page(1548)) {
+    // Массив ID страниц, на которых нужно подключать Tailwind и Preline
+    $allowed_pages = [1548, 1562]; // Добавь сюда другие ID страниц, если нужно
+
+    if (is_page($allowed_pages)) {
         wp_enqueue_script(
             'tailwind-cdn',
             'https://cdn.tailwindcss.com',

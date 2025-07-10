@@ -13,6 +13,7 @@
 get_header(); ?>
 
 
+
 <!-- ====== Hero Section Start -->
 
 <section id="home" class="relative overflow-hidden z-10 pt-[120px] pb-[110px] md:pt-[150px] md:pb-[120px] xl:pt-[180px] xl:pb-[160px] 2xl:pt-[210px] 2xl:pb-[200px]">
