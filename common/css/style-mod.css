@@ -597,3 +597,7 @@ html body #rs-post-audio-player-container .plyr{
     width: 100% !important;
     height: 100% !important;
 }
+
+.rs-post-audio-player-container {
+    padding: 8px 12px 0px !important;
+}

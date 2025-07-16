@@ -73,7 +73,6 @@ function theme_enqueue_assets() {
     wp_enqueue_script('earth-js', get_template_directory_uri() . '/common/js/earth.js', array(), '1.0', true);
     wp_enqueue_script('gsap', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js', [], null, true);
     wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', [], null, true);
-    wp_enqueue_script('wavesurfer', 'https://unpkg.com/wavesurfer.js', [], null, true);
     wp_enqueue_style('glightbox-css', 'https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css', [], '3.2.0');
     wp_enqueue_script('glightbox-js', 'https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js', [], '3.2.0', true);
     // Инициализация в DOMContentLoaded
@@ -705,25 +704,33 @@ function wp_custom_debug_info() {
 
 // audio play posts 
 
-function rs_enqueue_plyr() {
-    if ( is_singular('post') ) {
-        wp_enqueue_style( 'plyr-css', 'https://cdn.plyr.io/3.7.8/plyr.css' );
-        wp_enqueue_script( 'plyr-js', 'https://cdn.plyr.io/3.7.8/plyr.polyfilled.js', [], null, true );
-    }
+
+function rs_enqueue_audio_assets() {
+	if ( is_singular( 'post' ) ) {
+		wp_enqueue_style( 'plyr-css', 'https://cdn.plyr.io/3.7.8/plyr.css', [], null );
+		wp_enqueue_script( 'plyr-js', 'https://cdn.plyr.io/3.7.8/plyr.polyfilled.js', [], null, true );
+		// WaveSurfer 7.x
+		wp_enqueue_script( 'wavesurfer-js', 'https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js', [], null, true );
+	}
 }
-add_action( 'wp_enqueue_scripts', 'rs_enqueue_plyr' );
+add_action( 'wp_enqueue_scripts', 'rs_enqueue_audio_assets' );
 
-
+/**
+ * Append collapsible audio player + waveform (bars) after content.
+ */
 function rs_prepend_post_audio_player( $content ) {
 	if ( is_singular( 'post' ) && in_the_loop() && is_main_query() ) {
+
 		$audio_url = carbon_get_post_meta( get_the_ID(), 'post_audio_file' );
 		if ( $audio_url ) {
 
-			$post_id       = get_the_ID();
-			$btn_id        = 'rs-listen-toggle-btn-' . $post_id;
-			$wrap_id       = 'rs-post-audio-player-container-' . $post_id;
-			$icon_id       = 'rs-icon-' . $post_id;
-			$audio_dom_id  = 'rs-audio-' . $post_id;
+			$post_id      = get_the_ID();
+			$uid          = 'rs-' . $post_id; // стабильный префикс
+			$btn_id       = $uid . '-btn';
+			$wrap_id      = $uid . '-wrap';
+			$icon_id      = $uid . '-icon';
+			$wave_id      = $uid . '-wave';
+			$audio_dom_id = $uid . '-audio';
 
 			ob_start(); ?>
 			<div class="rs-listen-toggle-container" style="margin-top:50px;max-width:100%;width:100%;">
@@ -748,101 +755,164 @@ function rs_prepend_post_audio_player( $content ) {
 					id="<?php echo esc_attr( $wrap_id ); ?>"
 					class="rs-post-audio-player-container"
 				>
+					<!-- Waveform -->
+					<div id="<?php echo esc_attr( $wave_id ); ?>" class="rs-audio-wave"></div>
+
+					<!-- Audio element controlled by Plyr; WaveSurfer reads from it -->
 					<audio
 						id="<?php echo esc_attr( $audio_dom_id ); ?>"
 						class="js-player"
 						controls
 						crossorigin
-						style="width:100%;height:60px;"
+						style="width:100%;height:60px;margin-top:8px;"
 					>
 						<source src="<?php echo esc_url( $audio_url ); ?>" type="audio/mpeg" />
 					</audio>
 				</div>
 			</div>
-
-			<script>
-			document.addEventListener('DOMContentLoaded', () => {
-				const audioEl     = document.getElementById('<?php echo esc_js( $audio_dom_id ); ?>');
-				// Создаём Plyr instance именно на нашем <audio>
-				const plyrInstance = new Plyr(audioEl, {
-					controls: ['play', 'progress', 'current-time', 'mute', 'volume']
-				});
-
-				const btn        = document.getElementById('<?php echo esc_js( $btn_id ); ?>');
-				const playerWrap = document.getElementById('<?php echo esc_js( $wrap_id ); ?>');
-				const iconHolder = document.getElementById('<?php echo esc_js( $icon_id ); ?>');
-
-				const playIconSVG = `
-					<svg viewBox="0 0 24 24" fill="#2E3038" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
-						<path d="M8 5v14l11-7z"/>
-					</svg>
-				`;
-				const closeIconSVG = `
-					<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
-						<path d="M18 6L6 18" stroke="#2E3038" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-						<path d="M6 6L18 18" stroke="#2E3038" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-					</svg>
-				`;
-
-				btn.addEventListener('click', () => {
-					const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-					if (expanded) {
-						// ------ СВЕРНУТЬ ------
-						plyrInstance.pause(); // остановили, позиция сохраняется
-						playerWrap.classList.remove('is-open');
-						btn.setAttribute('aria-expanded', 'false');
-						iconHolder.innerHTML = playIconSVG;
-						btn.style.border = ''; // вернуть border-transparent из классов
-					} else {
-						// ------ РАЗВЕРНУТЬ ------
-						playerWrap.classList.add('is-open');
-						btn.setAttribute('aria-expanded', 'true');
-						iconHolder.innerHTML = closeIconSVG;
-						btn.style.border = 'none'; // убрать бордер при открытии
-					}
-				});
-			});
-			</script>
-
-			<style>
-			/* Collapsible wrapper animation + стили */
-			.rs-post-audio-player-container {
-				max-height:0;
-				opacity:0;
-				overflow:hidden;
-				transition:opacity .4s ease, max-height .5s ease;
-				background-color:#000000;
-				border:1px solid #2E3038;
-				border-radius:6px;
-				--plyr-color-main:#4A6CF7;
-				--plyr-track-background:#222222;
-				--plyr-progress-background:#4A6CF7;
-				--plyr-control-hover-background:rgba(74,108,247,.15);
-				color:#fff;
-				margin-top:10px;
-			}
-			.rs-post-audio-player-container.is-open {
-				max-height:200px; /* запас */
-				opacity:1;
-			}
-
-			/* Plyr body */
-			.rs-post-audio-player-container .plyr__time {
-				color:#fff !important;
-			}
-			.plyr--audio .plyr__controls {
-				background:#000000 !important;
-			}
-			</style>
 			<?php
 			$player_html = ob_get_clean();
 			$content    .= $player_html;
+
+			// Подключаем общий inline JS/CSS в футере только 1 раз.
+			static $rs_audio_inline_done = false;
+			if ( ! $rs_audio_inline_done ) {
+				$rs_audio_inline_done = true;
+				add_action( 'wp_footer', 'rs_audio_inline_assets', 99 );
+			}
 		}
 	}
 	return $content;
 }
 add_filter( 'the_content', 'rs_prepend_post_audio_player' );
+
+/**
+ * Inline JS/CSS (один раз в футере).
+ */
+function rs_audio_inline_assets() { ?>
+	<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const playIconSVG = `
+			<svg viewBox="0 0 24 24" fill="#2E3038" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+				<path d="M8 5v14l11-7z"/>
+			</svg>
+		`;
+		const closeIconSVG = `
+			<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+				<path d="M18 6L6 18" stroke="#2E3038" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				<path d="M6 6L18 18" stroke="#2E3038" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+		`;
+
+		// Для каждого плеера на странице
+		document.querySelectorAll('.rs-post-audio-player-container').forEach((wrap) => {
+			const waveEl  = wrap.querySelector('.rs-audio-wave');
+			const audioEl = wrap.querySelector('audio.js-player');
+			const btn     = wrap.parentElement.querySelector('button[id$="-btn"]');
+			const icon    = wrap.parentElement.querySelector('span[id$="-icon"]');
+
+			// Plyr: убираем прогресс (используем волну)
+			const plyrInstance = new Plyr(audioEl, {
+				controls: ['play', 'current-time', 'mute', 'volume'],
+			});
+
+			// WaveSurfer: грузим звук из уже существующего <audio>
+			const wavesurfer = WaveSurfer.create({
+				container: waveEl,
+				waveColor: '#2E3038',
+				progressColor: '#4A6CF7',
+				barWidth: 2,
+				barGap: 2,
+				barRadius: 1,
+				height: 80,
+				responsive: true,
+				interact: true,
+				dragToSeek: true,
+				backend: 'MediaElement',
+				media: audioEl, // используем тот же media элемент
+			});
+			// В backend: 'MediaElement' режим, WaveSurfer работает поверх audioEl, НЕ создавая второй звук.
+
+			// Перемотка по волне (дублируем на всякий случай, хотя MediaElement сам синхронен)
+			wavesurfer.on('seek', (progress) => {
+				if (audioEl.duration) {
+					audioEl.currentTime = progress * audioEl.duration;
+				}
+			});
+
+			// Кнопка раскрытия/сворачивания
+			btn.addEventListener('click', () => {
+				const expanded = btn.getAttribute('aria-expanded') === 'true';
+
+				if (expanded) {
+					// СВЕРНУТЬ: пауза, позиция остаётся
+					plyrInstance.pause(); // останавливает audioEl; волна тоже остановится (общий media)
+					wrap.classList.remove('is-open');
+					btn.setAttribute('aria-expanded', 'false');
+					icon.innerHTML = playIconSVG;
+					btn.style.border = ''; // вернуть border-transparent
+				} else {
+					// РАЗВЕРНУТЬ
+					wrap.classList.add('is-open');
+					btn.setAttribute('aria-expanded', 'true');
+					icon.innerHTML = closeIconSVG;
+					btn.style.border = 'none';
+				}
+			});
+		});
+	});
+	</script>
+
+	<style>
+	/* Скрываем стандартный прогресс Plyr */
+	.rs-post-audio-player-container .plyr__progress,
+	.rs-post-audio-player-container .plyr__progress__container {
+		display:none !important;
+	}
+
+	/* Обёртка плеера (анимация открытия) */
+	.rs-post-audio-player-container {
+		max-height:0;
+		opacity:0;
+		overflow:hidden;
+		transition:opacity .4s ease,max-height .5s ease;
+		background-color:#000;
+		border:1px solid #2E3038;
+		border-radius:6px;
+		--plyr-color-main:#4A6CF7;
+		--plyr-track-background:#222;
+		--plyr-progress-background:#4A6CF7;
+		--plyr-control-hover-background:rgba(74,108,247,.15);
+		color:#fff;
+		margin-top:10px;
+		padding:8px 12px 16px;
+	}
+	.rs-post-audio-player-container.is-open {
+		max-height:300px; /* запас под волну + контролы */
+		opacity:1;
+	}
+
+	/* Волна */
+	.rs-post-audio-player-container .rs-audio-wave {
+		width:100%;
+		height:80px;
+	}
+
+	/* Plyr */
+	.rs-post-audio-player-container .plyr {
+		width:100% !important;
+		height:60px !important;
+	}
+	.rs-post-audio-player-container .plyr__time {
+		color:#fff !important;
+	}
+	.plyr--audio .plyr__controls {
+		background:#000 !important;
+	}
+	</style>
+<?php }
+
+
 
 
 
