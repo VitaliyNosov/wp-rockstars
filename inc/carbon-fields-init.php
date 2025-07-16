@@ -344,3 +344,18 @@ function wp_faq_add_class_to_paragraphs($content) {
         $content
     );
 }
+
+// posts audio player
+
+add_action('carbon_fields_register_fields', 'add_audio_player_fields');
+
+function add_audio_player_fields() {
+    Container::make('post_meta', 'Аудио плеер')
+        ->where('post_type', '=', 'post') // только для постов
+        ->add_fields(array(
+            Field::make('file', 'post_audio_file', 'Аудио файл')
+                ->set_type(array('audio'))
+                ->set_value_type('url') // получаем URL файла
+                ->set_help_text('Загрузите аудио файл (mp3, wav, ogg)')
+        ));
+}

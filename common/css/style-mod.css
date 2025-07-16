@@ -590,3 +590,10 @@ body {
 .header .current-menu-item > a{
   color: #2563EB;
 }
+
+/* audio player custom */
+
+html body #rs-post-audio-player-container .plyr{
+    width: 100% !important;
+    height: 100% !important;
+}

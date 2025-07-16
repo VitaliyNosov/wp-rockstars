@@ -73,6 +73,7 @@ function theme_enqueue_assets() {
     wp_enqueue_script('earth-js', get_template_directory_uri() . '/common/js/earth.js', array(), '1.0', true);
     wp_enqueue_script('gsap', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js', [], null, true);
     wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', [], null, true);
+    wp_enqueue_script('wavesurfer', 'https://unpkg.com/wavesurfer.js', [], null, true);
     wp_enqueue_style('glightbox-css', 'https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css', [], '3.2.0');
     wp_enqueue_script('glightbox-js', 'https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js', [], '3.2.0', true);
     // Инициализация в DOMContentLoaded
@@ -704,342 +705,153 @@ function wp_custom_debug_info() {
 
 // audio play posts 
 
-add_filter('the_content', 'add_tts_audio_wave_progress');
-
-function add_tts_audio_wave_progress($content) {
-    if (!is_singular('post')) return $content;
-
-    $post_text = wp_strip_all_tags($content);
-    $post_text = preg_replace('/\s+/', ' ', trim($post_text)); // Нормализация пробелов
-    $post_text = esc_js($post_text);
-
-    $script = <<<HTML
-<style>
-  .wave-progress-wrapper {
-    width: 100%;
-    height: 64px;
-    display: flex;
-    gap: 1px;
-    overflow: hidden;
-    user-select: none;
-    align-items: flex-end;
-    background: transparent;
-  }
-  .wave-block {
-    width: 2px;
-    background: #3b82f6;
-    border-radius: 2px;
-    transform-origin: bottom center;
-    transition: height 0.1s ease-out;
-  }
-  .tts-controls {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-  .tts-button {
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  .tts-button:hover {
-    background: #1d4ed8;
-  }
-  .tts-button:disabled {
-    background: #6b7280;
-    cursor: not-allowed;
-  }
-</style>
-
-<div style="width:100%; max-width:100%; margin-bottom:24px; padding:16px; background:#000; border:1px solid #2E3038; color:#fff; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3);">
-  <div style="display:flex; align-items:center; justify-between; gap:12px; flex-wrap:wrap;">
-    <div style="font-size:1.125rem; font-weight:600; display:flex; align-items:center; gap:8px; flex-grow:1;">
-      <span>🔊</span><span>Voice the article</span>
-    </div>
-    <div class="tts-controls">
-      <button id="tts-toggle" class="tts-button">▶️ Play</button>
-      <button id="tts-stop" class="tts-button" style="display:none;">⏹️ Stop</button>
-    </div>
-  </div>
-  <div class="wave-progress-wrapper" id="wave-progress-wrapper" aria-label="Прогресс озвучки" aria-live="polite" aria-atomic="true"></div>
-</div>
-
-<script>
-(function(){
-  const toggleBtn = document.getElementById('tts-toggle');
-  const stopBtn = document.getElementById('tts-stop');
-  const waveWrapper = document.getElementById('wave-progress-wrapper');
-
-  const blockWidth = 2;
-  const blockGap = 1;
-  let maxBlocks = 0;
-  let blocks = [];
-  let utterance = null;
-  let timer = null;
-  let startTime = 0;
-  let totalDuration = 0;
-  let pausedTime = 0;
-  let isPaused = false;
-  let isSpeaking = false;
-  let selectedVoice = null;
-  let textChunks = [];
-  let currentChunkIndex = 0;
-  let chunkStartTimes = [];
-
-  const text = "$post_text";
-
-  // Разбиваем текст на части для лучшей работы с разными языками
-
-  function splitTextIntoChunks(text, maxLength = 300) {
-    const chunks = [];
-    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-    
-    let currentChunk = '';
-    for (const sentence of sentences) {
-      if (currentChunk.length + sentence.length > maxLength && currentChunk.length > 0) {
-        chunks.push(currentChunk.trim());
-        currentChunk = sentence.trim();
-      } else {
-        currentChunk += (currentChunk.length > 0 ? '. ' : '') + sentence.trim();
-      }
+function rs_enqueue_plyr() {
+    if ( is_singular('post') ) {
+        wp_enqueue_style( 'plyr-css', 'https://cdn.plyr.io/3.7.8/plyr.css' );
+        wp_enqueue_script( 'plyr-js', 'https://cdn.plyr.io/3.7.8/plyr.polyfilled.js', [], null, true );
     }
-    
-    if (currentChunk.length > 0) {
-      chunks.push(currentChunk.trim());
-    }
-    
-    return chunks.length > 0 ? chunks : [text];
-  }
-
-  function createBlocks() {
-    waveWrapper.innerHTML = '';
-    const wrapperWidth = waveWrapper.clientWidth || 600;
-    maxBlocks = Math.floor(wrapperWidth / (blockWidth + blockGap));
-    blocks = [];
-    
-    for (let i = 0; i < maxBlocks; i++) {
-      const block = document.createElement('div');
-      block.className = 'wave-block';
-      block.style.height = Math.floor(Math.random() * 60 + 4) + 'px';
-      block.style.visibility = 'hidden';
-      waveWrapper.appendChild(block);
-      blocks.push(block);
-    }
-  }
-
-  function updateProgress() {
-    if (!isSpeaking) return;
-    
-    const now = Date.now();
-    const elapsed = (now - startTime) + pausedTime;
-    const progress = Math.min(elapsed / totalDuration, 1);
-    const visibleBlocks = Math.floor(progress * maxBlocks);
-    
-    for (let i = 0; i < maxBlocks; i++) {
-      blocks[i].style.visibility = i < visibleBlocks ? 'visible' : 'hidden';
-    }
-    
-    if (progress >= 1) {
-      stopSpeech();
-    }
-  }
-
-  function detectVoice() {
-    return new Promise((resolve) => {
-      const setVoice = () => {
-        const voices = speechSynthesis.getVoices();
-        if (voices.length === 0) return;
-        
-        // Определяем язык страницы
-
-        const pageLanguage = document.documentElement.lang || 
-                           navigator.language || 
-                           navigator.userLanguage || 
-                           'en-US';
-        
-        // Ищем голос для языка страницы
-
-        let voice = voices.find(v => v.lang === pageLanguage);
-        
-        // Если не найден точный, ищем по основному языку
-
-        if (!voice) {
-          const mainLang = pageLanguage.split('-')[0];
-          voice = voices.find(v => v.lang.startsWith(mainLang));
-        }
-        
-        // Если все еще не найден, берем первый доступный
-
-        if (!voice) {
-          voice = voices.find(v => v.default) || voices[0];
-        }
-        
-        selectedVoice = voice;
-        resolve();
-      };
-
-      if (speechSynthesis.getVoices().length > 0) {
-        setVoice();
-      } else {
-        speechSynthesis.onvoiceschanged = setVoice;
-      }
-    });
-  }
-
-  function calculateDuration(text) {
-
-    // Более точный расчет длительности для разных языков
-
-    const wordsPerMinute = selectedVoice && selectedVoice.lang.startsWith('ru') ? 180 : 200;
-    const words = text.split(/\s+/).length;
-    return (words / wordsPerMinute) * 60 * 1000; // в миллисекундах
-  }
-
-  function speakChunk(chunkIndex) {
-    if (chunkIndex >= textChunks.length) {
-      stopSpeech();
-      return;
-    }
-
-    currentChunkIndex = chunkIndex;
-    utterance = new SpeechSynthesisUtterance(textChunks[chunkIndex]);
-    
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-      utterance.lang = selectedVoice.lang;
-    }
-    
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
-
-    utterance.onend = () => {
-      if (isSpeaking && currentChunkIndex < textChunks.length - 1) {
-
-        // Небольшая пауза между частями
-
-        setTimeout(() => speakChunk(currentChunkIndex + 1), 100);
-      } else {
-        stopSpeech();
-      }
-    };
-
-    utterance.onerror = (event) => {
-      console.error('Speech synthesis error:', event);
-      stopSpeech();
-    };
-
-    speechSynthesis.speak(utterance);
-  }
-
-  function startSpeech() {
-    if (!selectedVoice) return;
-
-    textChunks = splitTextIntoChunks(text);
-    totalDuration = calculateDuration(text);
-    
-    if (!isPaused) {
-      startTime = Date.now();
-      pausedTime = 0;
-      currentChunkIndex = 0;
-    } else {
-      startTime = Date.now();
-      isPaused = false;
-    }
-
-    isSpeaking = true;
-    timer = setInterval(updateProgress, 100);
-    
-    speakChunk(currentChunkIndex);
-    
-    toggleBtn.textContent = '⏸️ Pause';
-    stopBtn.style.display = 'inline-block';
-  }
-
-  function pauseSpeech() {
-    if (speechSynthesis.speaking) {
-      speechSynthesis.pause();
-      clearInterval(timer);
-      pausedTime += Date.now() - startTime;
-      isPaused = true;
-      isSpeaking = false;
-      toggleBtn.textContent = '▶️ Continue';
-    }
-  }
-
-  function resumeSpeech() {
-    if (speechSynthesis.paused) {
-      speechSynthesis.resume();
-      startTime = Date.now();
-      isSpeaking = true;
-      timer = setInterval(updateProgress, 100);
-      toggleBtn.textContent = '⏸️ Pause';
-    }
-  }
-
-  function stopSpeech() {
-    speechSynthesis.cancel();
-    clearInterval(timer);
-    
-    isSpeaking = false;
-    isPaused = false;
-    pausedTime = 0;
-    currentChunkIndex = 0;
-    
-    // Скрываем все блоки прогресса
-
-    for (let i = 0; i < maxBlocks; i++) {
-      blocks[i].style.visibility = 'hidden';
-    }
-    
-    toggleBtn.textContent = '▶️ Play';
-    stopBtn.style.display = 'none';
-  }
-
-  // Обработчики событий
-
-  toggleBtn.onclick = () => {
-    if (!selectedVoice) {
-      detectVoice().then(() => {
-        if (selectedVoice) toggleBtn.onclick();
-      });
-      return;
-    }
-
-    if (isSpeaking) {
-      pauseSpeech();
-    } else if (isPaused) {
-      resumeSpeech();
-    } else {
-      startSpeech();
-    }
-  };
-
-  stopBtn.onclick = stopSpeech;
-
-  // Инициализация
-
-  createBlocks();
-  detectVoice();
-
-  // Пересоздаем блоки при изменении размера окна
-
-  window.addEventListener('resize', createBlocks);
-
-  // Останавливаем при уходе со страницы
-
-  window.addEventListener('beforeunload', stopSpeech);
-})();
-</script>
-HTML;
-
-    return $script . $content;
 }
+add_action( 'wp_enqueue_scripts', 'rs_enqueue_plyr' );
+
+
+function rs_prepend_post_audio_player( $content ) {
+	if ( is_singular( 'post' ) && in_the_loop() && is_main_query() ) {
+		$audio_url = carbon_get_post_meta( get_the_ID(), 'post_audio_file' );
+		if ( $audio_url ) {
+
+			$post_id       = get_the_ID();
+			$btn_id        = 'rs-listen-toggle-btn-' . $post_id;
+			$wrap_id       = 'rs-post-audio-player-container-' . $post_id;
+			$icon_id       = 'rs-icon-' . $post_id;
+			$audio_dom_id  = 'rs-audio-' . $post_id;
+
+			ob_start(); ?>
+			<div class="rs-listen-toggle-container" style="margin-top:50px;max-width:100%;width:100%;">
+				<button
+					id="<?php echo esc_attr( $btn_id ); ?>"
+					aria-expanded="false"
+					data-target="#<?php echo esc_attr( $wrap_id ); ?>"
+					class="inline-flex items-center justify-center py-2 px-4 mr-4 mb-2 rounded-md bg-primary bg-opacity-10 text-body-color hover:bg-opacity-100 hover:text-white cursor-pointer border border-transparent transition"
+					style="text-decoration:none;"
+					type="button"
+				>
+					<span id="<?php echo esc_attr( $icon_id ); ?>" class="inline-block w-5 h-5 mr-2" aria-hidden="true">
+						<!-- Play Icon -->
+						<svg viewBox="0 0 24 24" fill="#2E3038" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+							<path d="M8 5v14l11-7z"/>
+						</svg>
+					</span>
+					<span>Listen to the article</span>
+				</button>
+
+				<div
+					id="<?php echo esc_attr( $wrap_id ); ?>"
+					class="rs-post-audio-player-container"
+				>
+					<audio
+						id="<?php echo esc_attr( $audio_dom_id ); ?>"
+						class="js-player"
+						controls
+						crossorigin
+						style="width:100%;height:60px;"
+					>
+						<source src="<?php echo esc_url( $audio_url ); ?>" type="audio/mpeg" />
+					</audio>
+				</div>
+			</div>
+
+			<script>
+			document.addEventListener('DOMContentLoaded', () => {
+				const audioEl     = document.getElementById('<?php echo esc_js( $audio_dom_id ); ?>');
+				// Создаём Plyr instance именно на нашем <audio>
+				const plyrInstance = new Plyr(audioEl, {
+					controls: ['play', 'progress', 'current-time', 'mute', 'volume']
+				});
+
+				const btn        = document.getElementById('<?php echo esc_js( $btn_id ); ?>');
+				const playerWrap = document.getElementById('<?php echo esc_js( $wrap_id ); ?>');
+				const iconHolder = document.getElementById('<?php echo esc_js( $icon_id ); ?>');
+
+				const playIconSVG = `
+					<svg viewBox="0 0 24 24" fill="#2E3038" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+						<path d="M8 5v14l11-7z"/>
+					</svg>
+				`;
+				const closeIconSVG = `
+					<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+						<path d="M18 6L6 18" stroke="#2E3038" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M6 6L18 18" stroke="#2E3038" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>
+				`;
+
+				btn.addEventListener('click', () => {
+					const expanded = btn.getAttribute('aria-expanded') === 'true';
+
+					if (expanded) {
+						// ------ СВЕРНУТЬ ------
+						plyrInstance.pause(); // остановили, позиция сохраняется
+						playerWrap.classList.remove('is-open');
+						btn.setAttribute('aria-expanded', 'false');
+						iconHolder.innerHTML = playIconSVG;
+						btn.style.border = ''; // вернуть border-transparent из классов
+					} else {
+						// ------ РАЗВЕРНУТЬ ------
+						playerWrap.classList.add('is-open');
+						btn.setAttribute('aria-expanded', 'true');
+						iconHolder.innerHTML = closeIconSVG;
+						btn.style.border = 'none'; // убрать бордер при открытии
+					}
+				});
+			});
+			</script>
+
+			<style>
+			/* Collapsible wrapper animation + стили */
+			.rs-post-audio-player-container {
+				max-height:0;
+				opacity:0;
+				overflow:hidden;
+				transition:opacity .4s ease, max-height .5s ease;
+				background-color:#000000;
+				border:1px solid #2E3038;
+				border-radius:6px;
+				--plyr-color-main:#4A6CF7;
+				--plyr-track-background:#222222;
+				--plyr-progress-background:#4A6CF7;
+				--plyr-control-hover-background:rgba(74,108,247,.15);
+				color:#fff;
+				margin-top:10px;
+			}
+			.rs-post-audio-player-container.is-open {
+				max-height:200px; /* запас */
+				opacity:1;
+			}
+
+			/* Plyr body */
+			.rs-post-audio-player-container .plyr__time {
+				color:#fff !important;
+			}
+			.plyr--audio .plyr__controls {
+				background:#000000 !important;
+			}
+			</style>
+			<?php
+			$player_html = ob_get_clean();
+			$content    .= $player_html;
+		}
+	}
+	return $content;
+}
+add_filter( 'the_content', 'rs_prepend_post_audio_player' );
+
+
+
+
+
+
+
+
+
 
 
 
