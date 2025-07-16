@@ -753,7 +753,7 @@ function rs_prepend_post_audio_player( $content ) {
 
 				<div
 					id="<?php echo esc_attr( $wrap_id ); ?>"
-					class="rs-post-audio-player-container"
+					class="rs-post-audio-player-container 123"
 				>
 					<!-- Waveform -->
 					<div id="<?php echo esc_attr( $wave_id ); ?>" class="rs-audio-wave"></div>
@@ -876,7 +876,7 @@ function rs_audio_inline_assets() { ?>
 		opacity:0;
 		overflow:hidden;
 		transition:opacity .4s ease,max-height .5s ease;
-		background-color:#000;
+		/* background-color:#000; */
 		border:1px solid #2E3038;
 		border-radius:6px;
 		--plyr-color-main:#4A6CF7;
@@ -907,7 +907,7 @@ function rs_audio_inline_assets() { ?>
 		color:#fff !important;
 	}
 	.plyr--audio .plyr__controls {
-		background:#000 !important;
+		background: rgba(0, 0, 0, 0) !important;
 	}
 	</style>
 <?php }
