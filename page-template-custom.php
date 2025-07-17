@@ -908,7 +908,7 @@ wp_reset_postdata();
 
             <!-- form ticket admin  -->
 
-            <form id="wp-custom-contact-form" class="wp-custom-form">
+<form id="wp-custom-contact-form" class="wp-custom-form">
   <div class="flex flex-wrap mx-[-16px]">
     <div class="w-full md:w-1/2 px-4">
       <div class="mb-8">
