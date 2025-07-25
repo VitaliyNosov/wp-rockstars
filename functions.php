@@ -75,6 +75,9 @@ function theme_enqueue_assets() {
     wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', [], null, true);
     wp_enqueue_style('glightbox-css', 'https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css', [], '3.2.0');
     wp_enqueue_script('glightbox-js', 'https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js', [], '3.2.0', true);
+    wp_enqueue_style( 'plyr-css', 'https://cdn.plyr.io/3.7.8/plyr.css', [], null );
+	wp_enqueue_script( 'plyr-js', 'https://cdn.plyr.io/3.7.8/plyr.polyfilled.js', [], null, true );
+    wp_enqueue_script( 'wavesurfer-js', 'https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js', [], null, true );
     // Инициализация в DOMContentLoaded
     wp_add_inline_script('glightbox-js', '
       document.addEventListener("DOMContentLoaded", function() {
@@ -736,15 +739,15 @@ add_action( 'added_post_meta', function( $mid, $pid, $key, $val ) {
 // audio play posts 
 
 
-function rs_enqueue_audio_assets() {
-	if ( is_singular( 'post' ) ) {
-		wp_enqueue_style( 'plyr-css', 'https://cdn.plyr.io/3.7.8/plyr.css', [], null );
-		wp_enqueue_script( 'plyr-js', 'https://cdn.plyr.io/3.7.8/plyr.polyfilled.js', [], null, true );
-		// WaveSurfer 7.x
-		wp_enqueue_script( 'wavesurfer-js', 'https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js', [], null, true );
-	}
-}
-add_action( 'wp_enqueue_scripts', 'rs_enqueue_audio_assets' );
+// function rs_enqueue_audio_assets() {
+// 	if ( is_singular( 'post' ) ) {
+// 		wp_enqueue_style( 'plyr-css', 'https://cdn.plyr.io/3.7.8/plyr.css', [], null );
+// 		wp_enqueue_script( 'plyr-js', 'https://cdn.plyr.io/3.7.8/plyr.polyfilled.js', [], null, true );
+// 		// WaveSurfer 7.x
+// 		wp_enqueue_script( 'wavesurfer-js', 'https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js', [], null, true );
+// 	}
+// }
+// add_action( 'wp_enqueue_scripts', 'rs_enqueue_audio_assets' );
 
 /**
  * Append collapsible audio player + waveform (bars) after content.
@@ -945,14 +948,51 @@ function rs_audio_inline_assets() { ?>
 
 
 
+// modal portfolio
 
+add_action('wp_enqueue_scripts', function () {
+    wp_enqueue_script('portfolio-modal', get_template_directory_uri() . '/common/js/portfolio-modal.js', [], null, true);
+});
 
+add_action('wp_ajax_nopriv_proxy_site', 'proxy_site_func');
+add_action('wp_ajax_proxy_site', 'proxy_site_func');
 
+function proxy_site_func() {
+    if (empty($_GET['url'])) {
+        wp_send_json_error('Missing URL', 400);
+    }
 
+    $url = esc_url_raw($_GET['url']);
+    $parsed_url = parse_url($url);
 
+    if (!isset($parsed_url['host'])) {
+        wp_send_json_error('Invalid URL', 400);
+    }
 
+    // Нормализация хоста — убираем www.
+    $host = strtolower($parsed_url['host']);
+    $host = preg_replace('/^www\./', '', $host);
 
+    // Разрешённые домены (без www)
+    $allowed_hosts = ['seeintl.org', 'waapple.org', 'snopud.com', 'cchpca.org'];
 
+    if (!in_array($host, $allowed_hosts, true)) {
+        wp_send_json_error('URL not allowed', 403);
+    }
+
+    $response = wp_remote_get($url);
+
+    if (is_wp_error($response)) {
+        wp_send_json_error('Request failed');
+    }
+
+    $body = wp_remote_retrieve_body($response);
+    $content_type = wp_remote_retrieve_header($response, 'content-type');
+
+    header('Content-Type: ' . $content_type);
+    echo $body;
+    wp_die();
+}
 
 
 
