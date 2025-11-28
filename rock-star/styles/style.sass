@@ -1,8 +1,532 @@
-body 
-    padding: 0px
-    margin: 0px
-    background: black
+// ========================================
+// ПЕРЕМЕННЫЕ
+// ========================================
 
-h1 
-    color: red 
-    
+// Цвета
+$color-dark-bg: #000000
+$color-dark-border: #2E3038
+$color-dark-secondary: #1F2024
+$color-primary: #2563EB
+$color-primary-hover: #4A6CF7
+$color-gray-light: #F3F4F6
+$color-gray-border: #e5e7eb
+$color-gray-text: #6b7280
+$color-error: #971408
+
+// Размеры
+$border-radius: 0.5rem
+$border-radius-large: 0.75rem
+$transition-speed: 0.3s
+
+// ========================================
+// БАЗОВЫЕ СТИЛИ
+// ========================================
+
+body
+  margin: 0
+  overflow-x: hidden
+  background: $color-gray-light
+
+// ========================================
+// НАВИГАЦИЯ
+// ========================================
+
+#navbarCollapse
+  background-color: transparent !important
+
+  .dark\:bg-dark .submenu
+    background-color: $color-dark-secondary !important
+
+  @media (max-width: 820px)
+    background-color: #fff !important
+
+.dark
+  #navbarCollapse
+    @media (max-width: 820px)
+      background-color: $color-dark-bg !important
+      border: 1px solid $color-dark-border !important
+      overflow: hidden
+
+  .dark\:bg-dark .submenu
+    border: 1px solid $color-dark-border !important
+
+    @media (max-width: 820px)
+      border: none !important
+
+  // Темные фоны
+  .dark\:bg-black,
+  .dark\:bg-dark
+    --tw-bg-opacity: 1
+    background-color: $color-dark-bg !important
+
+  .dark\:bg-\[\#1D2144\]
+    --tw-bg-opacity: 1
+    background-color: $color-dark-bg !important
+    border: 1px solid $color-dark-border
+
+  .dark\:bg-\[\#242B51\]
+    --tw-bg-opacity: 1
+    background-color: rgb(31 32 36) !important
+
+  .bg-primary
+    --tw-bg-opacity: 1
+    background-color: rgb(6 6 7) !important
+    border: 1px solid $color-dark-border
+
+  .shadow-one
+    border: 1px solid $color-dark-border
+
+  // Ховеры для форм
+  form
+    a:hover,
+    button:hover
+      background-color: rgb(74 108 247 / var(--tw-bg-opacity)) !important
+
+// Активный пункт меню
+.header .current-menu-item > a
+  color: $color-primary
+
+// ========================================
+// СЛАЙДЕР
+// ========================================
+
+.portfolio-name
+  margin-top: 100px
+  margin-bottom: 50px
+
+.slider-container
+  position: relative
+  width: 100vw
+  overflow: hidden
+  margin: 2rem
+
+  @media (max-width: 640px)
+    width: 90%
+    margin: 20px
+
+.slider-track
+  display: flex
+  gap: 2%
+  transition: transform 0.6s ease
+  will-change: transform
+  user-select: none
+  -webkit-user-select: none
+  -ms-user-select: none
+
+  @media (max-width: 640px)
+    gap: 0
+
+.slide
+  flex: 0 0 38.46%
+  height: 400px
+  border-radius: $border-radius
+  overflow: hidden
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.1)
+  border: 1px solid $color-dark-border
+  cursor: grab
+  position: relative
+  transition: $transition-speed
+
+  &:hover
+    border: 1px solid #25367C
+
+  &:active
+    cursor: grabbing
+
+  img
+    width: 100%
+    height: 100%
+    object-fit: cover
+    display: block
+
+  @media (max-width: 640px)
+    flex: 0 0 100% !important
+    height: 300px
+
+.slider-buttons
+  margin-top: 1rem
+  display: flex
+  justify-content: center
+  gap: 1rem
+
+  button
+    width: 50px
+    height: 50px
+    border-radius: 50%
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15)
+    cursor: pointer
+    font-size: 25px
+    transition: background-color $transition-speed
+    user-select: none
+    color: $color-dark-border
+    border: 1px solid $color-dark-border
+
+    &:hover
+      background-color: #e5e7eb
+
+// ========================================
+// КАСТОМНЫЕ АЛЕРТЫ
+// ========================================
+
+.swal2-popup.custom-toast
+  background-color: $color-dark-bg
+  border: 1px solid $color-dark-border
+  color: $color-error
+  font-size: 14px
+  padding: 8px 16px
+  border-radius: 4px
+  box-shadow: none
+
+// ========================================
+// КОММЕНТАРИИ
+// ========================================
+
+.commentlist
+  margin-top: 1.5rem
+  list-style: none
+  padding: 0
+
+.comment
+  padding: 1rem
+  border-radius: $border-radius
+  border: 1px solid $color-gray-border
+  background-color: $color-gray-light
+  color: $color-dark-bg
+  transition: all $transition-speed ease
+  margin-bottom: 1.5rem
+
+.dark .comment
+  background-color: $color-dark-bg
+  color: #ffffff
+  border-color: #374151
+
+.comment-body
+  display: flex
+  flex-direction: column
+  gap: 0.75rem
+
+// Метаданные комментария
+.comment-meta
+  display: flex
+  justify-content: space-between
+  flex-wrap: wrap
+  font-size: 0.875rem
+  color: #4b5563
+
+.dark .comment-meta
+  color: #9ca3af
+
+.comment-author
+  display: flex
+  align-items: center
+  gap: 0.5rem
+
+  .fn
+    font-weight: 600
+    color: $color-dark-bg
+
+  .url
+    text-decoration: none
+    color: $color-dark-bg
+
+    &:hover
+      text-decoration: underline
+
+.dark .comment-author
+  .fn,
+  .url
+    color: #ffffff
+
+.says
+  color: #4b5563
+
+.dark .says
+  color: #9ca3af
+
+.comment-metadata
+  font-size: 0.75rem
+  color: $color-gray-text
+  margin-top: 0.25rem
+
+.comment-edit-link
+  margin-left: 0.5rem
+  text-decoration: none
+
+  &:hover
+    text-decoration: underline
+
+// Контент комментария
+.comment-content
+  font-size: 0.875rem
+  line-height: 1.625
+  color: #1f2937
+
+.dark .comment-content
+  color: #d1d5db
+
+// Ответ на комментарий
+.reply
+  margin-top: 0.75rem
+
+.comment-reply-link
+  font-size: 0.875rem
+  color: $color-primary
+  text-decoration: none
+
+  &:hover
+    text-decoration: underline
+
+.dark .comment-reply-link
+  color: #60a5fa
+
+// Аватар
+.avatar
+  border-radius: 9999px
+  width: 2rem
+  height: 2rem
+
+// Навигация между страницами комментариев
+.comment-navigation
+  display: flex
+  justify-content: space-between
+  margin: 2rem 0
+  font-size: 0.875rem
+  color: $color-gray-text
+
+  a
+    color: $color-primary
+    text-decoration: none
+
+    &:hover
+      text-decoration: underline
+
+.dark .comment-navigation
+  color: #9ca3af
+
+  a
+    color: #60a5fa
+
+// Нет комментариев
+.no-comments
+  font-size: 0.875rem
+  color: $color-gray-text
+  padding: 1rem
+
+.dark .no-comments
+  color: #9ca3af
+
+// Заголовок секции комментариев
+.comments-title
+  font-size: 1.25rem
+  font-weight: 700
+  margin-bottom: 1rem
+  color: $color-dark-bg
+
+.dark .comments-title
+  color: #ffffff
+
+// Форма добавления комментария
+.comment-respond
+  margin-top: 2rem
+  padding: 1rem
+  border-radius: $border-radius
+  background-color: $color-gray-light
+  border: 1px solid $color-gray-border
+  color: $color-dark-bg
+
+.dark .comment-respond
+  background-color: $color-dark-bg
+  border-color: #374151
+  color: #ffffff
+
+.comment-reply-title
+  font-size: 1.125rem
+  font-weight: 600
+  margin-bottom: 1rem
+
+.comment-form
+  input,
+  textarea
+    width: 100%
+    padding: 0.5rem
+    border-radius: 0.375rem
+    border: 1px solid #d1d5db
+    background-color: $color-gray-light
+    color: $color-dark-bg
+    font-size: 0.875rem
+    margin-bottom: 1rem
+    margin-top: 20px
+
+  input[type="submit"]
+    background-color: $color-primary
+    color: #ffffff
+    padding: 0.5rem 1rem
+    font-weight: 600
+    border-radius: 0.375rem
+    border: none
+    cursor: pointer
+
+    &:hover
+      background-color: #1d4ed8
+
+.dark .comment-form
+  input,
+  textarea
+    background-color: $color-dark-bg
+    border-color: #374151
+    color: #ffffff
+
+.custom-message-popular
+  position: absolute
+  top: -60px
+
+// ========================================
+// FAQ
+// ========================================
+
+.wp-faq-container
+  max-width: 1200px
+  margin: 200px auto 200px auto
+
+.wp-faq-answer
+  max-height: 0
+  overflow: hidden
+  transition: max-height $transition-speed ease-out
+  padding-top: 0
+  padding-bottom: 0
+
+  &.open
+    max-height: 200px
+    transition: max-height $transition-speed ease-in
+    padding-top: 0
+    padding-bottom: 1.5rem
+
+.wp-faq-rotate-180
+  transform: rotate(180deg)
+
+.wp-faq-transition
+  transition: transform $transition-speed ease
+
+.wp-faq-item
+  margin-bottom: 1rem
+  border-radius: $border-radius-large
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1)
+  border: 1px solid #CECED0
+  transition: all $transition-speed ease
+  background: white
+
+  &:hover
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1)
+
+.dark .wp-faq-item
+  border: 1px solid $color-dark-border
+  background: $color-dark-bg
+
+.wp-faq-button
+  width: 100%
+  padding: 1.5rem
+  text-align: left
+  display: flex
+  justify-content: space-between
+  align-items: center
+  background: none
+  border: none
+  cursor: pointer
+  border-radius: $border-radius-large
+  outline: none
+
+.wp-faq-title
+  font-size: 1.125rem
+  font-weight: 600
+  padding-right: 1rem
+
+.wp-faq-arrow
+  width: 1.5rem
+  height: 1.5rem
+  flex-shrink: 0
+  stroke: currentColor
+  fill: none
+  stroke-width: 2
+  stroke-linecap: round
+  stroke-linejoin: round
+
+.dark .wp-faq-arrow
+  stroke: #FFFFFF
+
+.wp-faq-content
+  padding: 0 1.5rem
+  line-height: 1.75
+
+// ========================================
+// EARTH ANIMATION
+// ========================================
+
+.earth_wrap .earth-container
+  width: 600px
+  margin: 0 auto
+
+.earth-wrapp-bg
+  padding-top: 50px
+
+#sky
+  height: 100%
+
+.star
+  box-shadow: 0px 0px 1px 1px rgba(255, 255, 255, 0.4)
+  position: absolute
+  width: 1px
+  height: 1px
+  border-radius: 2px
+  background-color: white
+
+// ========================================
+// LANDING PAGES
+// ========================================
+
+.landing-margin-class
+  margin-top: 120px
+  margin-bottom: 80px
+
+.page-id-1548,
+.page-id-1562
+  .section-two
+    margin-top: 50px
+    margin-bottom: 50px
+
+  .header-landing-section
+    margin-top: 150px
+    margin-bottom: 50px
+
+    h2
+      text-align: center
+
+.page-id-1548
+  .bg-gray-100
+    border: 1px solid $color-dark-border
+    background: none !important
+
+  .grid .bg-white
+    border: 1px solid $color-dark-border
+    background: none !important
+
+  .border-gray-200
+    --tw-border-opacity: 1
+    border-color: $color-dark-border !important
+
+.dark .page-id-1548 .custom-color-bage
+  background-color: $color-primary !important
+
+.page-id-1562 .border-gray-200
+  --tw-border-opacity: 1
+  border-color: $color-dark-border !important
+
+// ========================================
+// AUDIO PLAYER
+// ========================================
+
+html body #rs-post-audio-player-container .plyr
+  width: 100% !important
+  height: 100% !important
+
+.rs-post-audio-player-container
+  padding: 8px 12px 0px !important
