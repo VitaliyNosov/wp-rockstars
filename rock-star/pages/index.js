@@ -3,8 +3,14 @@ import client from '../lib/apolloClient';
 import HeroSection from '../components/HeroSection';
 import FeaturesSection from '../components/FeaturesSection';
 import VideoSection from '../components/VideoSection';
+import BrandsSection from '../components/BrandsSection';
+import PortfolioSlider from '../components/PortfolioSlider';
+import AboutSection from '../components/AboutSection';
+import BenefitsSection from '../components/BenefitsSection';
+import TestimonialsSection from '../components/TestimonialsSection';
+import PricingSection from '../components/PricingSection';
 
-export default function Home({ heroData, featuresData, videoData }) {
+export default function Home({ heroData, featuresData, videoData, brandsData, portfolioData, aboutData, benefitsData, testimonialsData, pricingData }) {
   return (
     <>
       <HeroSection
@@ -27,6 +33,35 @@ export default function Home({ heroData, featuresData, videoData }) {
         previewImage={videoData?.videoPreviewImage}
         backgroundShape={videoData?.videoBackgroundShape}
       />
+      <BrandsSection
+        logos={brandsData?.brandLogosList}
+      />
+      <PortfolioSlider
+        slides={portfolioData?.portfolioSlides}
+      />
+      <AboutSection
+        title={aboutData?.title}
+        subtitle={aboutData?.subtitle}
+        image={aboutData?.image}
+        features={aboutData?.features}
+      />
+      <BenefitsSection
+        image={benefitsData?.image}
+        benefits={benefitsData?.benefits}
+      />
+      <TestimonialsSection
+        title={testimonialsData?.title}
+        description={testimonialsData?.description}
+        testimonials={testimonialsData?.testimonials}
+      />
+      <PricingSection
+        enabled={pricingData?.enabled}
+        title={pricingData?.title}
+        description={pricingData?.description}
+        monthlyLabel={pricingData?.monthlyLabel}
+        yearlyLabel={pricingData?.yearlyLabel}
+        pricingPlans={pricingData?.pricingPlans}
+      />
     </>
   );
 }
@@ -34,6 +69,37 @@ export default function Home({ heroData, featuresData, videoData }) {
 export async function getStaticProps() {
   const GET_PAGE_DATA = gql`
     query GetPageData {
+      testimonialsSection {
+        title
+        description
+        testimonials {
+          rating
+          text
+          photo
+          name
+          position
+        }
+      }
+      pricingSection {
+        enabled
+        title
+        description
+        monthlyLabel
+        yearlyLabel
+        pricingPlans {
+          name
+          monthlyPrice
+          yearlyPrice
+          description
+          buttonText
+          buttonUrl
+          isPopular
+          features {
+            text
+            status
+          }
+        }
+      }
       nodeByUri(uri: "/") {
         ... on Page {
           heroSection {
@@ -60,6 +126,35 @@ export async function getStaticProps() {
             videoYoutubeUrl
             videoBackgroundShape
           }
+          brandsSection {
+            brandLogosList {
+              brandLogo
+              brandLink
+              brandAlt
+            }
+          }
+          portfolioSection {
+            portfolioSlides {
+              slideImage
+              slideUrl
+              slideAlt
+            }
+          }
+          aboutSection {
+            title
+            subtitle
+            image
+            features {
+              featureText
+            }
+          }
+          benefitsSection {
+            image
+            benefits {
+              benefitTitle
+              benefitDescription
+            }
+          }
         }
       }
     }
@@ -75,6 +170,12 @@ export async function getStaticProps() {
         heroData: data?.nodeByUri?.heroSection || null,
         featuresData: data?.nodeByUri?.featuresSection || null,
         videoData: data?.nodeByUri?.videoSection || null,
+        brandsData: data?.nodeByUri?.brandsSection || null,
+        portfolioData: data?.nodeByUri?.portfolioSection || null,
+        aboutData: data?.nodeByUri?.aboutSection || null,
+        benefitsData: data?.nodeByUri?.benefitsSection || null,
+        testimonialsData: data?.testimonialsSection || null,
+        pricingData: data?.pricingSection || null,
       },
       revalidate: 10,
     };
@@ -85,6 +186,12 @@ export async function getStaticProps() {
         heroData: null,
         featuresData: null,
         videoData: null,
+        brandsData: null,
+        portfolioData: null,
+        aboutData: null,
+        benefitsData: null,
+        testimonialsData: null,
+        pricingData: null,
       },
       revalidate: 10,
     };

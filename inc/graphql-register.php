@@ -103,4 +103,335 @@ add_action('graphql_register_types', function () {
             'videoBackgroundShape' => ['type' => 'String'],
         ],
     ]);
+
+    // Brands Section Fields
+    register_graphql_field('Page', 'brandsSection', [
+        'type' => 'BrandsSection',
+        'description' => 'Brands Section Data',
+        'resolve' => function ($post) {
+            $id = $post->ID;
+            $logos = carbon_get_post_meta($id, 'brand_logos_list');
+            return [
+                'brandLogosList' => $logos ?: [],
+            ];
+        }
+    ]);
+
+    register_graphql_object_type('BrandItem', [
+        'description' => 'Brand Logo Item',
+        'fields' => [
+            'brandLogo' => [
+                'type' => 'String',
+                'resolve' => function ($item) {
+                    return $item['brand_logo'] ?? '';
+                }
+            ],
+            'brandLink' => [
+                'type' => 'String',
+                'resolve' => function ($item) {
+                    return $item['brand_link'] ?? '';
+                }
+            ],
+            'brandAlt' => [
+                'type' => 'String',
+                'resolve' => function ($item) {
+                    return $item['brand_alt'] ?? '';
+                }
+            ],
+        ],
+    ]);
+
+    register_graphql_object_type('BrandsSection', [
+        'description' => 'Brands Section Fields',
+        'fields' => [
+            'brandLogosList' => ['type' => ['list_of' => 'BrandItem']],
+        ],
+    ]);
+
+    // Portfolio Section Fields
+    register_graphql_field('Page', 'portfolioSection', [
+        'type' => 'PortfolioSection',
+        'description' => 'Portfolio Section Data',
+        'resolve' => function ($post) {
+            $id = $post->ID;
+            $slides = carbon_get_post_meta($id, 'portfolio_slides');
+            return [
+                'portfolioSlides' => $slides ?: [],
+            ];
+        }
+    ]);
+
+    register_graphql_object_type('PortfolioSlide', [
+        'description' => 'Portfolio Slide Item',
+        'fields' => [
+            'slideImage' => [
+                'type' => 'String',
+                'resolve' => function ($item) {
+                    $img_id = $item['slide_image'] ?? '';
+                    if ($img_id) {
+                        $img_url = wp_get_attachment_image_url($img_id, 'full');
+                        return $img_url ?: '';
+                    }
+                    return '';
+                }
+            ],
+            'slideUrl' => [
+                'type' => 'String',
+                'resolve' => function ($item) {
+                    return $item['slide_url'] ?? '';
+                }
+            ],
+            'slideAlt' => [
+                'type' => 'String',
+                'resolve' => function ($item) {
+                    return $item['slide_alt'] ?? '';
+                }
+            ],
+        ],
+    ]);
+
+    register_graphql_object_type('PortfolioSection', [
+        'description' => 'Portfolio Section Fields',
+        'fields' => [
+            'portfolioSlides' => ['type' => ['list_of' => 'PortfolioSlide']],
+        ],
+    ]);
+
+    // About Section Fields
+    register_graphql_field('Page', 'aboutSection', [
+        'type' => 'AboutSection',
+        'description' => 'About Section Data',
+        'resolve' => function ($post) {
+            $id = $post->ID;
+            $features = carbon_get_post_meta($id, 'about_features');
+            
+            $img_val = carbon_get_post_meta($id, 'about_image');
+            $img_url = $img_val;
+            // If it's an ID (numeric), get the URL. Otherwise assume it's already a URL.
+            if (is_numeric($img_val)) {
+                $attachment_url = wp_get_attachment_image_url($img_val, 'full');
+                if ($attachment_url) {
+                    $img_url = $attachment_url;
+                }
+            }
+
+            return [
+                'title' => carbon_get_post_meta($id, 'about_title'),
+                'subtitle' => carbon_get_post_meta($id, 'about_subtitle'),
+                'image' => $img_url,
+                'features' => $features ?: [],
+            ];
+        }
+    ]);
+
+    register_graphql_object_type('AboutFeature', [
+        'description' => 'About Feature Item',
+        'fields' => [
+            'featureText' => [
+                'type' => 'String',
+                'resolve' => function ($item) {
+                    return $item['feature_text'] ?? '';
+                }
+            ],
+        ],
+    ]);
+
+    register_graphql_object_type('AboutSection', [
+        'description' => 'About Section Fields',
+        'fields' => [
+            'title' => ['type' => 'String'],
+            'subtitle' => ['type' => 'String'],
+            'image' => ['type' => 'String'],
+            'features' => ['type' => ['list_of' => 'AboutFeature']],
+        ],
+    ]);
+
+    // Benefits Section Fields
+    register_graphql_field('Page', 'benefitsSection', [
+        'type' => 'BenefitsSection',
+        'description' => 'Benefits Section Data',
+        'resolve' => function ($post) {
+            $id = $post->ID;
+            $benefits = carbon_get_post_meta($id, 'benefits_list');
+            
+            $img_val = carbon_get_post_meta($id, 'benefits_image');
+            $img_url = $img_val;
+            if (is_numeric($img_val)) {
+                $attachment_url = wp_get_attachment_image_url($img_val, 'full');
+                if ($attachment_url) {
+                    $img_url = $attachment_url;
+                }
+            }
+
+            return [
+                'image' => $img_url,
+                'benefits' => $benefits ?: [],
+            ];
+        }
+    ]);
+
+    register_graphql_object_type('BenefitItem', [
+        'description' => 'Benefit Item',
+        'fields' => [
+            'benefitTitle' => [
+                'type' => 'String',
+                'resolve' => function ($item) {
+                    return $item['benefit_title'] ?? '';
+                }
+            ],
+            'benefitDescription' => [
+                'type' => 'String',
+                'resolve' => function ($item) {
+                    return $item['benefit_description'] ?? '';
+                }
+            ],
+        ],
+    ]);
+
+    register_graphql_object_type('BenefitsSection', [
+        'description' => 'Benefits Section Fields',
+        'fields' => [
+            'image' => ['type' => 'String'],
+            'benefits' => ['type' => ['list_of' => 'BenefitItem']],
+        ],
+    ]);
+
+    // Testimonials Section (from theme options)
+    register_graphql_field('RootQuery', 'testimonialsSection', [
+        'type' => 'TestimonialsSection',
+        'description' => 'Testimonials Section Data from Theme Options',
+        'resolve' => function () {
+            $testimonials = carbon_get_theme_option('testimonial_list');
+            $processed_testimonials = [];
+            
+            if ($testimonials && is_array($testimonials)) {
+                foreach ($testimonials as $item) {
+                    $photo_id = $item['photo'] ?? null;
+                    $photo_url = '';
+                    if ($photo_id) {
+                        if (is_numeric($photo_id)) {
+                            $photo_url = wp_get_attachment_image_url($photo_id, 'thumbnail') ?: '';
+                        } else {
+                            $photo_url = $photo_id;
+                        }
+                    }
+                    
+                    $processed_testimonials[] = [
+                        'rating' => $item['rating'] ?? '5',
+                        'text' => $item['text'] ?? '',
+                        'photo' => $photo_url,
+                        'name' => $item['name'] ?? '',
+                        'position' => $item['position'] ?? '',
+                    ];
+                }
+            }
+
+            return [
+                'title' => carbon_get_theme_option('testimonial_title'),
+                'description' => carbon_get_theme_option('testimonial_description'),
+                'testimonials' => $processed_testimonials,
+            ];
+        }
+    ]);
+
+    register_graphql_object_type('TestimonialItem', [
+        'description' => 'Testimonial Item',
+        'fields' => [
+            'rating' => ['type' => 'String'],
+            'text' => ['type' => 'String'],
+            'photo' => ['type' => 'String'],
+            'name' => ['type' => 'String'],
+            'position' => ['type' => 'String'],
+        ],
+    ]);
+
+    register_graphql_object_type('TestimonialsSection', [
+        'description' => 'Testimonials Section Fields',
+        'fields' => [
+            'title' => ['type' => 'String'],
+            'description' => ['type' => 'String'],
+            'testimonials' => ['type' => ['list_of' => 'TestimonialItem']],
+        ],
+    ]);
+
+    // Pricing Section (from theme options)
+    register_graphql_field('RootQuery', 'pricingSection', [
+        'type' => 'PricingSection',
+        'description' => 'Pricing Section Data from Theme Options',
+        'resolve' => function () {
+            $enabled = carbon_get_theme_option('pricing_section_enabled');
+            $pricing_plans = carbon_get_theme_option('pricing_plans');
+            $processed_plans = [];
+            
+            if ($pricing_plans && is_array($pricing_plans)) {
+                foreach ($pricing_plans as $plan) {
+                    $features = $plan['plan_features'] ?? [];
+                    $processed_features = [];
+                    
+                    if ($features && is_array($features)) {
+                        foreach ($features as $feature) {
+                            $processed_features[] = [
+                                'text' => $feature['feature_text'] ?? '',
+                                'status' => $feature['feature_status'] ?? 'included',
+                            ];
+                        }
+                    }
+                    
+                    $processed_plans[] = [
+                        'name' => $plan['plan_name'] ?? '',
+                        'monthlyPrice' => $plan['plan_price_monthly'] ?? '0',
+                        'yearlyPrice' => $plan['plan_price_yearly'] ?? '0',
+                        'description' => $plan['plan_description'] ?? '',
+                        'buttonText' => $plan['plan_button_text'] ?? 'Start Free Trial',
+                        'buttonUrl' => $plan['plan_button_url'] ?? '#',
+                        'isPopular' => !empty($plan['plan_is_popular']),
+                        'features' => $processed_features,
+                    ];
+                }
+            }
+
+            return [
+                'enabled' => !empty($enabled),
+                'title' => carbon_get_theme_option('pricing_section_title'),
+                'description' => carbon_get_theme_option('pricing_section_description'),
+                'monthlyLabel' => carbon_get_theme_option('pricing_monthly_label'),
+                'yearlyLabel' => carbon_get_theme_option('pricing_yearly_label'),
+                'pricingPlans' => $processed_plans,
+            ];
+        }
+    ]);
+
+    register_graphql_object_type('PricingFeature', [
+        'description' => 'Pricing Feature Item',
+        'fields' => [
+            'text' => ['type' => 'String'],
+            'status' => ['type' => 'String'],
+        ],
+    ]);
+
+    register_graphql_object_type('PricingPlan', [
+        'description' => 'Pricing Plan Item',
+        'fields' => [
+            'name' => ['type' => 'String'],
+            'monthlyPrice' => ['type' => 'String'],
+            'yearlyPrice' => ['type' => 'String'],
+            'description' => ['type' => 'String'],
+            'buttonText' => ['type' => 'String'],
+            'buttonUrl' => ['type' => 'String'],
+            'isPopular' => ['type' => 'Boolean'],
+            'features' => ['type' => ['list_of' => 'PricingFeature']],
+        ],
+    ]);
+
+    register_graphql_object_type('PricingSection', [
+        'description' => 'Pricing Section Fields',
+        'fields' => [
+            'enabled' => ['type' => 'Boolean'],
+            'title' => ['type' => 'String'],
+            'description' => ['type' => 'String'],
+            'monthlyLabel' => ['type' => 'String'],
+            'yearlyLabel' => ['type' => 'String'],
+            'pricingPlans' => ['type' => ['list_of' => 'PricingPlan']],
+        ],
+    ]);
 });

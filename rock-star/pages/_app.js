@@ -24,6 +24,12 @@ function MyApp({ Component, pageProps }) {
         autoplayVideos: true
       });
     }
+
+    // Initialize WOW.js
+    if (typeof window !== 'undefined') {
+      const WOW = require('wowjs');
+      new WOW.WOW().init();
+    }
   }, []);
 
   return (
