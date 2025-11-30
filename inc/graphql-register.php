@@ -434,4 +434,115 @@ add_action('graphql_register_types', function () {
             'pricingPlans' => ['type' => ['list_of' => 'PricingPlan']],
         ],
     ]);
+
+    // Blog Section - Latest Posts
+    register_graphql_field('RootQuery', 'latestBlogPosts', [
+        'type' => ['list_of' => 'BlogPost'],
+        'description' => 'Latest Blog Posts',
+        'resolve' => function () {
+            // First try to get posts from 'lasts-posts' category
+            $args_category = [
+                'post_type' => 'post',
+                'posts_per_page' => 3,
+                'post_status' => 'publish',
+                'category_name' => 'lasts-posts',
+                'orderby' => 'date',
+                'order' => 'DESC',
+            ];
+            
+            $category_posts = new WP_Query($args_category);
+            
+            // If no posts in category, get latest 3 posts
+            if (!$category_posts->have_posts()) {
+                wp_reset_postdata();
+                $args_latest = [
+                    'post_type' => 'post',
+                    'posts_per_page' => 3,
+                    'post_status' => 'publish',
+                    'orderby' => 'date',
+                    'order' => 'DESC',
+                ];
+                $posts_query = new WP_Query($args_latest);
+            } else {
+                $posts_query = $category_posts;
+            }
+            
+            $posts = [];
+            
+            if ($posts_query->have_posts()) {
+                while ($posts_query->have_posts()) {
+                    $posts_query->the_post();
+                    
+                    // Get featured image
+                    $featured_image = '';
+                    if (has_post_thumbnail()) {
+                        $featured_image = get_the_post_thumbnail_url(get_the_ID(), 'medium');
+                    }
+                    
+                    // Get first category
+                    $categories = get_the_category();
+                    $category_name = !empty($categories) ? $categories[0]->name : 'Blog';
+                    
+                    // Get author info
+                    $author_id = get_the_author_meta('ID');
+                    $author_avatar = get_avatar_url($author_id, ['size' => 40]);
+                    $author_description = get_the_author_meta('description');
+                    if (empty($author_description)) {
+                        $author_description = 'Автор блогу';
+                    }
+                    
+                    // Get excerpt
+                    $excerpt = get_the_excerpt();
+                    if (empty($excerpt)) {
+                        $excerpt = wp_trim_words(get_the_content(), 20, '...');
+                    } else {
+                        $excerpt = wp_trim_words($excerpt, 20, '...');
+                    }
+                    
+                    $posts[] = [
+                        'id' => get_the_ID(),
+                        'title' => get_the_title(),
+                        'excerpt' => $excerpt,
+                        'permalink' => get_permalink(),
+                        'featuredImage' => $featured_image,
+                        'categoryName' => $category_name,
+                        'authorName' => get_the_author(),
+                        'authorAvatar' => $author_avatar,
+                        'authorDescription' => $author_description,
+                        'authorUrl' => get_author_posts_url($author_id),
+                        'date' => get_the_date('j M, Y'),
+                    ];
+                }
+            }
+            
+            wp_reset_postdata();
+            
+            return $posts;
+        }
+    ]);
+
+    register_graphql_object_type('BlogPost', [
+        'description' => 'Blog Post Item',
+        'fields' => [
+            'id' => ['type' => 'Int'],
+            'title' => ['type' => 'String'],
+            'excerpt' => ['type' => 'String'],
+            'permalink' => ['type' => 'String'],
+            'featuredImage' => ['type' => 'String'],
+            'categoryName' => ['type' => 'String'],
+            'authorName' => ['type' => 'String'],
+            'authorAvatar' => ['type' => 'String'],
+            'authorDescription' => ['type' => 'String'],
+            'authorUrl' => ['type' => 'String'],
+            'date' => ['type' => 'String'],
+        ],
+    ]);
+
+    register_graphql_field('RootQuery', 'ticketNonce', [
+        'type' => 'String',
+        'description' => 'Nonce for ticket submission',
+        'resolve' => function () {
+            return wp_create_nonce('wp_custom_ticket_nonce');
+        }
+    ]);
 });

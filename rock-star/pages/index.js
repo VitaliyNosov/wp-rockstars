@@ -9,8 +9,10 @@ import AboutSection from '../components/AboutSection';
 import BenefitsSection from '../components/BenefitsSection';
 import TestimonialsSection from '../components/TestimonialsSection';
 import PricingSection from '../components/PricingSection';
+import BlogSection from '../components/BlogSection';
+import ContactSection from '../components/ContactSection';
 
-export default function Home({ heroData, featuresData, videoData, brandsData, portfolioData, aboutData, benefitsData, testimonialsData, pricingData }) {
+export default function Home({ heroData, featuresData, videoData, brandsData, portfolioData, aboutData, benefitsData, testimonialsData, pricingData, blogPosts }) {
   return (
     <>
       <HeroSection
@@ -62,6 +64,10 @@ export default function Home({ heroData, featuresData, videoData, brandsData, po
         yearlyLabel={pricingData?.yearlyLabel}
         pricingPlans={pricingData?.pricingPlans}
       />
+      <BlogSection
+        posts={blogPosts}
+      />
+      <ContactSection />
     </>
   );
 }
@@ -69,6 +75,19 @@ export default function Home({ heroData, featuresData, videoData, brandsData, po
 export async function getStaticProps() {
   const GET_PAGE_DATA = gql`
     query GetPageData {
+      latestBlogPosts {
+        id
+        title
+        excerpt
+        permalink
+        featuredImage
+        categoryName
+        authorName
+        authorAvatar
+        authorDescription
+        authorUrl
+        date
+      }
       testimonialsSection {
         title
         description
@@ -176,6 +195,7 @@ export async function getStaticProps() {
         benefitsData: data?.nodeByUri?.benefitsSection || null,
         testimonialsData: data?.testimonialsSection || null,
         pricingData: data?.pricingSection || null,
+        blogPosts: data?.latestBlogPosts || [],
       },
       revalidate: 10,
     };
@@ -192,6 +212,7 @@ export async function getStaticProps() {
         benefitsData: null,
         testimonialsData: null,
         pricingData: null,
+        blogPosts: [],
       },
       revalidate: 10,
     };

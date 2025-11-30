@@ -6,6 +6,8 @@ import Layout from '../components/Layout';
 import Script from 'next/script';
 import { useEffect } from 'react';
 import { Inter } from 'next/font/google';
+import { ApolloProvider } from "@apollo/client";
+import client from "../lib/apolloClient";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -98,9 +100,11 @@ function MyApp({ Component, pageProps }) {
         strategy="lazyOnload"
       />
 
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <ApolloProvider client={client}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ApolloProvider>
     </div>
   );
 }
