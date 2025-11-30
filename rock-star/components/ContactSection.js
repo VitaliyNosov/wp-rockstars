@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Swal from 'sweetalert2';
 import { gql, useQuery } from '@apollo/client';
 
 const GET_TICKET_NONCE = gql`
@@ -28,7 +29,7 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
         message: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showSuccessModal, setShowSuccessModal] = useState(false);
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -72,26 +73,43 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
             const data = await response.json();
 
             if (data.success) {
-                setShowSuccessModal(true);
+                Swal.fire({
+                    title: 'Thank You!',
+                    text: 'We have received your message and will contact you soon.',
+                    icon: 'success',
+                    timer: 3000,
+                    showConfirmButton: false,
+                    customClass: {
+                        popup: 'swal2-custom-popup'
+                    }
+                });
                 setFormData({ name: '', email: '', message: '' });
-
-                // Auto close modal after 5 seconds
-                setTimeout(() => {
-                    setShowSuccessModal(false);
-                }, 5000);
             } else {
-                alert('Error: ' + (data.data || 'Something went wrong'));
+                Swal.fire({
+                    title: 'Error',
+                    text: data.data || 'Something went wrong',
+                    icon: 'error',
+                    confirmButtonColor: '#667eea',
+                    customClass: {
+                        popup: 'swal2-custom-popup'
+                    }
+                });
             }
         } catch (error) {
             console.error('Form submission error:', error);
-            alert('Error: Unable to submit ticket. Please try again.');
+
+            Swal.fire({
+                title: 'Error',
+                text: 'Unable to submit ticket. Please try again.',
+                icon: 'error',
+                confirmButtonColor: '#667eea',
+                customClass: {
+                    popup: 'swal2-custom-popup'
+                }
+            });
         } finally {
             setIsSubmitting(false);
         }
-    };
-
-    const closeModal = () => {
-        setShowSuccessModal(false);
     };
 
     return (
@@ -260,50 +278,82 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
                 </div>
             </section>
 
-            {/* Success Modal */}
-            {showSuccessModal && (
-                <div
-                    className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex items-center justify-center z-[9999]"
-                    style={{ backdropFilter: 'blur(4px)' }}
-                    onClick={closeModal}
-                >
-                    <div
-                        className="bg-[#060607] border border-[#2E3038] rounded-2xl p-10 max-w-[420px] mx-5 text-center shadow-2xl animate-[modalSlideIn_0.3s_ease-out]"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div className="mb-5">
-                            <svg className="mx-auto h-20 w-20 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4" />
-                            </svg>
-                        </div>
-                        <h3 className="text-2xl font-bold text-white mb-3">Thank You!</h3>
-                        <p className="text-gray-300 mb-6 text-base leading-relaxed">
-                            We have received your message and will contact you soon.
-                        </p>
-                        <button
-                            onClick={closeModal}
-                            className="bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-8 py-3 rounded-lg font-semibold text-base transition-all duration-300 hover:shadow-lg"
-                            style={{ boxShadow: '0 4px 15px 0 rgba(116, 79, 168, 0.75)' }}
-                        >
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
 
-            <style jsx>{`
-@keyframes modalSlideIn {
-          from {
-        opacity: 0;
-        transform: translateY(-50px) scale(0.9);
-    }
-          to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-`}</style>
+            <style jsx global>{`
+                /* Light Mode (Default) */
+                .swal2-custom-popup {
+                    background-color: #ffffff !important;
+                    color: #1f2937 !important;
+                    border-radius: 1rem !important;
+                }
+                .swal2-title {
+                    color: #111827 !important;
+                }
+                .swal2-html-container {
+                    color: #4b5563 !important;
+                }
+                .swal2-icon.swal2-success {
+                    border-color: transparent !important;
+                }
+                .swal2-icon.swal2-success .swal2-success-ring {
+                    border-color: #10b981 !important;
+                }
+                .swal2-icon.swal2-success [class^='swal2-success-line'] {
+                    background-color: #10b981 !important;
+                }
+                .swal2-success-circular-line-left {
+                    background-color: #ffffff !important;
+                }
+                .swal2-success-circular-line-right {
+                    background-color: #ffffff !important;
+                }
+                .swal2-success-fix {
+                    background-color: #ffffff !important;
+                }
+                .swal2-icon.swal2-error {
+                    border-color: #ef4444 !important;
+                }
+                .swal2-icon.swal2-error [class^='swal2-x-mark-line'] {
+                    background-color: #ef4444 !important;
+                }
+
+                /* Dark Mode */
+                html.dark .swal2-custom-popup {
+                    background-color: #060607 !important;
+                    color: #ffffff !important;
+                    border: 1px solid #2E3038 !important;
+                }
+                html.dark .swal2-title {
+                    color: #ffffff !important;
+                }
+                html.dark .swal2-html-container {
+                    color: #d1d5db !important;
+                }
+                html.dark .swal2-icon.swal2-success {
+                    border-color: transparent !important;
+                }
+                html.dark .swal2-icon.swal2-success .swal2-success-ring {
+                    border-color: #10b981 !important;
+                }
+                html.dark .swal2-icon.swal2-success [class^='swal2-success-line'] {
+                    background-color: #10b981 !important;
+                }
+                html.dark .swal2-success-circular-line-left {
+                    background-color: #060607 !important;
+                }
+                html.dark .swal2-success-circular-line-right {
+                    background-color: #060607 !important;
+                }
+                html.dark .swal2-success-fix {
+                    background-color: #060607 !important;
+                }
+                html.dark .swal2-icon.swal2-error {
+                    border-color: #ef4444 !important;
+                }
+                html.dark .swal2-icon.swal2-error [class^='swal2-x-mark-line'] {
+                    background-color: #ef4444 !important;
+                }
+            `}</style>
         </>
     );
 }
