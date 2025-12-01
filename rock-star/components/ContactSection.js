@@ -42,37 +42,68 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        console.log('=== FORM SUBMISSION STARTED ===');
+        console.log('Form Data:', formData);
+        console.log('wpAjaxUrl:', wpAjaxUrl);
+        console.log('wpNonce:', wpNonce);
+
         // Validation
         if (!formData.name || !formData.email || !formData.message) {
+            console.warn('Validation failed: Missing fields');
             alert('Please fill in all fields');
             return;
         }
 
         if (!formData.email.includes('@')) {
+            console.warn('Validation failed: Invalid email');
             alert('Please enter a valid email address');
+            return;
+        }
+
+        if (!wpNonce) {
+            console.error('ERROR: No nonce available!');
+            Swal.fire({
+                title: 'Error',
+                text: 'Security token is missing. Please refresh the page and try again.',
+                icon: 'error',
+                confirmButtonColor: '#667eea',
+                customClass: {
+                    popup: 'swal2-custom-popup'
+                }
+            });
             return;
         }
 
         setIsSubmitting(true);
 
         try {
+            const requestBody = {
+                action: 'wp_custom_submit_ticket',
+                nonce: wpNonce,
+                name: formData.name,
+                email: formData.email,
+                message: formData.message
+            };
+
+            console.log('Request Body:', requestBody);
+            console.log('Sending to:', wpAjaxUrl);
+
             const response = await fetch(wpAjaxUrl || '/wp-admin/admin-ajax.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: new URLSearchParams({
-                    action: 'wp_custom_submit_ticket',
-                    nonce: wpNonce,
-                    name: formData.name,
-                    email: formData.email,
-                    message: formData.message
-                })
+                body: new URLSearchParams(requestBody)
             });
 
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
+
             const data = await response.json();
+            console.log('Response data:', data);
 
             if (data.success) {
+                console.log('✅ Form submitted successfully!');
                 Swal.fire({
                     title: 'Thank You!',
                     text: 'We have received your message and will contact you soon.',
@@ -85,6 +116,7 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
                 });
                 setFormData({ name: '', email: '', message: '' });
             } else {
+                console.error('❌ Form submission failed:', data.data);
                 Swal.fire({
                     title: 'Error',
                     text: data.data || 'Something went wrong',
@@ -96,7 +128,11 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
                 });
             }
         } catch (error) {
-            console.error('Form submission error:', error);
+            console.error('❌ Form submission error:', error);
+            console.error('Error details:', {
+                message: error.message,
+                stack: error.stack
+            });
 
             Swal.fire({
                 title: 'Error',
@@ -109,8 +145,10 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
             });
         } finally {
             setIsSubmitting(false);
+            console.log('=== FORM SUBMISSION ENDED ===');
         }
     };
+
 
     return (
         <>

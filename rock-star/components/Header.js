@@ -42,7 +42,7 @@ function MenuItem({ item, depth = 0 }) {
     return (
         <li className={`relative group ${hasChildren ? 'submenu-item' : ''}`}>
             <Link
-                href={item.uri}
+                href={item.label === 'Blog Grids' ? '/posts' : item.uri}
                 className={linkClasses}
                 style={hasChildren && depth === 0 ? { position: 'relative' } : {}}
             >

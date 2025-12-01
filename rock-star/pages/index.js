@@ -72,21 +72,36 @@ export default function Home({ heroData, featuresData, videoData, brandsData, po
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const GET_PAGE_DATA = gql`
     query GetPageData {
-      latestBlogPosts {
-        id
-        title
-        excerpt
-        permalink
-        featuredImage
-        categoryName
-        authorName
-        authorAvatar
-        authorDescription
-        authorUrl
-        date
+      posts(first: 3, where: {categoryName: "lasts-posts"}) {
+        nodes {
+          id
+          title
+          excerpt
+          slug
+          date
+          featuredImage {
+            node {
+              sourceUrl
+            }
+          }
+          categories {
+            nodes {
+              name
+            }
+          }
+          author {
+            node {
+              name
+              avatar {
+                url
+              }
+              description
+            }
+          }
+        }
       }
       testimonialsSection {
         title
@@ -184,6 +199,19 @@ export async function getStaticProps() {
       query: GET_PAGE_DATA,
     });
 
+    const posts = data?.posts?.nodes?.map(post => ({
+      id: post.id,
+      title: post.title,
+      excerpt: post.excerpt,
+      slug: post.slug,
+      date: post.date,
+      featuredImage: post.featuredImage?.node?.sourceUrl || null,
+      categoryName: post.categories?.nodes?.[0]?.name || null,
+      authorName: post.author?.node?.name || null,
+      authorAvatar: post.author?.node?.avatar?.url || null,
+      authorDescription: post.author?.node?.description || null,
+    })) || [];
+
     return {
       props: {
         heroData: data?.nodeByUri?.heroSection || null,
@@ -195,9 +223,8 @@ export async function getStaticProps() {
         benefitsData: data?.nodeByUri?.benefitsSection || null,
         testimonialsData: data?.testimonialsSection || null,
         pricingData: data?.pricingSection || null,
-        blogPosts: data?.latestBlogPosts || [],
+        blogPosts: posts,
       },
-      revalidate: 10,
     };
   } catch (error) {
     console.error("Error fetching page data:", error);
@@ -214,7 +241,6 @@ export async function getStaticProps() {
         pricingData: null,
         blogPosts: [],
       },
-      revalidate: 10,
     };
   }
 }

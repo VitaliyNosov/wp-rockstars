@@ -3,7 +3,8 @@
 // Telegram bot form
 
 
-add_action( 'added_post_meta', function( $mid, $pid, $key, $val ) {
+// Function to send Telegram notification
+function wp_custom_send_telegram_notification( $mid, $pid, $key, $val ) {
     if ( '_wp_custom_message' !== $key ) return;
     if ( 'ticket' !== get_post_type( $pid ) ) return;
     if ( get_post_meta( $pid, '_wp_custom_telegram_sent', true ) ) return;
@@ -17,7 +18,7 @@ add_action( 'added_post_meta', function( $mid, $pid, $key, $val ) {
 
     $text = "Новый тикет\nИмя: $name\nEmail: $email\n\n$message";
 
-    wp_remote_post( "https://api.telegram.org/bot{$token}/sendMessage", array(
+    $response = wp_remote_post( "https://api.telegram.org/bot{$token}/sendMessage", array(
         'body' => array(
             'chat_id' => $chat_id,
             'text'    => $text,
@@ -25,5 +26,17 @@ add_action( 'added_post_meta', function( $mid, $pid, $key, $val ) {
         'timeout' => 10,
     ) );
 
+    // Log response for debugging
+    if ( is_wp_error( $response ) ) {
+        error_log( 'Telegram Bot Error: ' . $response->get_error_message() );
+    } else {
+        error_log( 'Telegram notification sent successfully for ticket #' . $pid );
+    }
+
     update_post_meta( $pid, '_wp_custom_telegram_sent', 1 );
-}, 10, 4 );
+}
+
+// Hook for both added and updated meta to ensure it works in all cases
+add_action( 'added_post_meta', 'wp_custom_send_telegram_notification', 10, 4 );
+add_action( 'updated_post_meta', 'wp_custom_send_telegram_notification', 10, 4 );
+
