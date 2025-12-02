@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSlider } from '../lib/useSlider';
+import PortfolioModal from './PortfolioModal';
 
 const PortfolioSlider = ({ slides }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentUrl, setCurrentUrl] = useState('');
+
     // Don't render if no slides
     if (!slides || slides.length === 0) {
         return null;
@@ -9,6 +13,17 @@ const PortfolioSlider = ({ slides }) => {
 
     // Initialize slider with custom hook
     useSlider('sliderTrack');
+
+    const handleSlideClick = (e, url) => {
+        e.preventDefault();
+        setCurrentUrl(url);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setCurrentUrl('');
+    };
 
     return (
         <section className="portfolio-section">
@@ -29,6 +44,7 @@ const PortfolioSlider = ({ slides }) => {
                             key={index}
                             href={slide.slideUrl || '#'}
                             className="slide"
+                            onClick={(e) => handleSlideClick(e, slide.slideUrl)}
                         >
                             <img
                                 src={slide.slideImage}
@@ -56,6 +72,12 @@ const PortfolioSlider = ({ slides }) => {
                     &gt;
                 </button>
             </div>
+
+            <PortfolioModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                url={currentUrl}
+            />
         </section>
     );
 };

@@ -13,13 +13,6 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
     const { data, error } = useQuery(GET_TICKET_NONCE);
     const fetchedNonce = data?.ticketNonce;
 
-    console.log('Debug ContactSection:', {
-        data,
-        error,
-        envUrl: process.env.NEXT_PUBLIC_WORDPRESS_API_URL,
-        computedAjaxUrl: process.env.NEXT_PUBLIC_WORDPRESS_API_URL ? process.env.NEXT_PUBLIC_WORDPRESS_API_URL.replace('/graphql', '/wp-admin/admin-ajax.php') : '/wp-admin/admin-ajax.php'
-    });
-
     const wpNonce = propNonce || fetchedNonce;
     const wpAjaxUrl = propAjaxUrl || (process.env.NEXT_PUBLIC_WORDPRESS_API_URL ? process.env.NEXT_PUBLIC_WORDPRESS_API_URL.replace('/graphql', '/wp-admin/admin-ajax.php') : '/wp-admin/admin-ajax.php');
 
@@ -42,26 +35,18 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log('=== FORM SUBMISSION STARTED ===');
-        console.log('Form Data:', formData);
-        console.log('wpAjaxUrl:', wpAjaxUrl);
-        console.log('wpNonce:', wpNonce);
-
         // Validation
         if (!formData.name || !formData.email || !formData.message) {
-            console.warn('Validation failed: Missing fields');
             alert('Please fill in all fields');
             return;
         }
 
         if (!formData.email.includes('@')) {
-            console.warn('Validation failed: Invalid email');
             alert('Please enter a valid email address');
             return;
         }
 
         if (!wpNonce) {
-            console.error('ERROR: No nonce available!');
             Swal.fire({
                 title: 'Error',
                 text: 'Security token is missing. Please refresh the page and try again.',
@@ -85,9 +70,6 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
                 message: formData.message
             };
 
-            console.log('Request Body:', requestBody);
-            console.log('Sending to:', wpAjaxUrl);
-
             const response = await fetch(wpAjaxUrl || '/wp-admin/admin-ajax.php', {
                 method: 'POST',
                 headers: {
@@ -96,14 +78,9 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
                 body: new URLSearchParams(requestBody)
             });
 
-            console.log('Response status:', response.status);
-            console.log('Response ok:', response.ok);
-
             const data = await response.json();
-            console.log('Response data:', data);
 
             if (data.success) {
-                console.log('✅ Form submitted successfully!');
                 Swal.fire({
                     title: 'Thank You!',
                     text: 'We have received your message and will contact you soon.',
@@ -116,7 +93,6 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
                 });
                 setFormData({ name: '', email: '', message: '' });
             } else {
-                console.error('❌ Form submission failed:', data.data);
                 Swal.fire({
                     title: 'Error',
                     text: data.data || 'Something went wrong',
@@ -128,12 +104,6 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
                 });
             }
         } catch (error) {
-            console.error('❌ Form submission error:', error);
-            console.error('Error details:', {
-                message: error.message,
-                stack: error.stack
-            });
-
             Swal.fire({
                 title: 'Error',
                 text: 'Unable to submit ticket. Please try again.',
@@ -145,7 +115,6 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
             });
         } finally {
             setIsSubmitting(false);
-            console.log('=== FORM SUBMISSION ENDED ===');
         }
     };
 

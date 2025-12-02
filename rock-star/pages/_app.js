@@ -30,7 +30,9 @@ function MyApp({ Component, pageProps }) {
     // Initialize WOW.js
     if (typeof window !== 'undefined') {
       const WOW = require('wowjs');
-      new WOW.WOW().init();
+      new WOW.WOW({
+        live: false // Disable MutationObserver to prevent console warnings
+      }).init();
     }
   }, []);
 
