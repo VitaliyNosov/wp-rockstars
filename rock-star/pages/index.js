@@ -39,7 +39,18 @@ export default function Home({ heroData, featuresData, videoData, brandsData, po
         logos={brandsData?.brandLogosList}
       />
       <PortfolioSlider
-        slides={portfolioData?.portfolioSlides}
+        slides={portfolioData?.portfolioSlides?.length > 0 ? portfolioData.portfolioSlides : [
+          {
+            slideImage: 'https://via.placeholder.com/600x400',
+            slideUrl: 'https://example.com',
+            slideAlt: 'Test Slide 1'
+          },
+          {
+            slideImage: 'https://via.placeholder.com/600x400',
+            slideUrl: 'https://google.com',
+            slideAlt: 'Test Slide 2'
+          }
+        ]}
       />
       <AboutSection
         title={aboutData?.title}

@@ -51,7 +51,7 @@ const Footer = () => {
     return (
         <>
             {/* ====== Footer Section Start */}
-            <footer className="relative z-10 bg-primary bg-opacity-5 pt-[100px] wow fadeInUp" data-wow-delay=".1s">
+            <footer className="relative z-10 bg-primary bg-opacity-5 pt-[100px]">
                 <div className="container mx-auto">
                     <div className="flex flex-wrap mx-[-16px]">
                         <div className="w-full md:w-1/2 lg:w-4/12 xl:w-5/12 px-4">

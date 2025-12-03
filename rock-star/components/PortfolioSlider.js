@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSlider } from '../lib/useSlider';
 import PortfolioModal from './PortfolioModal';
 
 const PortfolioSlider = ({ slides }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentUrl, setCurrentUrl] = useState('');
+    const containerRef = useRef(null);
 
     // Don't render if no slides
     if (!slides || slides.length === 0) {
@@ -14,16 +15,35 @@ const PortfolioSlider = ({ slides }) => {
     // Initialize slider with custom hook
     useSlider('sliderTrack');
 
-    const handleSlideClick = (e, url) => {
-        e.preventDefault();
-        setCurrentUrl(url);
-        setIsModalOpen(true);
-    };
-
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setCurrentUrl('');
     };
+
+    // Event delegation for handling clicks on both original and cloned slides
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const handleClick = (e) => {
+            // Find the closest anchor element
+            const anchor = e.target.closest('a.slide');
+            if (anchor) {
+                e.preventDefault();
+                const url = anchor.getAttribute('href');
+                if (url && url !== '#') {
+                    setCurrentUrl(url);
+                    setIsModalOpen(true);
+                }
+            }
+        };
+
+        container.addEventListener('click', handleClick);
+
+        return () => {
+            container.removeEventListener('click', handleClick);
+        };
+    }, []);
 
     return (
         <section className="portfolio-section">
@@ -37,14 +57,13 @@ const PortfolioSlider = ({ slides }) => {
             {/* Slider Container */}
             <div className="portfolio-slider-block"></div>
 
-            <div className="slider-container" id="sliderContainer">
+            <div className="slider-container" id="sliderContainer" ref={containerRef}>
                 <div id="sliderTrack" className="slider-track">
                     {slides.map((slide, index) => (
                         <a
                             key={index}
                             href={slide.slideUrl || '#'}
                             className="slide"
-                            onClick={(e) => handleSlideClick(e, slide.slideUrl)}
                         >
                             <img
                                 src={slide.slideImage}

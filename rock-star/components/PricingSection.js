@@ -69,7 +69,7 @@ const PricingSection = ({ title, description, monthlyLabel, yearlyLabel, pricing
                                         data-wow-delay={`${delay}s`}
                                     >
                                         {plan.isPopular && (
-                                            <div className="absolute top-0 left-[20px] mt-[-16px]">
+                                            <div className="custom-bage-position absolute top-0 left-[20px] mt-[-16px]">
                                                 <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-semibold block">
                                                     Popular
                                                 </span>
