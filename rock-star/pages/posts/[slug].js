@@ -3,6 +3,7 @@ import client from '../../lib/apolloClient';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import PostAudio from '../../components/PostAudio';
 
 const GET_POST_BY_SLUG = gql`
   query GetPostBySlug($slug: ID!) {
@@ -42,6 +43,7 @@ const GET_POST_BY_SLUG = gql`
         }
       }
       commentCount
+      audioFile
     }
   }
 `;
@@ -92,7 +94,7 @@ export default function SinglePost({ post }) {
         return <div className="container pt-[150px] text-center">Post not found</div>;
     }
 
-    const { title, content, date, featuredImage, categories, tags, author, commentCount } = post;
+    const { title, content, date, featuredImage, categories, tags, author, commentCount, audioFile } = post;
 
     // Format date
     const formattedDate = new Date(date).toLocaleDateString('en-US', {
@@ -121,6 +123,12 @@ export default function SinglePost({ post }) {
                                 <h1 className="font-bold text-black dark:text-white text-3xl sm:text-4xl leading-tight sm:leading-tight mb-8">
                                     {title}
                                 </h1>
+
+                                {audioFile && audioFile.trim() !== '' && (
+                                    <PostAudio
+                                        audioUrl={`/api/audio-proxy?url=${encodeURIComponent(audioFile)}`}
+                                    />
+                                )}
 
                                 <div className="flex flex-wrap items-center justify-between pb-4 mb-10 border-b border-body-color border-opacity-10 dark:border-white dark:border-opacity-10">
                                     <div className="flex flex-wrap items-center">

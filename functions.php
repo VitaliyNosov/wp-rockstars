@@ -149,6 +149,16 @@ add_action('init', function() {
     header("Access-Control-Allow-Origin: *");
 });
 
+// Add CORS headers for uploaded media files
+add_action('template_redirect', function() {
+    // Check if this is a request for an uploaded file
+    if (strpos($_SERVER['REQUEST_URI'], '/wp-content/uploads/') !== false) {
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type');
+    }
+});
+
 
 // Функция которая отодвигает с верху шапку сайта что бы это выглядело красиво с навигационным меню от wordpress
 

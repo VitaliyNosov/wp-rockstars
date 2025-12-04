@@ -538,6 +538,16 @@ add_action('graphql_register_types', function () {
         ],
     ]);
 
+    // Post Audio Field
+    register_graphql_field('Post', 'audioFile', [
+        'type' => 'String',
+        'description' => 'Audio file URL for the post',
+        'resolve' => function ($post) {
+            $audio_url = carbon_get_post_meta($post->ID, 'post_audio_file');
+            return $audio_url ?: null;
+        }
+    ]);
+
     register_graphql_field('RootQuery', 'ticketNonce', [
         'type' => 'String',
         'description' => 'Nonce for ticket submission',
