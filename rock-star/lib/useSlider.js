@@ -11,7 +11,10 @@ export function useSlider(sliderId = 'sliderTrack') {
         if (!track) return;
 
         trackRef.current = track;
-        const slides = Array.from(track.children);
+        // Ensure we only count ORIGINAL slides, not clones from previous renders
+        // Array.from(track.children) might include old clones if React didn't strip them (though it usually does)
+        // logic: filter out any that have class 'clone' just in case.
+        const slides = Array.from(track.children).filter(child => !child.classList.contains('clone'));
         const gapPercent = 2;
         let slideWidthPercent = 38.46;
         let visibleSlidesCount = 2.6;
@@ -23,12 +26,17 @@ export function useSlider(sliderId = 'sliderTrack') {
                 // Mobile: 1 slide
                 slideWidthPercent = 100;
                 visibleSlidesCount = 1;
-                track.style.gap = '0';
-            } else {
-                // Все десктопные разрешения: 2.6 слайда (дизайнерский замысел)
+                track.style.gap = '0px'; // Explicitly 0
+            } else if (window.innerWidth <= 1600) {
+                // Standard Desktop (1024px - 1600px): 2.6 slides, Gap 30px
                 slideWidthPercent = 38.46;
                 visibleSlidesCount = 2.6;
-                track.style.gap = '2%';
+                track.style.gap = '30px';
+            } else {
+                // Large Desktop (> 1600px): 2.6 slides, Gap 100px (Huge buffer)
+                slideWidthPercent = 38.46;
+                visibleSlidesCount = 2.6;
+                track.style.gap = '100px'; // 100px to definitely hide artifacts
             }
         }
 
@@ -36,10 +44,20 @@ export function useSlider(sliderId = 'sliderTrack') {
             const clones = track.querySelectorAll('.clone');
             clones.forEach(c => c.remove());
 
-            for (let i = 0; i < Math.ceil(visibleSlidesCount); i++) {
-                const clone = slides[i].cloneNode(true);
-                clone.classList.add('clone');
-                track.appendChild(clone);
+            if (slides.length === 0) return;
+
+            // We need enough clones to cover the visible area + buffer for smooth infinite scroll.
+            // If we have few slides (e.g. 2), we might need more than just visibleSlidesCount clones.
+            // Let's clone enough to cover at least 2x the visible count to be safe.
+            const clonesCount = Math.ceil(visibleSlidesCount * 2) + 2;
+
+            for (let i = 0; i < clonesCount; i++) {
+                const slideToClone = slides[i % slides.length];
+                if (slideToClone) {
+                    const clone = slideToClone.cloneNode(true);
+                    clone.classList.add('clone');
+                    track.appendChild(clone);
+                }
             }
         }
 
@@ -50,10 +68,12 @@ export function useSlider(sliderId = 'sliderTrack') {
             const slideWidth = slides[0].offsetWidth;
 
             // Вычисляем gap в пикселях. 
-            // В CSS у нас gap: 2% для десктопа и 0 для мобилок.
+            // Gap = 30px для десктопа (чтобы совпадал с padding 30px и скрывал предыдущий слайд)
             let gap = 0;
-            if (window.innerWidth > 640) {
-                gap = track.offsetWidth * 0.02;
+            if (window.innerWidth > 1600) {
+                gap = 100;
+            } else if (window.innerWidth > 640) {
+                gap = 30;
             }
 
             const slideWithGap = slideWidth + gap;
@@ -64,34 +84,38 @@ export function useSlider(sliderId = 'sliderTrack') {
         }
 
         function nextSlide() {
-            indexRef.current++;
-            if (indexRef.current > slides.length) {
-                updatePosition(false);
+            // If we are at the end (mimicking the start), swap to start instantly
+            // This is the "Teleport" check.
+            // visual check: indexRef.current === slides.length is the start of clones (which looks like start of original)
+            if (indexRef.current >= slides.length) {
                 indexRef.current = 0;
+                updatePosition(false); // No animation snap
                 requestAnimationFrame(() => {
                     requestAnimationFrame(() => {
-                        updatePosition(true);
                         indexRef.current++;
+                        updatePosition(true);
                     });
                 });
             } else {
-                updatePosition();
+                indexRef.current++;
+                updatePosition(true);
             }
         }
 
         function prevSlide() {
-            indexRef.current--;
-            if (indexRef.current < 0) {
-                updatePosition(false);
+            if (indexRef.current <= 0) {
+                // We are at start. Teleport to end (start of clones)
                 indexRef.current = slides.length;
+                updatePosition(false); // No animation snap
                 requestAnimationFrame(() => {
                     requestAnimationFrame(() => {
-                        updatePosition(true);
                         indexRef.current--;
+                        updatePosition(true);
                     });
                 });
             } else {
-                updatePosition();
+                indexRef.current--;
+                updatePosition(true);
             }
         }
 
@@ -105,23 +129,27 @@ export function useSlider(sliderId = 'sliderTrack') {
         cloneSlides();
         updatePosition();
 
-        // Event listeners
+        // Event listeners handlers
+        const handleNextClick = () => {
+            nextSlide();
+            resetInterval();
+        };
+
+        const handlePrevClick = () => {
+            prevSlide();
+            resetInterval();
+        };
+
         const nextBtn = document.getElementById('nextBtn');
         const prevBtn = document.getElementById('prevBtn');
         const sliderContainer = document.getElementById('sliderContainer');
 
         if (nextBtn) {
-            nextBtn.addEventListener('click', () => {
-                nextSlide();
-                resetInterval();
-            });
+            nextBtn.addEventListener('click', handleNextClick);
         }
 
         if (prevBtn) {
-            prevBtn.addEventListener('click', () => {
-                prevSlide();
-                resetInterval();
-            });
+            prevBtn.addEventListener('click', handlePrevClick);
         }
 
         // Touch events
@@ -140,25 +168,14 @@ export function useSlider(sliderId = 'sliderTrack') {
             if (!slides[0]) return;
             const slideWidth = slides[0].offsetWidth;
             let gap = 0;
-            if (window.innerWidth > 640) {
-                gap = track.offsetWidth * 0.02;
+            if (window.innerWidth > 1600) {
+                gap = 100;
+            } else if (window.innerWidth > 640) {
+                gap = 30;
             }
             const slideWithGap = slideWidth + gap;
 
             let movePx = indexRef.current * slideWithGap + diff;
-
-            // Limits
-            const maxMove = (slides.length - visibleSlidesCount) * slideWithGap; // Approximate limit
-            // Or just limit based on total slides length like before but in pixels
-            // Previous logic: slides.length * slideWithGap. Let's keep it simple and consistent.
-
-            // Actually, let's just use the same logic as before but in pixels
-            // if (movePercent < 0) movePercent = 0;
-            // if (movePercent > slides.length * slideWithGap) ...
-
-            // We don't strictly enforce limits during drag in the original code (it allows overdrag), 
-            // but let's keep it safe.
-
             track.style.transform = `translateX(-${movePx}px)`;
         }
 
@@ -207,6 +224,12 @@ export function useSlider(sliderId = 'sliderTrack') {
                 sliderContainer.removeEventListener('touchmove', touchMove);
                 sliderContainer.removeEventListener('touchend', touchEnd);
                 sliderContainer.removeEventListener('touchcancel', touchEnd);
+            }
+            if (nextBtn) {
+                nextBtn.removeEventListener('click', handleNextClick);
+            }
+            if (prevBtn) {
+                prevBtn.removeEventListener('click', handlePrevClick);
             }
         };
     }, [sliderId]);

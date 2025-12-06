@@ -11,7 +11,7 @@ const BrandsSection = ({ logos }) => {
             <div className="container">
                 <div className="flex flex-wrap mx-[-16px]">
                     <div className="w-full px-4">
-                        <div className="bg-dark dark:bg-primary dark:bg-opacity-5 rounded-md flex flex-wrap items-center justify-center py-8 px-8 sm:px-10 md:py-[40px] md:px-[50px] xl:p-[50px] 2xl:py-[60px] 2xl:px-[70px] wow fadeInUp" data-wow-delay=".1s">
+                        <div className="bg-dark dark:bg-primary dark:bg-opacity-5 rounded-md flex flex-wrap items-center justify-center py-8 px-8 sm:px-10 md:py-[40px] md:px-[50px] xl:p-[50px] 2xl:py-[60px] 2xl:px-[70px] wow fadeInUp margin-custom-bottom" data-wow-delay=".1s">
                             {logos.map((item, index) => (
                                 <a
                                     key={index}

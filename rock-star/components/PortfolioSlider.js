@@ -46,9 +46,9 @@ const PortfolioSlider = ({ slides }) => {
     }, []);
 
     return (
-        <section className="portfolio-section">
+        <section className="portfolio-section wow fadeInUp" data-wow-delay=".1s">
             {/* Title */}
-            <div className="portfolio-name text-center mb-12">
+            <div className="portfolio-name text-center mb-12 wow fadeInUp" data-wow-delay=".2s">
                 <h1 className="text-black dark:text-white font-bold text-3xl sm:text-4xl md:text-[45px] mb-4">
                     Portfolio
                 </h1>
