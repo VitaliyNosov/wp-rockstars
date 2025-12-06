@@ -4,10 +4,12 @@ import '../styles/common/style.css';
 import '../styles/style-mod.sass';
 import Layout from '../components/Layout';
 import Script from 'next/script';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Inter } from 'next/font/google';
 import { ApolloProvider } from "@apollo/client";
 import client from "../lib/apolloClient";
+import Router from 'next/router';
+import Loader from '../components/Loader';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -16,6 +18,23 @@ const inter = Inter({
 });
 
 function MyApp({ Component, pageProps }) {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const start = () => setLoading(true);
+    const end = () => setLoading(false);
+
+    Router.events.on('routeChangeStart', start);
+    Router.events.on('routeChangeComplete', end);
+    Router.events.on('routeChangeError', end);
+
+    return () => {
+      Router.events.off('routeChangeStart', start);
+      Router.events.off('routeChangeComplete', end);
+      Router.events.off('routeChangeError', end);
+    };
+  }, []);
+
   useEffect(() => {
     // Initialize GLightbox when it's loaded
     if (typeof window !== 'undefined' && window.GLightbox) {
@@ -38,6 +57,8 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <div className={inter.className}>
+      {loading && <Loader />}
+
       {/* External CSS Libraries */}
       <link
         rel="stylesheet"

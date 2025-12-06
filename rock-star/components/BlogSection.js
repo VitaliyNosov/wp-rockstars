@@ -24,6 +24,11 @@ export default function BlogSection({ posts }) {
                 <div className="flex flex-wrap mx-[-16px] justify-center">
                     {posts.map((post, index) => {
                         const postLink = `/posts/${post.slug}`;
+                        const formattedDate = new Date(post.date).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                        });
 
                         return (
                             <div key={post.id} className="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 px-4">
@@ -76,7 +81,7 @@ export default function BlogSection({ posts }) {
                                                 </div>
                                                 <div className="w-full">
                                                     <h4 className="text-sm font-medium text-dark dark:text-white mb-1">
-                                                        Автор:{' '}
+                                                        Author:{' '}
                                                         <span className="text-dark dark:text-white hover:text-primary dark:hover:text-primary cursor-pointer">
                                                             {post.authorName}
                                                         </span>
@@ -89,10 +94,10 @@ export default function BlogSection({ posts }) {
 
                                             <div className="inline-block">
                                                 <h4 className="text-sm font-medium text-dark dark:text-white mb-1">
-                                                    Дата
+                                                    Date
                                                 </h4>
                                                 <p className="text-xs text-body-color">
-                                                    {post.date}
+                                                    {formattedDate}
                                                 </p>
                                             </div>
                                         </div>

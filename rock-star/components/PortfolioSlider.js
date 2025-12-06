@@ -46,7 +46,7 @@ const PortfolioSlider = ({ slides }) => {
     }, []);
 
     return (
-        <section className="portfolio-section wow fadeInUp" data-wow-delay=".1s">
+        <section className="portfolio-section">
             {/* Title */}
             <div className="portfolio-name text-center mb-12 wow fadeInUp" data-wow-delay=".2s">
                 <h1 className="text-black dark:text-white font-bold text-3xl sm:text-4xl md:text-[45px] mb-4">
@@ -57,7 +57,7 @@ const PortfolioSlider = ({ slides }) => {
             {/* Slider Container */}
             <div className="portfolio-slider-block"></div>
 
-            <div className="slider-container" id="sliderContainer" ref={containerRef}>
+            <div className="slider-container wow fadeInUp" data-wow-delay=".1s" id="sliderContainer" ref={containerRef}>
                 <div id="sliderTrack" className="slider-track">
                     {slides.map((slide, index) => (
                         <a
