@@ -101,6 +101,7 @@ export async function getServerSideProps() {
           categories {
             nodes {
               name
+              slug
             }
           }
           author {

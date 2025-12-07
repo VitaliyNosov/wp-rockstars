@@ -190,7 +190,14 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
                                                 disabled={isSubmitting}
                                                 className="text-base font-medium text-white bg-primary py-4 px-9 hover:bg-opacity-80 hover:shadow-signUp rounded-md transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
-                                                {isSubmitting ? 'Sending...' : 'Submit Ticket'}
+                                                {isSubmitting ? (
+                                                    <>
+                                                        Sending
+                                                        <span className="dot-1">.</span>
+                                                        <span className="dot-2">.</span>
+                                                        <span className="dot-3">.</span>
+                                                    </>
+                                                ) : 'Submit Ticket'}
                                             </button>
                                         </div>
                                     </div>
@@ -359,6 +366,28 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
                 }
                 html.dark .swal2-icon.swal2-error [class^='swal2-x-mark-line'] {
                     background-color: #ef4444 !important;
+                }
+
+                /* Animated Loading Dots */
+                @keyframes blink {
+                    0%, 100% { 
+                        opacity: 0.3; 
+                    }
+                    50% { 
+                        opacity: 1; 
+                    }
+                }
+                
+                .dot-1 {
+                    animation: blink 0.6s 0s infinite ease-in-out;
+                }
+                
+                .dot-2 {
+                    animation: blink 0.6s 0.2s infinite ease-in-out;
+                }
+                
+                .dot-3 {
+                    animation: blink 0.6s 0.4s infinite ease-in-out;
                 }
             `}</style>
         </>

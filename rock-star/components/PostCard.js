@@ -4,6 +4,7 @@ import Image from 'next/image';
 export default function PostCard({ post }) {
     const { title, excerpt, slug, date, featuredImage, categories, author } = post;
     const category = categories?.nodes?.[0]?.name;
+    const categorySlug = categories?.nodes?.[0]?.slug;
     const authorName = author?.node?.name;
     const authorAvatar = author?.node?.avatar?.url;
     const authorDescription = author?.node?.description;
@@ -18,13 +19,16 @@ export default function PostCard({ post }) {
     return (
         <div className="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 px-4">
             <div className="relative bg-white dark:bg-dark shadow-one rounded-md overflow-hidden mb-10 wow fadeInUp" data-wow-delay=".1s">
-                <Link href={`/posts/${slug}`} className="w-full block relative">
-                    <div className="relative w-full overflow-hidden" style={{ height: '220px' }}>
-                        {category && (
-                            <span className="absolute top-6 right-6 bg-primary rounded-full inline-flex items-center justify-center py-2 px-4 font-semibold text-sm text-white z-10">
-                                {category}
-                            </span>
-                        )}
+                <div className="relative w-full overflow-hidden" style={{ height: '220px' }}>
+                    {category && categorySlug && (
+                        <Link
+                            href={`/category/${categorySlug}`}
+                            className="absolute top-6 right-6 bg-primary rounded-full inline-flex items-center justify-center py-2 px-4 font-semibold text-sm text-white z-10 hover:bg-opacity-80 transition"
+                        >
+                            {category}
+                        </Link>
+                    )}
+                    <Link href={`/posts/${slug}`} className="block w-full h-full relative">
                         {featuredImage?.node?.sourceUrl ? (
                             <Image
                                 src={featuredImage.node.sourceUrl}
@@ -38,8 +42,8 @@ export default function PostCard({ post }) {
                                 <span className="text-gray-400">No Image</span>
                             </div>
                         )}
-                    </div>
-                </Link>
+                    </Link>
+                </div>
                 <div className="p-6 sm:p-8 md:py-8 md:px-6 lg:p-8 xl:py-8 xl:px-5 2xl:p-8">
                     <h3>
                         <Link href={`/posts/${slug}`} className="font-bold text-black dark:text-white text-xl sm:text-2xl block mb-4 hover:text-primary dark:hover:text-primary line-clamp-2 min-h-[64px]">

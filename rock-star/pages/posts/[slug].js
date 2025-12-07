@@ -192,9 +192,13 @@ export default function SinglePost({ post }) {
                                     {/* Categories */}
                                     <div className="mb-5">
                                         {categories?.nodes?.map((category) => (
-                                            <span key={category.slug} className="bg-primary rounded-full inline-flex items-center justify-center py-2 px-4 font-semibold text-sm text-white mr-2">
+                                            <Link
+                                                key={category.slug}
+                                                href={`/category/${category.slug}`}
+                                                className="bg-primary rounded-full inline-flex items-center justify-center py-2 px-4 font-semibold text-sm text-white mr-2 hover:bg-opacity-80 transition"
+                                            >
                                                 {category.name}
-                                            </span>
+                                            </Link>
                                         ))}
                                     </div>
                                 </div>
