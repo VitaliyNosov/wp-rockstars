@@ -171,6 +171,41 @@ function wp_custom_handle_ticket_submission() {
     update_post_meta($post_id, '_wp_custom_ip_address', $_SERVER['REMOTE_ADDR']);
     
     error_log('WP Custom Ticket: Successfully created ticket with ID: ' . $post_id);
+
+    // --- SEND AUTO-REPLY EMAIL START ---
+    $to = $email;
+    $subject = 'We received your request | ' . get_bloginfo('name');
+    $headers = array('Content-Type: text/html; charset=UTF-8');
+
+    // Load template
+    ob_start();
+    include get_template_directory() . '/inc/email-templates/contact-reply.php';
+    $message_html = ob_get_clean();
+
+    // Define the closure for the hook
+    $embed_logo_callback = function($phpmailer) {
+        $logo_path = get_template_directory() . '/images/logo.png';
+        if (file_exists($logo_path)) {
+            $phpmailer->AddEmbeddedImage($logo_path, 'company-logo', 'logo.png');
+        }
+    };
+
+    // Add the hook
+    add_action('phpmailer_init', $embed_logo_callback);
+
+    // Send email
+    $sent = wp_mail($to, $subject, $message_html, $headers);
+    
+    // Remove the hook so it doesn't affect other emails
+    remove_action('phpmailer_init', $embed_logo_callback);
+    
+    if ($sent) {
+        error_log('WP Custom Ticket: Auto-reply sent to ' . $to);
+    } else {
+        error_log('WP Custom Ticket: Failed to send auto-reply to ' . $to);
+    }
+    // --- SEND AUTO-REPLY EMAIL END ---
+
     wp_send_json_success('Ticket submitted successfully');
 }
 add_action('wp_ajax_wp_custom_submit_ticket', 'wp_custom_handle_ticket_submission');

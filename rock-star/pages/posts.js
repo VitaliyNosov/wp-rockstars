@@ -23,6 +23,7 @@ const GET_POSTS = gql`
         categories {
           nodes {
             name
+            slug
           }
         }
         author {

@@ -217,11 +217,9 @@ export async function getServerSideProps() {
       excerpt: post.excerpt,
       slug: post.slug,
       date: post.date,
-      featuredImage: post.featuredImage?.node?.sourceUrl || null,
-      categoryName: post.categories?.nodes?.[0]?.name || null,
-      authorName: post.author?.node?.name || null,
-      authorAvatar: post.author?.node?.avatar?.url || null,
-      authorDescription: post.author?.node?.description || null,
+      featuredImage: post.featuredImage,
+      categories: post.categories,
+      author: post.author,
     })) || [];
 
     return {
