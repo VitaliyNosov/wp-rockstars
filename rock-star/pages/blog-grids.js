@@ -70,7 +70,7 @@ export default function BlogGrids({ posts, pageInfo, error }) {
                         <div className="w-full md:w-8/12 lg:w-7/12 px-4">
                             <div className="max-w-[570px] mb-12 md:mb-0">
                                 <h1 className="font-bold text-black dark:text-white text-2xl sm:text-3xl mb-5">Blog Grids</h1>
-                                <p className="font-medium text-base text-body-color leading-relaxed">
+                                <p className="font-medium text-base text-body-color dark:text-white leading-relaxed">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius eros eget sapien consectetur ultrices.
                                     Ut quis dapibus libero.
                                 </p>
@@ -80,8 +80,8 @@ export default function BlogGrids({ posts, pageInfo, error }) {
                             <div className="text-end">
                                 <ul className="flex items-center md:justify-end">
                                     <li className="flex items-center">
-                                        <Link href="/" className="font-medium text-base text-body-color pr-1 hover:text-primary">Home</Link>
-                                        <span className="block w-2 h-2 border-t-2 border-r-2 border-body-color rotate-45 mr-3"></span>
+                                        <Link href="/" className="font-medium text-base text-body-color dark:text-white pr-1 hover:text-primary">Home</Link>
+                                        <span className="block w-2 h-2 border-t-2 border-r-2 border-body-color dark:border-white rotate-45 mr-3"></span>
                                     </li>
                                     <li className="font-medium text-base text-primary">Blog Grids</li>
                                 </ul>

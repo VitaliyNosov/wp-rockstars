@@ -878,3 +878,40 @@ html body #rs-post-audio-player-container .plyr {
 .btn-link:hover {
   opacity: 0.7;
 }
+
+/* landing page style */
+
+.dark .button-hover-custom-landing:hover {
+  background-color: rgb(0 0 0) !important;
+  border-color: #2563EB !important;
+}
+
+.dark .button-hover-custom-landing:focus {
+  background-color: rgb(0 0 0) !important;
+  border-color: #2563EB !important;
+}
+
+.dark .hs-tab-active:bg-white{
+  background-color: rgb(0 0 0) !important;
+}
+
+.landing-header-landing-section{
+  margin-top: 120px;
+  margin-bottom: 60px;
+}
+
+
+@media (min-width: 1320px) {
+    .landing-page-id .container {
+        max-width: 1320px !important;
+    }
+}
+
+.dark .bg-blue-100 {
+    background-color : rgb(0 0 0) !important;
+}
+
+.dark .border-blue-50 {
+    border-color: rgb(0 0 0) !important;
+}
+   

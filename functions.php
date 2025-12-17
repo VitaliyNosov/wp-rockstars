@@ -103,17 +103,63 @@ add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
 
 // Tailwind и Preline для лендингов
 
-add_action('wp_enqueue_scripts', function () {
-    // Массив ID страниц, на которых нужно подключать Tailwind и Preline
-    $allowed_pages = [1548, 1562]; // Добавь сюда другие ID страниц, если нужно
+// add_action('wp_enqueue_scripts', function () {
+//     // Массив ID страниц, на которых нужно подключать Tailwind и Preline
+//     $allowed_pages = [1548, 1562]; // Добавь сюда другие ID страниц, если нужно
 
-    if (is_page($allowed_pages)) {
+//     if (is_page($allowed_pages)) {
+//         wp_enqueue_script(
+//             'tailwind-cdn',
+//             'https://cdn.tailwindcss.com',
+//             [],
+//             null,
+//             false
+//         );
+
+//         wp_enqueue_script(
+//             'preline-js',
+//             'https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.js',
+//             [],
+//             null,
+//             true
+//         );
+//     }
+// });
+
+
+/**
+ * Добавляет класс landing-page-id в body для шаблона "about us"
+ */
+function add_landing_page_body_class($classes) {
+    global $post;
+    
+    if (isset($post->ID)) {
+        $template = get_post_meta($post->ID, '_wp_page_template', true);
+        
+        // Ищем шаблон с "about" в названии
+        if ($template && strpos(strtolower($template), 'about') !== false) {
+            $classes[] = 'landing-page-id';
+        }
+    }
+    
+    return $classes;
+}
+add_filter('body_class', 'add_landing_page_body_class');
+
+
+
+add_action('wp_enqueue_scripts', function () {
+    // Получаем все классы body для текущей страницы
+    $body_classes = get_body_class();
+    
+    // Проверяем, есть ли класс 'landing-page-id' среди классов body
+    if (in_array('landing-page-id', $body_classes)) {
         wp_enqueue_script(
             'tailwind-cdn',
             'https://cdn.tailwindcss.com',
             [],
             null,
-            false
+            true
         );
 
         wp_enqueue_script(
