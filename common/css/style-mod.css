@@ -584,10 +584,10 @@ body {
   margin-bottom: 50px;
 }
 
-.page-id-1548,
+/* .page-id-1548,
 .page-id-1562 .header-landing-section h2 {
   text-align: center;
-}
+} */
 
 .page-id-1548 .bg-gray-100 {
   border: 1px solid #2E3038;
@@ -792,10 +792,6 @@ body {
   margin-bottom: 50px;
 }
 
-.page-id-1548,
-.page-id-1562 .header-landing-section h2 {
-  text-align: center;
-}
 
 .page-id-1548 .bg-gray-100 {
   border: 1px solid #2E3038;
@@ -891,27 +887,56 @@ html body #rs-post-audio-player-container .plyr {
   border-color: #2563EB !important;
 }
 
-.dark .hs-tab-active:bg-white{
+.dark .hs-tab-active:bg-white {
   background-color: rgb(0 0 0) !important;
 }
 
-.landing-header-landing-section{
+.landing-header-landing-section {
   margin-top: 120px;
   margin-bottom: 60px;
 }
 
 
 @media (min-width: 1320px) {
-    .landing-page-id .container {
-        max-width: 1320px !important;
-    }
+  .landing-page-id .container {
+    max-width: 1320px !important;
+  }
 }
 
 .dark .bg-blue-100 {
-    background-color : rgb(0 0 0) !important;
+  background-color: rgb(0 0 0) !important;
 }
 
 .dark .border-blue-50 {
-    border-color: rgb(0 0 0) !important;
+  border-color: rgb(0 0 0) !important;
 }
-   
+
+.header-landing-section {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.section-margin-top {
+  margin-top: 100px;
+}
+
+/* Кастом для лендинга нужно не забыть */
+
+.page-id-1654 .grid .bg-white {
+  border: 1px solid #2E3038;
+  background: none !important;
+}
+
+.page-id-1654 .bg-gray-100 {
+  border: 1px solid #2E3038;
+  background: none !important;
+}
+
+.dark .custom-color-bage {
+  background-color: #2563EB !important;
+}
+
+.dark .custom-color-bage .bg-blue-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1)) !important;
+}

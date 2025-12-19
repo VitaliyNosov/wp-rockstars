@@ -53,6 +53,7 @@ add_action( 'after_setup_theme', function() {
     Carbon_Fields::boot();
 
     require_once get_template_directory() . '/inc/carbon-fields-init.php'; 
+    require_once get_template_directory() . '/inc/carbon-fields-init-landing.php'; 
     require_once get_template_directory() . '/inc/graphql-register.php';
 });
 
@@ -130,21 +131,32 @@ add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
 /**
  * Добавляет класс landing-page-id в body для шаблона "about us"
  */
+
 function add_landing_page_body_class($classes) {
     global $post;
     
     if (isset($post->ID)) {
         $template = get_post_meta($post->ID, '_wp_page_template', true);
         
-        // Ищем шаблон с "about" в названии
-        if ($template && strpos(strtolower($template), 'about') !== false) {
-            $classes[] = 'landing-page-id';
+        if ($template) {
+            $template_lower = strtolower($template);
+            
+            // Шаблон с "about" в названии
+            if (strpos($template_lower, 'about') !== false) {
+                $classes[] = 'landing-page-id';
+            }
+            
+            // Шаблон landings-template.php
+            if (strpos($template_lower, 'landings-template.php') !== false) {
+                $classes[] = 'landing-page-id';
+            }
         }
     }
     
     return $classes;
 }
 add_filter('body_class', 'add_landing_page_body_class');
+
 
 
 
@@ -227,6 +239,30 @@ function custom_excerpt_length($length) {
     return 20; // Количество слов
 }
 add_filter('excerpt_length', 'custom_excerpt_length');
+
+
+// Custom Admin Styles for Carbon Fields
+function rock_stars_admin_style() {
+    echo '<style>
+        .cf-complex__tabs-item--tabbed-vertical.cf-complex__tabs-item--current,
+        .cf-complex__tabs-item--tabbed-horizontal.cf-complex__tabs-item--current,
+        .cf-container__tabs-item.cf-container__tabs-item--current {
+            background-color: #2271b1 !important;
+            color: #ffffff !important;
+            border-color: #2271b1 !important;
+        }
+        .cf-container__tabs-item.cf-container__tabs-item--current button {
+            color: #ffffff !important;
+        }
+        .cf-complex__tabs-item--tabbed-vertical.cf-complex__tabs-item--current:hover,
+        .cf-complex__tabs-item--tabbed-horizontal.cf-complex__tabs-item--current:hover,
+        .cf-container__tabs-item.cf-container__tabs-item--current:hover {
+            background-color: #135e96 !important;
+            color: #ffffff !important;
+        }
+    </style>';
+}
+add_action('admin_head', 'rock_stars_admin_style');
 
 
 
