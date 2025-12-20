@@ -1,0 +1,68 @@
+/* custom styles for landings */
+
+.grid .bg-white {
+    border: 1px solid #2E3038;
+    background: none !important;
+}
+
+.bg-gray-100 {
+    border: 1px solid #2E3038;
+    background: none !important;
+}
+
+.dark .custom-color-bage {
+    background-color: #2563EB !important;
+}
+
+.dark .custom-color-bage .bg-blue-600 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1)) !important;
+}
+
+.border {
+    border: 1px solid #E5E7EB !important;
+}
+
+.dark .border {
+    border: 1px solid #2E3038 !important;
+}
+
+.bg-gray-100 {
+    border: 1px solid #E5E7EB;
+    background: none !important;
+}
+
+.dark .bg-gray-100 {
+    border: 1px solid #2E3038;
+    background: none !important;
+}
+
+.group h3 {
+    transition: 0.2s;
+}
+
+.group h3:hover {
+    color: #2563EB !important;
+}
+
+.custom-hover-button-landing:hover {
+    transition: 0.2s;
+    color: #fff !important;
+}
+
+.dark.custom-hover-button-landing {
+    color: #2E3038 !important;
+}
+
+.custom-hover-button-landing:hover {
+    background-color: #2563EB !important;
+}
+
+.custom-button-posts-landing {
+    transition: 0.2s;
+}
+
+.custom-button-posts-landing:hover {
+    background-color: #2563EB !important;
+    color: #fff !important;
+}

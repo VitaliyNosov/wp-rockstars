@@ -49,7 +49,7 @@ get_header(); ?>
             <?php endif; ?>
             
             <?php if ( $btn2_text = carbon_get_the_post_meta( 'hero_btn_2_text' ) ) : ?>
-                <a class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-gray-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="<?php echo esc_url( carbon_get_the_post_meta( 'hero_btn_2_url' ) ); ?>">
+                <a class="custom-hover-button-landing  py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-gray-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="<?php echo esc_url( carbon_get_the_post_meta( 'hero_btn_2_url' ) ); ?>">
                   <?php echo esc_html( $btn2_text ); ?>
                 </a>
             <?php endif; ?>
@@ -210,7 +210,7 @@ get_header(); ?>
                         ?>
                         <?php if ( ! empty( $block['image'] ) ): ?>
                         <figure>
-                            <img class="w-full object-cover rounded-xl" src="<?php echo esc_url( $block['image'] ); ?>" alt="Blog Image">
+                            <img class="w-full h-auto max-h-[600px] object-cover rounded-xl" src="<?php echo esc_url( $block['image'] ); ?>" alt="Blog Image">
                             <?php if ( ! empty( $block['caption'] ) ): ?>
                             <figcaption class="mt-3 text-sm text-center text-gray-500 dark:text-neutral-500">
                               <?php echo esc_html( $block['caption'] ); ?>
@@ -598,7 +598,7 @@ get_header(); ?>
       <!-- Card -->
       <?php if ( $sec7_read_more_text && $sec7_read_more_url ) : ?>
       <div class="mt-12 text-center">
-        <a class="py-3 px-4 inline-flex items-center gap-x-1 text-sm font-medium rounded-full border border-gray-200 text-blue-600 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-blue-500 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="<?php echo esc_url( $sec7_read_more_url ); ?>">
+        <a class="custom-button-posts-landing py-3 px-4 inline-flex items-center gap-x-1 text-sm font-medium rounded-full border border-gray-200 text-blue-600 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-blue-500 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="<?php echo esc_url( $sec7_read_more_url ); ?>">
           <?php echo esc_html( $sec7_read_more_text ); ?>
           <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
         </a>

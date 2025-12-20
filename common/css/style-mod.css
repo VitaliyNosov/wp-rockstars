@@ -919,24 +919,3 @@ html body #rs-post-audio-player-container .plyr {
 .section-margin-top {
   margin-top: 100px;
 }
-
-/* Кастом для лендинга нужно не забыть */
-
-.page-id-1654 .grid .bg-white {
-  border: 1px solid #2E3038;
-  background: none !important;
-}
-
-.page-id-1654 .bg-gray-100 {
-  border: 1px solid #2E3038;
-  background: none !important;
-}
-
-.dark .custom-color-bage {
-  background-color: #2563EB !important;
-}
-
-.dark .custom-color-bage .bg-blue-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1)) !important;
-}

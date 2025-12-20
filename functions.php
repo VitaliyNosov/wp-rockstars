@@ -166,6 +166,13 @@ add_action('wp_enqueue_scripts', function () {
     
     // Проверяем, есть ли класс 'landing-page-id' среди классов body
     if (in_array('landing-page-id', $body_classes)) {
+        wp_enqueue_style(
+            'landings-mod',
+            get_template_directory_uri() . '/common/css/landings-mod.css',
+            [],
+            null
+        );
+
         wp_enqueue_script(
             'tailwind-cdn',
             'https://cdn.tailwindcss.com',
