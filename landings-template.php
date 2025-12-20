@@ -16,7 +16,7 @@ get_header(); ?>
       <!-- Grid -->
       <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
         <div>
-          <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-6xl lg:leading-tight dark:text-white">
+          <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-6xl lg:leading-tight dark:text-white wow fadeInUp" data-wow-delay=".2s">
             <?php 
             $hero_title = carbon_get_the_post_meta( 'hero_title' );
             if ( $hero_title ) {
@@ -35,12 +35,12 @@ get_header(); ?>
             }
             ?>
           </h1>
-          <p class="mt-3 text-lg dark:text-white dark:text-neutral-400">
+          <p class="mt-3 text-lg dark:text-white dark:text-neutral-400 wow fadeInUp" data-wow-delay=".4s">
             <?php echo esc_html( carbon_get_the_post_meta( 'hero_description' ) ); ?>
           </p>
     
           <!-- Buttons -->
-          <div class="mt-7 grid gap-3 w-full sm:inline-flex">
+          <div class="mt-7 grid gap-3 w-full sm:inline-flex wow fadeInUp" data-wow-delay=".6s">
             <?php if ( $btn1_text = carbon_get_the_post_meta( 'hero_btn_1_text' ) ) : ?>
                 <a class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" href="<?php echo esc_url( carbon_get_the_post_meta( 'hero_btn_1_url' ) ); ?>">
                   <?php echo esc_html( $btn1_text ); ?>
@@ -117,7 +117,7 @@ get_header(); ?>
         </div>
         <!-- End Col -->
     
-        <div class="relative ms-4">
+        <div class="relative ms-4 wow fadeInUp" data-wow-delay=".8s">
           <?php if ( $hero_img_url = carbon_get_the_post_meta( 'hero_image' ) ) : ?>
             <img class="w-full rounded-md" src="<?php echo esc_url( $hero_img_url ); ?>" alt="Hero Image">
           <?php else: ?>
@@ -158,7 +158,7 @@ get_header(); ?>
 
     <!-- section-two -->
     <?php if ( $sec2_title = carbon_get_the_post_meta( 'sec2_title' ) ): ?>
-    <div class="header-landing-section section-margin-top">
+    <div class="header-landing-section section-margin-top wow fadeInUp" data-wow-delay=".2s">
             <h2 class="text-center text-2xl font-bold md:text-4xl md:leading-tight dark:text-white">
                 <?php echo esc_html( $sec2_title ); ?> 
             </h2>
@@ -166,7 +166,7 @@ get_header(); ?>
     <?php endif; ?>
 
     <!-- Blog Article -->
-    <div class="max-w-[75rem] px-4 pt-6 lg:pt-10 pb-12 sm:px-6 lg:px-8 mx-auto">
+    <div class="max-w-[75rem] px-4 pt-6 lg:pt-10 pb-12 sm:px-6 lg:px-8 mx-auto wow fadeInUp" data-wow-delay=".4s">
       <div class="max-w-1xl">
        
         <!-- Content -->
@@ -259,7 +259,7 @@ get_header(); ?>
 
     <!-- section-three -->
     <?php if ( $sec3_header = carbon_get_the_post_meta( 'sec3_header' ) ): ?>
-    <div class="header-landing-section">
+    <div class="header-landing-section wow fadeInUp" data-wow-delay=".2s">
         <h2 class="text-center text-2xl font-bold md:text-4xl md:leading-tight dark:text-white">
             <?php echo esc_html( $sec3_header ); ?>
           </h2>
@@ -277,7 +277,7 @@ get_header(); ?>
             </h2>
 
             <!-- Tab Navs -->
-            <nav class="grid gap-4 mt-5 md:mt-10" aria-label="Tabs" role="tablist" aria-orientation="vertical">
+            <nav class="grid gap-4 mt-5 md:mt-10 wow fadeInUp" data-wow-delay=".4s" aria-label="Tabs" role="tablist" aria-orientation="vertical">
               <?php 
               $tabs = carbon_get_the_post_meta( 'sec3_tabs' );
               if ( ! empty( $tabs ) ):
@@ -305,7 +305,7 @@ get_header(); ?>
           <!-- End Col -->
 
           <div class="lg:col-span-6">
-            <div class="relative">
+            <div class="relative wow fadeInUp" data-wow-delay=".6s">
               <!-- Tab Content -->
               <div>
                 <?php 
@@ -348,7 +348,7 @@ get_header(); ?>
 
     <!-- section-four -->
     <?php if ( $sec4_header = carbon_get_the_post_meta( 'sec4_header' ) ): ?>
-    <div class="header-landing-section">
+    <div class="header-landing-section wow fadeInUp" data-wow-delay=".2s">
         <h2 class="text-center text-2xl font-bold md:text-4xl md:leading-tight dark:text-white">
             <?php echo esc_html( $sec4_header ); ?>
         </h2>
@@ -362,10 +362,11 @@ get_header(); ?>
         <?php 
         $cards = carbon_get_the_post_meta( 'sec4_cards' );
         if ( ! empty( $cards ) ):
-            foreach ( $cards as $card ):
+            foreach ( $cards as $index => $card ):
+                $delay = 0.1 + ( $index * 0.1 );
         ?>
         <!-- Card -->
-        <div class="size-full bg-white shadow-lg rounded-lg p-5 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700">
+        <div class="size-full bg-white shadow-lg rounded-lg p-5 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 wow fadeInUp" data-wow-delay="<?php echo esc_attr( $delay ); ?>s">
           <div class="flex items-center gap-x-4 mb-3">
             <div class="inline-flex justify-center items-center size-15.5 rounded-full border-4 border-blue-50 bg-blue-100 dark:border-blue-900 dark:bg-blue-800">
               <span class="shrink-0 size-6 text-blue-600 dark:text-blue-400 flex items-center justify-center">
@@ -391,13 +392,13 @@ get_header(); ?>
     <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
       <!-- Title -->
       <?php if ( $sec5_title = carbon_get_the_post_meta( 'sec5_title' ) ): ?>
-      <div class="max-w-2xl mx-auto mb-10 lg:mb-14">
+      <div class="max-w-2xl mx-auto mb-10 lg:mb-14 wow fadeInUp" data-wow-delay=".2s">
         <h2 class="text-2xl font-bold md:text-4xl md:leading-tight dark:text-white"><?php echo esc_html( $sec5_title ); ?></h2>
       </div>
       <?php endif; ?>
       <!-- End Title -->
 
-      <div class="max-w-2xl mx-auto divide-y divide-gray-200 dark:divide-neutral-700">
+      <div class="max-w-2xl mx-auto divide-y divide-gray-200 dark:divide-neutral-700 wow fadeInUp" data-wow-delay=".4s">
         <?php 
         $faqs = carbon_get_the_post_meta( 'sec5_faqs' );
         if ( ! empty( $faqs ) ):
@@ -429,14 +430,14 @@ get_header(); ?>
     <!-- Pricing -->
     <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
       <!-- Title -->
-      <div class="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
+      <div class="max-w-2xl mx-auto text-center mb-10 lg:mb-14 wow fadeInUp" data-wow-delay=".2s">
         <h2 class="text-2xl font-bold md:text-4xl md:leading-tight dark:text-white"><?php echo esc_html( carbon_get_the_post_meta( 'sec6_title' ) ); ?></h2>
         <p class="mt-1 text-gray-600 dark:text-neutral-400"><?php echo esc_html( carbon_get_the_post_meta( 'sec6_desc' ) ); ?></p>
       </div>
       <!-- End Title -->
 
       <!-- Switch -->
-      <div class="flex justify-center items-center gap-x-3">
+      <div class="flex justify-center items-center gap-x-3 wow fadeInUp" data-wow-delay=".4s">
         <label for="pricing-switch" class="text-sm text-gray-800 dark:text-neutral-200">Monthly</label>
         <label for="pricing-switch" class="relative inline-block w-11 h-6 cursor-pointer">
           <input type="checkbox" id="pricing-switch" class="peer sr-only" checked>
@@ -462,7 +463,8 @@ get_header(); ?>
         <?php 
         $pricing_cards = carbon_get_the_post_meta( 'sec6_cards' );
         if ( ! empty( $pricing_cards ) ):
-            foreach ( $pricing_cards as $card ):
+            foreach ( $pricing_cards as $index => $card ):
+                $delay = 0.2 + ( $index * 0.1 );
                 $is_popular = $card['is_popular'];
                 $border_class = $is_popular ? 'border-2 border-blue-600 shadow-xl' : 'border border-gray-200';
                 $dark_border_class = $is_popular ? 'dark:border-blue-700' : 'dark:border-neutral-800';
@@ -473,7 +475,7 @@ get_header(); ?>
                     : 'border-gray-200 bg-white dark:text-white shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800';
         ?>
         <!-- Card -->
-        <div class="flex flex-col <?php echo $border_class; ?> text-center rounded-xl p-8 <?php echo $dark_border_class; ?>">
+        <div class="flex flex-col <?php echo $border_class; ?> text-center rounded-xl p-8 <?php echo $dark_border_class; ?> wow fadeInUp" data-wow-delay="<?php echo esc_attr( $delay ); ?>s">
           <?php if ( $is_popular ): ?>
           <p class="mb-3"><span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold bg-blue-100 text-blue-800 dark:bg-blue-600 dark:text-white custom-color-bage">Most popular</span></p>
           <?php endif; ?>
@@ -552,7 +554,7 @@ get_header(); ?>
     ?>
     <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
       <!-- Title -->
-      <div class="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
+      <div class="max-w-2xl mx-auto text-center mb-10 lg:mb-14 wow fadeInUp" data-wow-delay=".2s">
         <?php if ( $sec7_title ) : ?>
         <h2 class="text-2xl font-bold md:text-4xl md:leading-tight dark:text-white"><?php echo esc_html( $sec7_title ); ?></h2>
         <?php endif; ?>
@@ -564,9 +566,14 @@ get_header(); ?>
 
       <!-- Grid -->
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <?php while ( $blog_query->have_posts() ) : $blog_query->the_post(); ?>
+        <?php 
+        $delay_counter = 0;
+        while ( $blog_query->have_posts() ) : $blog_query->the_post(); 
+             $delay = 0.2 + ( $delay_counter * 0.1 );
+             $delay_counter++;
+        ?>
         <!-- Card -->
-        <a class="group flex flex-col h-full border border-gray-200 hover:border-transparent hover:shadow-lg focus:outline-hidden focus:border-transparent focus:shadow-lg transition duration-300 rounded-xl p-5 dark:border-neutral-700" href="<?php the_permalink(); ?>">
+        <a class="group flex flex-col h-full border border-gray-200 hover:border-transparent hover:shadow-lg focus:outline-hidden focus:border-transparent focus:shadow-lg transition duration-300 rounded-xl p-5 dark:border-neutral-700 wow fadeInUp" data-wow-delay="<?php echo esc_attr( $delay ); ?>s" href="<?php the_permalink(); ?>">
           <div class="aspect-w-16 aspect-h-11">
             <?php if ( has_post_thumbnail() ) : ?>
                 <img class="w-full object-cover rounded-xl" src="<?php echo get_the_post_thumbnail_url( get_the_ID(), 'medium' ); ?>" alt="<?php the_title_attribute(); ?>">
@@ -617,7 +624,7 @@ get_header(); ?>
     $sec8_placeholder = carbon_get_the_post_meta( 'sec8_input_placeholder' );
     $sec8_btn_text = carbon_get_the_post_meta( 'sec8_btn_text' );
     ?>
-    <div class="max-w-6xl py-10 px-4 sm:px-6 lg:px-8 lg:py-16 mx-auto">
+    <div class="max-w-6xl py-10 px-4 sm:px-6 lg:px-8 lg:py-16 mx-auto wow fadeInUp" data-wow-delay=".2s">
       <div class="max-w-xl text-center mx-auto">
         <div class="mb-5">
           <h2 class="text-2xl font-bold md:text-3xl md:leading-tight dark:text-white">
