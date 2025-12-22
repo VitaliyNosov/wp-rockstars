@@ -66,3 +66,54 @@
     background-color: #2563EB !important;
     color: #fff !important;
 }
+
+
+/* Active state for tabs - forcing over Tailwind utilities if needed */
+button[role="tab"].active {
+    background-color: #2563EB !important;
+    /* Blue background */
+    border-color: #2563EB !important;
+    border-width: 1px !important;
+    /* Reset border width if needed, or keep same as inactive */
+}
+
+button[role="tab"].active * {
+    color: #ffffff !important;
+    /* Force white text for all children */
+}
+
+
+/* Hover state for inactive tabs - content only */
+button[role="tab"]:hover:not(.active) * {
+    color: #2563EB !important;
+    /* Blue text on hover */
+    transition: color 0.2s ease-in-out;
+}
+
+/* Specific fix for dark mode override conflict */
+.dark button[role="tab"].active {
+    background-color: #2563EB !important;
+    border-color: #2563EB !important;
+}
+
+.dark .border-\[\#E5E7EB\] {
+    --tw-border-opacity: 1;
+    border-color: #2E3038;
+}
+
+/* Landing tags hover effect */
+.section-two-tag:hover {
+    background-color: #2563EB !important;
+    color: #ffffff !important;
+    border-color: #2563EB !important;
+}
+
+.dark .bg-blue-100 {
+    background-color: #000;
+}
+
+/* Pricing card hover effect */
+.pricing-card:hover {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+    transition: box-shadow 0.3s ease;
+}

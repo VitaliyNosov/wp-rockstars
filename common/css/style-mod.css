@@ -903,9 +903,9 @@ html body #rs-post-audio-player-container .plyr {
   }
 }
 
-.dark .bg-blue-100 {
+/* .dark .bg-blue-100 {
   background-color: rgb(0 0 0) !important;
-}
+} */
 
 .dark .border-blue-50 {
   border-color: rgb(0 0 0) !important;

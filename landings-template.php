@@ -244,7 +244,7 @@ get_header(); ?>
           ?>
           <div>
             <?php foreach ( $tags as $tag ): ?>
-            <a class="m-1 inline-flex items-center gap-1.5 py-2 px-3 rounded-full text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" href="<?php echo esc_url( $tag['tag_url'] ); ?>">
+            <a class="section-two-tag m-1 inline-flex items-center gap-1.5 py-2 px-3 rounded-full text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" href="<?php echo esc_url( $tag['tag_url'] ); ?>">
               <?php echo esc_html( $tag['tag_label'] ); ?>
             </a>
             <?php endforeach; ?>
@@ -287,14 +287,14 @@ get_header(); ?>
                     $active_class = $is_active ? 'active' : '';
                     $aria_selected = $is_active ? 'true' : 'false';
               ?>
-              <button type="button" class="hs-tab-active:bg-white hs-tab-active:shadow-md hs-tab-active:hover:border-transparent text-start hover:bg-gray-2001 focus:outline-hidden focus:bg-gray-2001 p-4 md:p-5 rounded-xl dark:hs-tab-active:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 <?php echo $active_class; ?>" id="tabs-with-card-item-<?php echo $tab_id; ?>" aria-selected="<?php echo $aria_selected; ?>" data-hs-tab="#tabs-with-card-<?php echo $tab_id; ?>" aria-controls="tabs-with-card-<?php echo $tab_id; ?>" role="tab">
+              <button type="button" class="hs-tab-active:bg-white hs-tab-active:shadow-md hs-tab-active:hover:border-transparent text-start hover:bg-gray-2001 focus:outline-hidden focus:bg-gray-2001 p-4 md:p-5 rounded-xl dark:hs-tab-active:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 border-[1px] border-[#E5E7EB] hs-tab-active:border-blue-600 dark:hs-tab-active:border-blue-500 <?php echo $active_class; ?>" id="tabs-with-card-item-<?php echo $tab_id; ?>" aria-selected="<?php echo $aria_selected; ?>" data-hs-tab="#tabs-with-card-<?php echo $tab_id; ?>" aria-controls="tabs-with-card-<?php echo $tab_id; ?>" role="tab">
                 <span class="flex gap-x-6">
                   <span class="shrink-0 mt-2 size-6 md:size-7 hs-tab-active:text-blue-600 dark:text-white dark:hs-tab-active:text-blue-500 dark:text-neutral-200 flex items-center justify-center">
                     <?php echo $tab['tab_icon']; // SVG Output ?>
                   </span>
                   <span class="grow">
                     <span class="block text-lg font-semibold hs-tab-active:text-blue-600 dark:text-white dark:hs-tab-active:text-blue-500 dark:text-neutral-200"><?php echo esc_html( $tab['tab_title'] ); ?></span>
-                    <span class="block mt-1 dark:text-white dark:hs-tab-active:text-gray-200 dark:text-neutral-200"><?php echo esc_html( $tab['tab_desc'] ); ?></span>
+                    <span class="block mt-1 dark:text-white hs-tab-active:text-blue-600 dark:hs-tab-active:text-blue-500 dark:text-neutral-200"><?php echo esc_html( $tab['tab_desc'] ); ?></span>
                   </span>
                 </span>
               </button>
@@ -475,7 +475,7 @@ get_header(); ?>
                     : 'border-gray-200 bg-white dark:text-white shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800';
         ?>
         <!-- Card -->
-        <div class="flex flex-col <?php echo $border_class; ?> text-center rounded-xl p-8 <?php echo $dark_border_class; ?> wow fadeInUp" data-wow-delay="<?php echo esc_attr( $delay ); ?>s">
+        <div class="pricing-card flex flex-col <?php echo $border_class; ?> text-center rounded-xl p-8 <?php echo $dark_border_class; ?> wow fadeInUp" data-wow-delay="<?php echo esc_attr( $delay ); ?>s">
           <?php if ( $is_popular ): ?>
           <p class="mb-3"><span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold bg-blue-100 text-blue-800 dark:bg-blue-600 dark:text-white custom-color-bage">Most popular</span></p>
           <?php endif; ?>
