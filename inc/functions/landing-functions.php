@@ -36,21 +36,38 @@ add_action('wp_enqueue_scripts', function () {
             null
         );
 
+        // wp_enqueue_script(
+        //     'tailwind-cdn',
+        //     'https://cdn.tailwindcss.com',
+        //     [],
+        //     null,
+        //     true
+        // );
+
         wp_enqueue_script(
-            'tailwind-cdn',
-            'https://cdn.tailwindcss.com',
+            'tailwindcss',
+            get_template_directory_uri() . '/common/landing-template/tailwindcss.js',
             [],
             null,
             true
         );
 
+        // wp_enqueue_script(
+        //     'preline-js',
+        //     'https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.js',
+        //     [],
+        //     null,
+        //     true
+        // );
+
         wp_enqueue_script(
             'preline-js',
-            'https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.js',
+            get_template_directory_uri() . '/common/landing-template/preline.js',
             [],
             null,
             true
         );
+
     }
 });
 

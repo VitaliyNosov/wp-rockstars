@@ -750,19 +750,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         function showCustomSuccessModal() {
+            var isDarkMode = document.documentElement.classList.contains('dark');
+            var modalBg = isDarkMode ? '#000000' : '#ffffff';
+            var modalBorder = isDarkMode ? '#2E3038' : '#e5e7eb';
+            var textColor = isDarkMode ? '#ffffff' : '#1f2937'; // gray-800
+            var subTextColor = isDarkMode ? '#d1d5db' : '#4b5563'; // gray-600
+
             var modal = document.createElement('div');
             modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(4px);';
             modal.innerHTML = `
-                <div style="background: #060607; border-radius: 16px; border: 1px solid #2E3038; padding: 40px; max-width: 420px; margin: 20px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); animation: modalSlideIn 0.3s ease-out;">
+                <div style="background: ${modalBg}; border-radius: 16px; border: 1px solid ${modalBorder}; padding: 40px; max-width: 420px; margin: 20px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); animation: modalSlideIn 0.3s ease-out;">
                     <div style="margin-bottom: 20px;">
-                        <svg style="margin: 0 auto; height: 80px; width: 80px; color: #10b981;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg style="margin: 0 auto; height: 80px; width: 80px; color: #2563eb;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"></circle>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"></path>
                         </svg>
                     </div>
-                    <h3 style="font-size: 24px; font-weight: 700; color: white; margin-bottom: 12px; font-family: -apple-system, BlinkMacSystemFont, system-ui;">Thank You!</h3>
-                    <p style="color: #d1d5db; margin-bottom: 24px; font-size: 16px; line-height: 1.5;">We have received your subscription and sent a confirmation email.</p>
-                    <button id="close-modal-custom" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 32px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s ease; box-shadow: 0 4px 15px 0 rgba(116, 79, 168, 0.75);">Close</button>
+                    <h3 style="font-size: 24px; font-weight: 700; color: ${textColor}; margin-bottom: 12px; font-family: -apple-system, BlinkMacSystemFont, system-ui;">Thank You!</h3>
+                    <p style="color: ${subTextColor}; margin-bottom: 24px; font-size: 16px; line-height: 1.5;">We have received your subscription and sent a confirmation email.</p>
+                    <button id="close-modal-custom" style="background: #2563eb; color: white; padding: 12px 32px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5);">Close</button>
                 </div>
             `;
             
