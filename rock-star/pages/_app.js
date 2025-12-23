@@ -1,6 +1,7 @@
 
 import '../styles/style.sass';
 import '../styles/common/style.css';
+import '../styles/tailwind.css';
 import '../styles/style-mod.sass';
 import Layout from '../components/Layout';
 import Script from 'next/script';

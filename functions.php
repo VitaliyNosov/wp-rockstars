@@ -55,6 +55,7 @@ add_action( 'after_setup_theme', function() {
     require_once get_template_directory() . '/inc/carbon-fields-init.php'; 
     require_once get_template_directory() . '/inc/carbon-fields-init-landing.php'; 
     require_once get_template_directory() . '/inc/graphql-register.php';
+    require_once get_template_directory() . '/inc/graphql/landing-graphql.php';
 });
 
 

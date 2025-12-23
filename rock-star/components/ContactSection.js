@@ -310,10 +310,10 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
                     border-color: transparent !important;
                 }
                 .swal2-icon.swal2-success .swal2-success-ring {
-                    border-color: #10b981 !important;
+                    border-color: #4A6CF7 !important;
                 }
                 .swal2-icon.swal2-success [class^='swal2-success-line'] {
-                    background-color: #10b981 !important;
+                    background-color: #4A6CF7 !important;
                 }
                 .swal2-success-circular-line-left {
                     background-color: #ffffff !important;
@@ -347,10 +347,10 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
                     border-color: transparent !important;
                 }
                 html.dark .swal2-icon.swal2-success .swal2-success-ring {
-                    border-color: #10b981 !important;
+                    border-color: #4A6CF7 !important;
                 }
                 html.dark .swal2-icon.swal2-success [class^='swal2-success-line'] {
-                    background-color: #10b981 !important;
+                    background-color: #4A6CF7 !important;
                 }
                 html.dark .swal2-success-circular-line-left {
                     background-color: #060607 !important;
