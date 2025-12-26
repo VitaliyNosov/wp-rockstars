@@ -5,12 +5,13 @@ import '../styles/tailwind.css';
 import '../styles/style-mod.sass';
 import Layout from '../components/Layout';
 import Script from 'next/script';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Inter } from 'next/font/google';
 import { ApolloProvider } from "@apollo/client";
 import client from "../lib/apolloClient";
-import Router from 'next/router';
-import Loader from '../components/Loader';
+import NextNProgress from 'nextjs-progressbar';
+import CookieConsent from "react-cookie-consent";
+import { initAnalytics } from '../lib/analytics';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -19,23 +20,6 @@ const inter = Inter({
 });
 
 function MyApp({ Component, pageProps }) {
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const start = () => setLoading(true);
-    const end = () => setLoading(false);
-
-    Router.events.on('routeChangeStart', start);
-    Router.events.on('routeChangeComplete', end);
-    Router.events.on('routeChangeError', end);
-
-    return () => {
-      Router.events.off('routeChangeStart', start);
-      Router.events.off('routeChangeComplete', end);
-      Router.events.off('routeChangeError', end);
-    };
-  }, []);
-
   useEffect(() => {
     // Initialize GLightbox when it's loaded
     if (typeof window !== 'undefined' && window.GLightbox) {
@@ -58,7 +42,52 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <div className={inter.className}>
-      {loading && <Loader />}
+      <NextNProgress color="#4A6CF7" options={{ showSpinner: false }} />
+      <CookieConsent
+        location="bottom"
+        buttonText="Accept"
+        cookieName="myAwesomeCookieName2"
+        buttonStyle={{ color: "#ffffff", fontSize: "14px", background: "#4A6CF7", borderRadius: "8px", fontWeight: "500", padding: "10px 20px" }}
+        expires={150}
+        containerClasses="cookie-consent-container"
+        disableStyles={true}
+        onAccept={() => {
+          initAnalytics();
+        }}
+      >
+        <span className="font-semibold block mb-1 text-base text-gray-900 dark:text-white">Cookies Policy</span>
+        We use cookies to improve your experience.
+      </CookieConsent>
+      <style jsx global>{`
+        .cookie-consent-container {
+          position: fixed !important;
+          bottom: 20px !important;
+          left: 20px !important;
+          width: 380px !important;
+          background: white !important;
+          color: #1f2937 !important;
+          padding: 20px !important;
+          border-radius: 0.375rem !important;
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+          z-index: 2147483647 !important;
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 10px !important;
+          border: 1px solid #e5e7eb !important;
+        }
+        .dark .cookie-consent-container {
+          background: #000000 !important;
+          color: #f3f4f6 !important;
+          border-color: #2e2e2e !important;
+        }
+        @media (max-width: 640px) {
+          .cookie-consent-container {
+            width: calc(100% - 40px) !important;
+            bottom: 20px !important;
+            left: 20px !important;
+          }
+        }
+      `}</style>
 
       {/* External CSS Libraries */}
       <link

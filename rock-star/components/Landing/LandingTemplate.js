@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Script from 'next/script';
 import styles from '../../styles/Landing.module.sass';
 import HeroSection from './HeroSection';
 import SectionTwo from './SectionTwo';
@@ -15,28 +14,13 @@ import SectionEight from './SectionEight';
 // import PricingSection from './PricingSection';
 
 const LandingTemplate = ({ data }) => {
-    // Re-init preline and Manage Body Class
+    // Manage Body Class
     useEffect(() => {
         // 1. Add class to body
         document.body.classList.add('landing-page-id');
 
-        // 2. Init Preline
-        const initPreline = () => {
-            if (typeof window !== 'undefined' && window.HSStaticMethods) {
-                try {
-                    window.HSStaticMethods.autoInit();
-                } catch (e) {
-                    // console.log('Preline init error', e);
-                }
-            }
-        };
-
-        // Delay init to wait for DOM - increase delay slightly
-        const timeoutId = setTimeout(initPreline, 600);
-
         // Cleanup
         return () => {
-            clearTimeout(timeoutId);
             document.body.classList.remove('landing-page-id');
         };
     }, []);
@@ -47,21 +31,6 @@ const LandingTemplate = ({ data }) => {
         <div
             className={`${styles.landingWrapper} landing-template-wrapper landing-margin-class`}
         >
-            <Script
-                src="/js/preline.js"
-                strategy="afterInteractive"
-                onLoad={() => {
-                    setTimeout(() => {
-                        if (window.HSStaticMethods) {
-                            try {
-                                window.HSStaticMethods.autoInit();
-                            } catch (e) {
-                                console.log('Preline Init Skipped', e);
-                            }
-                        }
-                    }, 500);
-                }}
-            />
 
             {/* Hero Section */}
             <section className={styles.heroSection}>

@@ -170,7 +170,7 @@ export async function getServerSideProps(context) {
                             nodes {
                                 title
                                 excerpt
-                                link
+                                slug
                                 featuredImage {
                                     node {
                                         sourceUrl
@@ -201,7 +201,7 @@ export async function getServerSideProps(context) {
                         sec7Posts: postsData.posts.nodes.map(post => ({
                             title: post.title,
                             excerpt: post.excerpt ? post.excerpt.replace(/(<([^>]+)>)/gi, "").substring(0, 100) + '...' : '', // Simple strip tags
-                            link: post.link,
+                            link: `/posts/${post.slug}`,
                             thumbnail: post.featuredImage?.node?.sourceUrl,
                             authorName: post.author?.node?.name,
                             authorAvatar: post.author?.node?.avatar?.url
