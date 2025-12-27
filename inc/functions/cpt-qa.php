@@ -125,6 +125,33 @@ function handle_qa_contact_submission( $request ) {
         'blocking' => false,
     ) );
 
+    // 6. Create Ticket in Admin (Save to Database)
+    // We check if the post type exists to avoid errors, although it should be there.
+    if ( post_type_exists( 'ticket' ) ) {
+        $post_data = array(
+            'post_title'   => 'Chat Inquiry: ' . $name,
+            'post_content' => $message_text,
+            'post_status'  => 'publish',
+            'post_type'    => 'ticket',
+            'post_author'  => 1 
+        );
+
+        $post_id = wp_insert_post( $post_data );
+
+        if ( ! is_wp_error( $post_id ) ) {
+            // Prevent duplicate TG message (suppress inc/functions/telegram-bot-form.php hook)
+            update_post_meta( $post_id, '_wp_custom_telegram_sent', 1 );
+            
+            update_post_meta( $post_id, '_wp_custom_sender_name', $name );
+            update_post_meta( $post_id, '_wp_custom_sender_email', $email );
+            update_post_meta( $post_id, '_wp_custom_message', $message_text );
+            update_post_meta( $post_id, '_wp_custom_submission_time', current_time( 'mysql' ) );
+            // Try to capture IP
+            $user_ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+            update_post_meta( $post_id, '_wp_custom_ip_address', $user_ip );
+        }
+    }
+
     if ( $sent ) {
         return new WP_REST_Response( array( 'success' => true, 'message' => 'Email sent' ), 200 );
     } else {
