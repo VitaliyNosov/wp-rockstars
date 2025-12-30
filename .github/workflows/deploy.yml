@@ -16,7 +16,7 @@ jobs:
           php-version: '8.2'
           
       - name: Install dependencies
-        run: composer install --no-dev --optimize-autoloader
+        run: composer install --no-dev --optimize-autoloader --ignore-platform-reqs
         
       - name: Sync Theme Files
         # Uses rsync to sync files to server

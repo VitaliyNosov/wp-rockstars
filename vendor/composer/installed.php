@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '0f10f0ba24c0df0ab2e79f4eba30f76ecfb9a86f',
+        'reference' => '7431fd9b38694e1aad9b9f838f6c291de179cf5f',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '0f10f0ba24c0df0ab2e79f4eba30f76ecfb9a86f',
+            'reference' => '7431fd9b38694e1aad9b9f838f6c291de179cf5f',
             'dev_requirement' => false,
         ),
         'htmlburger/carbon-fields' => array(
