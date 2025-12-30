@@ -42,11 +42,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: rock-star/package-lock.json
           
       - name: Install dependencies
-        run: npm ci
+        run: npm install
         
       - name: Build App
         run: npm run build
@@ -58,10 +56,10 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ../deploy_key
           chmod 600 ../deploy_key
-          # Sync .next, public, package.json, node_modules. 
+          # Sync .next, public, package.json. 
           # Note: It is often better to re-run npm install on server or sync node_modules if arch matches.
           # Here we assume linux-to-linux or re-install on server. For simplicity, we sync dependencies here but ideally should run npm i on server.
-          rsync -avz -e "ssh -i ../deploy_key -o StrictHostKeyChecking=no" .next public package.json package-lock.json next.config.js $dest
+          rsync -avz -e "ssh -i ../deploy_key -o StrictHostKeyChecking=no" .next public package.json next.config.js $dest
       
       - name: Restart PM2
         # Restarts the application managed by PM2
