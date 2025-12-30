@@ -1,0 +1,70 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-theme:
+    name: Deploy Theme
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          
+      - name: Install dependencies
+        run: composer install --no-dev --optimize-autoloader
+        
+      - name: Sync Theme Files
+        # Uses rsync to sync files to server
+        # Requires SSH setup (Secrets: SSH_PRIVATE_KEY, SERVER_IP, SERVER_USER)
+        env:
+          dest: '${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/html/wp-content/themes/rock-stars'
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > deploy_key
+          chmod 600 deploy_key
+          rsync -avz -e "ssh -i deploy_key -o StrictHostKeyChecking=no" --exclude='.git/' --exclude='rock-star/' ./ $dest
+          rm deploy_key
+
+  deploy-app:
+    name: Deploy Next.js App
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./rock-star
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: rock-star/package-lock.json
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build App
+        run: npm run build
+        
+      - name: Sync App Files
+        # Resyncs only necessary files for production
+        env:
+          dest: '${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/nextjs-app'
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ../deploy_key
+          chmod 600 ../deploy_key
+          # Sync .next, public, package.json, node_modules. 
+          # Note: It is often better to re-run npm install on server or sync node_modules if arch matches.
+          # Here we assume linux-to-linux or re-install on server. For simplicity, we sync dependencies here but ideally should run npm i on server.
+          rsync -avz -e "ssh -i ../deploy_key -o StrictHostKeyChecking=no" .next public package.json package-lock.json next.config.js $dest
+      
+      - name: Restart PM2
+        # Restarts the application managed by PM2
+        run: |
+          ssh -i ../deploy_key -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "cd /var/www/nextjs-app && npm ci --production && pm2 reload all"
+          rm ../deploy_key
