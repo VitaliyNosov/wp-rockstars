@@ -205,12 +205,18 @@ body {
 /* ========== Комментарий ========== */
 .comment {
   padding: 1rem;
-  border-radius: 0.5rem;
+  border-radius: 16px;
+  border-top-left-radius: 0;
   border: 1px solid #e5e7eb;
   background-color: #F3F4F6;
   color: #000000;
   transition: all 0.3s ease;
   margin-bottom: 1.5rem;
+}
+
+.comment-body-card {
+  border-radius: 16px;
+  border-top-left-radius: 0;
 }
 
 .dark .comment {

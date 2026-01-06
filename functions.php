@@ -1,4 +1,7 @@
 <?php
+// TEMPORARY: FORCE COMMENTS OPEN (DEBUGGING)
+add_filter('comments_open', '__return_true');
+
 // Theme setup function
 function theme_setup() {
     // Add support for title tag
@@ -98,6 +101,13 @@ function theme_enqueue_assets() {
       });
     ');
 
+    // Post Likes Script
+    wp_enqueue_script('post-likes', get_template_directory_uri() . '/common/js/post-likes.js', [], '1.0', true);
+    wp_localize_script('post-likes', 'rock_stars_likes', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('rock_stars_like_nonce')
+    ));
+
 
 }
 add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
@@ -148,9 +158,25 @@ function add_margin_for_admin_bar() {
             }
         </style>
         <?php
+
     }
 }
 add_action('wp_head', 'add_margin_for_admin_bar');
+
+// Custom Styles for Post Likes
+function rock_stars_like_styles() {
+    ?>
+    <style>
+        .liked-post {
+            color: #ef4444 !important; /* text-red-500 */
+        }
+        .liked-post svg {
+            fill: currentColor !important;
+        }
+    </style>
+    <?php
+}
+add_action('wp_head', 'rock_stars_like_styles');
 
 // Колличество слов в карточки постов
 
@@ -205,3 +231,52 @@ add_action('admin_head', 'rock_stars_admin_style');
 
 
 
+
+// Include AJAX Comment Handler
+require_once get_template_directory() . '/inc/functions/ajax-comments.php';
+
+// Custom Comment Callback
+function rock_stars_comment_callback($comment, $args, $depth) {
+    $GLOBALS['comment'] = $comment;
+    ?>
+    <div id="comment-<?php comment_ID(); ?>" <?php comment_class('mb-6'); ?>>
+        <div class="comment-body-card flex items-start bg-primary bg-opacity-[3%] dark:bg-dark p-6 rounded-[22px] rounded-tl-none">
+            <div class="flex-shrink-0 mr-4">
+                <?php echo get_avatar( $comment, 50, '', '', array('class' => 'rounded-full') ); ?>
+            </div>
+            <div class="flex-grow">
+                <!-- Header: Author Name & Date -->
+                <div class="flex flex-wrap items-center mb-2">
+                    <h4 class="font-bold text-black dark:text-white text-base mr-4">
+                        <?php echo get_comment_author(); ?>
+                    </h4>
+                    <span class="text-sm text-body-color">
+                        <?php printf(__('%1$s at %2$s', 'rock-star'), get_comment_date(), get_comment_time()); ?>
+                    </span>
+                </div>
+                
+                <!-- Comment Body -->
+                <div class="text-base text-body-color mb-3">
+                    <?php if ($comment->comment_approved == '0') : ?>
+                        <p class="italic text-yellow-500 mb-2"><?php _e('Your comment is awaiting moderation.', 'rock-star'); ?></p>
+                    <?php endif; ?>
+                    <?php comment_text(); ?>
+                </div>
+            </div>
+        </div>
+    <?php
+}
+
+function rock_stars_enqueue_comments_script() {
+    if (is_singular() && comments_open() && get_option('thread_comments')) {
+        wp_enqueue_script('comment-reply');
+    }
+    
+    // AJAX Comments Script
+    wp_enqueue_script('rock-stars-ajax-comments', get_template_directory_uri() . '/common/js/ajax-comments.js', array('jquery'), time(), true);
+    wp_localize_script('rock-stars-ajax-comments', 'rock_stars_ajax', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('comment_nonce')
+    ));
+}
+add_action('wp_enqueue_scripts', 'rock_stars_enqueue_comments_script');

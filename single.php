@@ -35,10 +35,12 @@ get_header(); ?>
                                 </div>
                             </div>
                             
+
+
                             <!-- Post Meta -->
-                            <div class="flex items-center mb-5">
+                            <div class="flex flex-wrap items-center mb-5">
                                 <!-- Date -->
-                                <p class="flex items-center text-base text-body-color font-medium mr-5">
+                                <p class="flex items-center text-sm text-body-color font-medium mr-6">
                                     <span class="mr-3">
                                         <svg width="15" height="15" viewBox="0 0 15 15" class="fill-current">
                                             <path d="M3.89531 8.67529H3.10666C2.96327 8.67529 2.86768 8.77089 2.86768 8.91428V9.67904C2.86768 9.82243 2.96327 9.91802 3.10666 9.91802H3.89531C4.03871 9.91802 4.1343 9.82243 4.1343 9.67904V8.91428C4.1343 8.77089 4.03871 8.67529 3.89531 8.67529Z" />
@@ -52,11 +54,11 @@ get_header(); ?>
                                             <path d="M13.2637 3.3697H7.64754V2.58105C8.19721 2.43765 8.62738 1.91189 8.62738 1.31442C8.62738 0.597464 8.02992 0 7.28906 0C6.54821 0 5.95074 0.597464 5.95074 1.31442C5.95074 1.91189 6.35702 2.41376 6.93058 2.58105V3.3697H1.31442C0.597464 3.3697 0 3.96716 0 4.68412V13.2637C0 13.9807 0.597464 14.5781 1.31442 14.5781H13.2637C13.9807 14.5781 14.5781 13.9807 14.5781 13.2637V4.68412C14.5781 3.96716 13.9807 3.3697 13.2637 3.3697ZM6.6677 1.31442C6.6677 0.979841 6.93058 0.716957 7.28906 0.716957C7.62364 0.716957 7.91042 0.979841 7.91042 1.31442C7.91042 1.649 7.64754 1.91189 7.28906 1.91189C6.95448 1.91189 6.6677 1.6251 6.6677 1.31442ZM1.31442 4.08665H13.2637C13.5983 4.08665 13.8612 4.34954 13.8612 4.68412V6.45261H0.716957V4.68412C0.716957 4.34954 0.979841 4.08665 1.31442 4.08665ZM13.2637 13.8612H1.31442C0.979841 13.8612 0.716957 13.5983 0.716957 13.2637V7.16957H13.8612V13.2637C13.8612 13.5983 13.5983 13.8612 13.2637 13.8612Z" />
                                         </svg>
                                     </span>
-                                    <?php echo get_the_date('j M Y'); ?>
+                                    <?php echo date('d M Y', get_post_time('U', true)); ?>
                                 </p>
                                 
                                 <!-- Comments Count -->
-                                <p class="flex items-center text-base text-body-color font-medium mr-5">
+                                <p class="flex items-center text-sm text-body-color font-medium mr-6">
                                     <span class="mr-3">
                                         <svg width="18" height="13" viewBox="0 0 18 13" class="fill-current">
                                             <path d="M15.6375 0H1.6875C0.759375 0 0 0.759375 0 1.6875V10.6875C0 11.3062 0.309375 11.8406 0.84375 12.15C1.09687 12.2906 1.40625 12.375 1.6875 12.375C1.96875 12.375 2.25 12.2906 2.53125 12.15L5.00625 10.7156C5.11875 10.6594 5.23125 10.6312 5.34375 10.6312H15.6094C16.5375 10.6312 17.2969 9.87187 17.2969 8.94375V1.6875C17.325 0.759375 16.5656 0 15.6375 0ZM16.3406 8.94375C16.3406 9.3375 16.0312 9.64687 15.6375 9.64687H5.37187C5.09062 9.64687 4.78125 9.73125 4.52812 9.87187L2.05313 11.3063C1.82812 11.4187 1.575 11.4187 1.35 11.3063C1.125 11.1938 1.0125 10.9688 1.0125 10.7156V1.6875C1.0125 1.29375 1.32188 0.984375 1.71563 0.984375H15.6656C16.0594 0.984375 16.3687 1.29375 16.3687 1.6875V8.94375H16.3406Z" />
@@ -64,11 +66,27 @@ get_header(); ?>
                                             <path d="M11.0529 6.55322H4.69668C4.41543 6.55322 4.19043 6.77822 4.19043 7.05947C4.19043 7.34072 4.41543 7.56572 4.69668 7.56572H11.0811C11.3623 7.56572 11.5873 7.34072 11.5873 7.05947C11.5873 6.77822 11.3342 6.55322 11.0529 6.55322Z" />
                                         </svg>
                                     </span>
-                                    <?php comments_number('0', '1', '%'); ?>
+                                    <span id="post-comment-count"><?php echo get_comments_number(); ?></span>
                                 </p>
+
+                                <!-- Like Button -->
+                                <a href="#" id="post-like-btn" data-post-id="<?php echo get_the_ID(); ?>" class="flex items-center text-sm text-body-color font-medium mr-6 hover:text-red-500 transition-colors">
+                                    <span class="mr-4">
+                                        <!-- Иконка: w-4 h-4 (16px), fill-transparent по умолчанию -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" class="w-4 h-4 transition-colors">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                        </svg>
+                                    </span>
+                                    <span class="like-count">
+                                        <?php 
+                                        $likes = get_post_meta(get_the_ID(), '_post_likes_count', true);
+                                        echo $likes ? intval($likes) : 0;
+                                        ?>
+                                    </span>
+                                </a>
                                 
                                 <!-- Views Count (if you have a plugin) -->
-                                <p class="flex items-center text-base text-body-color font-medium">
+                                <p class="flex items-center text-sm text-body-color font-medium">
                                     <span class="mr-3">
                                         <svg width="20" height="12" viewBox="0 0 20 12" class="fill-current">
                                             <path d="M10.2559 3.8125C9.03711 3.8125 8.06836 4.8125 8.06836 6C8.06836 7.1875 9.06836 8.1875 10.2559 8.1875C11.4434 8.1875 12.4434 7.1875 12.4434 6C12.4434 4.8125 11.4746 3.8125 10.2559 3.8125ZM10.2559 7.09375C9.66211 7.09375 9.16211 6.59375 9.16211 6C9.16211 5.40625 9.66211 4.90625 10.2559 4.90625C10.8496 4.90625 11.3496 5.40625 11.3496 6C11.3496 6.59375 10.8496 7.09375 10.2559 7.09375Z" />
@@ -78,7 +96,9 @@ get_header(); ?>
                                     <?php
                                     // Display post views if you have a plugin like WP-PostViews
                                     if (function_exists('the_views')) {
-                                        the_views();
+                                        // Attempt to get raw value if possible or just use output
+                                        $views = get_post_meta(get_the_ID(), 'views', true);
+                                        echo ($views ? $views : '0');
                                     } else {
                                         echo '0';
                                     }
@@ -172,14 +192,14 @@ get_header(); ?>
                         </div>
                     </div>
                 </div>
+                    <!-- Comments Section -->
+                    <?php 
+                    if (comments_open() || get_comments_number()) {
+                        comments_template();
+                    }
+                    ?>
+                </div>
                 <?php endwhile; endif; ?>
-                
-                <!-- Comments Section -->
-                <?php 
-                if (comments_open() || get_comments_number()) {
-                    comments_template();
-                }
-                ?>
             </div>
         </div>
     </div>
