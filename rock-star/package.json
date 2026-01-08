@@ -11,6 +11,8 @@
   "dependencies": {
     "@apollo/client": "^3.8.5",
     "graphql": "^16.8.1",
+    "gsap": "^3.14.2",
+    "mo-js": "^0.288.2",
     "next": "^14.0.3",
     "nextjs-progressbar": "^0.0.16",
     "plyr": "^3.8.3",

@@ -32,12 +32,7 @@ function rock_stars_ajax_comment_handler() {
         $debug_info .= "Email='" . (isset($_POST['email']) ? substr($_POST['email'], 0, 10) : 'NULL') . "', ";
         $debug_info .= "ID='" . (isset($_POST['comment_post_ID']) ? $_POST['comment_post_ID'] : 'NULL') . "']";
 
-        $data = intval($comment->get_error_data());
-        if (!empty($data)) {
-            wp_send_json_error($comment->get_error_message() . $debug_info);
-        } else {
-            wp_send_json_error('Unknown error. ' . $debug_info);
-        }
+        wp_send_json_error($comment->get_error_message() . $debug_info);
     }
 
     /*
@@ -74,8 +69,19 @@ function rock_stars_ajax_comment_handler() {
     echo '</div>'; // Manually close the div since the callback leaves it open for Walker_Comment compatibility
     $comment_html = ob_get_clean();
 
+    // Prepare structured data for frontend
+    $comment_data_for_frontend = array(
+        'id' => $comment->comment_ID,
+        'authorName' => $comment->comment_author,
+        'authorAvatar' => get_avatar_url($comment, array('size' => 50)),
+        'date' => get_comment_date(get_option('date_format'), $comment),
+        'content' => apply_filters('comment_text', $comment->comment_content, $comment),
+        'parentId' => $comment->comment_parent
+    );
+
     wp_send_json_success(array(
         'html' => $comment_html,
+        'data' => $comment_data_for_frontend,
         'message' => 'Comment submitted successfully'
     ));
 }

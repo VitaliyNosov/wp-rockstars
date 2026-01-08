@@ -4,11 +4,15 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import PostAudio from '../../components/PostAudio';
+import PostLike from '../../components/PostLike';
+import PostViews from '../../components/PostViews';
+import PostComments from '../../components/PostComments';
 
 const GET_POST_BY_SLUG = gql`
   query GetPostBySlug($slug: ID!) {
     post(id: $slug, idType: SLUG) {
       id
+      databaseId
       title
       content
       excerpt
@@ -44,6 +48,16 @@ const GET_POST_BY_SLUG = gql`
       }
       commentCount
       audioFile
+      likeCount
+      viewCount
+      commentsList {
+        id
+        authorName
+        authorAvatar
+        date
+        content
+        parentId
+      }
     }
   }
 `;
@@ -82,6 +96,7 @@ export default function SinglePost({ post }) {
                                     <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
                                     <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/6"></div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -94,7 +109,7 @@ export default function SinglePost({ post }) {
         return <div className="container pt-[150px] text-center">Post not found</div>;
     }
 
-    const { title, content, date, featuredImage, categories, tags, author, commentCount, audioFile } = post;
+    const { id, databaseId, title, content, date, featuredImage, categories, tags, author, commentCount, audioFile, likeCount, viewCount, commentsList } = post;
 
     // Format date
     const formattedDate = new Date(date).toLocaleDateString('en-US', {
@@ -146,7 +161,7 @@ export default function SinglePost({ post }) {
                                                 </div>
                                             )}
                                             <div className="w-full">
-                                                <h4 className="text-base font-medium text-body-color mb-1">
+                                                <h4 className="text-sm font-medium text-body-color">
                                                     By
                                                     <span className="text-body-color hover:text-primary ml-1">
                                                         {authorName}
@@ -158,7 +173,7 @@ export default function SinglePost({ post }) {
                                         {/* Post Meta */}
                                         <div className="flex items-center mb-5">
                                             {/* Date */}
-                                            <p className="flex items-center text-base text-body-color font-medium mr-5">
+                                            <p className="flex items-center text-sm text-body-color font-medium mr-6">
                                                 <span className="mr-3">
                                                     <svg width="15" height="15" viewBox="0 0 15 15" className="fill-current">
                                                         <path d="M3.89531 8.67529H3.10666C2.96327 8.67529 2.86768 8.77089 2.86768 8.91428V9.67904C2.86768 9.82243 2.96327 9.91802 3.10666 9.91802H3.89531C4.03871 9.91802 4.1343 9.82243 4.1343 9.67904V8.91428C4.1343 8.77089 4.03871 8.67529 3.89531 8.67529Z" />
@@ -175,8 +190,8 @@ export default function SinglePost({ post }) {
                                                 {formattedDate}
                                             </p>
 
-                                            {/* Comments Count */}
-                                            <p className="flex items-center text-base text-body-color font-medium mr-5">
+                                            {/* Comment Count */}
+                                            <p className="flex items-center text-sm text-body-color font-medium mr-6">
                                                 <span className="mr-3">
                                                     <svg width="18" height="13" viewBox="0 0 18 13" className="fill-current">
                                                         <path d="M15.6375 0H1.6875C0.759375 0 0 0.759375 0 1.6875V10.6875C0 11.3062 0.309375 11.8406 0.84375 12.15C1.09687 12.2906 1.40625 12.375 1.6875 12.375C1.96875 12.375 2.25 12.2906 2.53125 12.15L5.00625 10.7156C5.11875 10.6594 5.23125 10.6312 5.34375 10.6312H15.6094C16.5375 10.6312 17.2969 9.87187 17.2969 8.94375V1.6875C17.325 0.759375 16.5656 0 15.6375 0ZM16.3406 8.94375C16.3406 9.3375 16.0312 9.64687 15.6375 9.64687H5.37187C5.09062 9.64687 4.78125 9.73125 4.52812 9.87187L2.05313 11.3063C1.82812 11.4187 1.575 11.4187 1.35 11.3063C1.125 11.1938 1.0125 10.9688 1.0125 10.7156V1.6875C1.0125 1.29375 1.32188 0.984375 1.71563 0.984375H15.6656C16.0594 0.984375 16.3687 1.29375 16.3687 1.6875V8.94375H16.3406Z" />
@@ -186,6 +201,10 @@ export default function SinglePost({ post }) {
                                                 </span>
                                                 {commentCount || 0}
                                             </p>
+
+                                            {/* Post Interaction Meta */}
+                                            <PostLike postId={id} initialLikes={likeCount} />
+                                            <PostViews viewCount={viewCount} />
                                         </div>
                                     </div>
 
@@ -267,6 +286,9 @@ export default function SinglePost({ post }) {
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Comments Section */}
+                                <PostComments postId={databaseId} initialComments={commentsList} />
                             </div>
                         </div>
                     </div>

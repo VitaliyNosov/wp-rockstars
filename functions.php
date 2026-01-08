@@ -101,6 +101,9 @@ function theme_enqueue_assets() {
       });
     ');
 
+    // mo.js for Telegram-like burst animation
+    wp_enqueue_script('mo-js', 'https://cdn.jsdelivr.net/npm/mo-js@0.288.2/build/mo.min.js', [], '0.288.2', true);
+
     // Post Likes Script
     wp_enqueue_script('post-likes', get_template_directory_uri() . '/common/js/post-likes.js', [], '1.0', true);
     wp_localize_script('post-likes', 'rock_stars_likes', array(

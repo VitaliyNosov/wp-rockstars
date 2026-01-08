@@ -548,6 +548,82 @@ add_action('graphql_register_types', function () {
         }
     ]);
 
+    // --- Interactive Fields (Likes, Views, Comments) ---
+
+    // 1. Likes Count
+    register_graphql_field('Post', 'likeCount', [
+        'type' => 'Int',
+        'description' => 'Number of likes for the post',
+        'resolve' => function ($post) {
+            $likes = get_post_meta($post->ID, '_post_likes_count', true);
+            return $likes ? intval($likes) : 0;
+        }
+    ]);
+
+    // 2. Views Count
+    register_graphql_field('Post', 'viewCount', [
+        'type' => 'Int',
+        'description' => 'Number of views for the post',
+        'resolve' => function ($post) {
+            $views = get_post_meta($post->ID, 'views', true); // Assuming 'views' key is used
+            return $views ? intval($views) : 0;
+        }
+    ]);
+
+    // 3. Security Nonces
+    register_graphql_field('RootQuery', 'likeNonce', [
+        'type' => 'String',
+        'description' => 'Nonce for post likes',
+        'resolve' => function () {
+            return wp_create_nonce('rock_stars_like_nonce');
+        }
+    ]);
+
+    register_graphql_field('RootQuery', 'commentNonce', [
+        'type' => 'String',
+        'description' => 'Nonce for comment submission',
+        'resolve' => function () {
+            return wp_create_nonce('comment_nonce');
+        }
+    ]);
+
+    // 4. Comments List (Simplified structure for Frontend)
+    register_graphql_object_type('SimpleComment', [
+        'fields' => [
+            'id' => ['type' => 'ID'],
+            'authorName' => ['type' => 'String'],
+            'authorAvatar' => ['type' => 'String'],
+            'date' => ['type' => 'String'],
+            'content' => ['type' => 'String'],
+            'parentId' => ['type' => 'ID'],
+        ]
+    ]);
+
+    register_graphql_field('Post', 'commentsList', [
+        'type' => ['list_of' => 'SimpleComment'],
+        'description' => 'List of approved comments',
+        'resolve' => function ($post) {
+            $comments = get_comments([
+                'post_id' => $post->ID,
+                'status' => 'approve',
+                'order' => 'ASC'
+            ]);
+
+            $data = [];
+            foreach ($comments as $comment) {
+                $data[] = [
+                    'id' => $comment->comment_ID,
+                    'authorName' => $comment->comment_author,
+                    'authorAvatar' => get_avatar_url($comment->comment_author_email, ['size' => 50]),
+                    'date' => get_comment_date('F j, Y', $comment->comment_ID) . ' at ' . get_comment_time('g:i a', $comment->comment_ID),
+                    'content' => apply_filters('comment_text', $comment->comment_content),
+                    'parentId' => $comment->comment_parent,
+                ];
+            }
+            return $data;
+        }
+    ]);
+
     register_graphql_field('RootQuery', 'ticketNonce', [
         'type' => 'String',
         'description' => 'Nonce for ticket submission',

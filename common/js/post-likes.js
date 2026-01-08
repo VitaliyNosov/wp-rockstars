@@ -4,9 +4,45 @@ document.addEventListener('DOMContentLoaded', function () {
     if (likeBtn) {
         const postId = likeBtn.dataset.postId;
         const countSpan = likeBtn.querySelector('.like-count');
+        // Target the icon container for the burst origin
+        const iconContainer = likeBtn.querySelector('span');
+        const iconSvg = likeBtn.querySelector('svg');
 
         // Ключ для LocalStorage
         const storageKey = 'rock_stars_liked_' + postId;
+
+        // Initialize animations variables
+        let burst;
+
+        // Ensure container is relative for absolute positioning of burst
+        if (iconContainer) {
+            iconContainer.style.position = 'relative';
+            iconContainer.style.display = 'inline-flex'; // Ensure it behaves like a block for positioning
+            iconContainer.style.justifyContent = 'center';
+            iconContainer.style.alignItems = 'center';
+        }
+
+        // Check if mo.js is loaded
+        if (typeof mojs !== 'undefined') {
+            // Configure the burst animation
+            burst = new mojs.Burst({
+                parent: iconContainer || likeBtn, // Attach to icon if found, else button
+                radius: { 0: 30 },
+                count: 10,
+                // Center the burst in the container
+                left: '50%',
+                top: '50%',
+                angle: { 0: 90 },
+                children: {
+                    shape: 'circle',
+                    radius: { 4: 0 },
+                    fill: ['#ef4444', '#f87171', '#dc2626'], // Tailwind Red
+                    strokeWidth: 0,
+                    duration: 1000,
+                    easing: 'sin.out'
+                }
+            });
+        }
 
         // Функция для обновления UI
         const updateUI = (isLiked) => {
@@ -37,6 +73,22 @@ document.addEventListener('DOMContentLoaded', function () {
             // 1. ОПТИМИСТИЧНЫЙ UI
             updateUI(newLikedState);
             countSpan.textContent = newLikedState ? currentCount + 1 : Math.max(0, currentCount - 1);
+
+            // ANIMATION EFFECTS
+            if (newLikedState) {
+                // 1. Burst Effect (mo.js)
+                if (burst) {
+                    burst.replay();
+                }
+
+                // 2. Pulse Effect (GSAP)
+                if (typeof TweenMax !== 'undefined' && iconSvg) {
+                    TweenMax.fromTo(iconSvg, 0.4,
+                        { scale: 1 },
+                        { scale: 1.4, yoyo: true, repeat: 1, ease: Power2.easeOut }
+                    );
+                }
+            }
 
             // Обновляем LocalStorage сразу
             if (newLikedState) {
