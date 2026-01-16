@@ -105,10 +105,10 @@
             <a href="signin.html"
               class="hidden md:block text-base font-bold text-dark dark:text-white hover:opacity-70 py-3 px-7"> Contact US
             </a>
-            <a href="signup.html"
-              class="hidden md:block text-base font-bold text-white bg-primary py-3 px-8 md:px-9 lg:px-6 xl:px-9 hover:shadow-signUp hover:bg-opacity-90 rounded-md transition ease-in-up duration-300">
+            <button onclick="openQuizModal()" type="button"
+              class="hidden md:block text-base font-bold text-white bg-primary py-3 px-8 md:px-9 lg:px-6 xl:px-9 hover:shadow-signUp hover:bg-opacity-90 rounded-md transition ease-in-up duration-300 cursor-pointer border-0">
               Stars
-            </a>
+            </button>
             <div>
               <label for="darkToggler"
                 class="cursor-pointer w-9 h-9 md:w-14 md:h-14 rounded-full flex items-center justify-center bg-gray-2 dark:bg-dark-bg text-black dark:text-white">

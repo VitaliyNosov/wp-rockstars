@@ -111,6 +111,8 @@ function theme_enqueue_assets() {
         'nonce'    => wp_create_nonce('rock_stars_like_nonce')
     ));
 
+    // Quiz Widget Script
+    wp_enqueue_script('quiz-widget', get_template_directory_uri() . '/common/js/quiz-widget.js', array('jquery'), '1.0', true);
 
 }
 add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
