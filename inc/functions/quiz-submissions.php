@@ -144,12 +144,27 @@ function quiz_get_submission_html($post_id) {
                         $display_value = $val;
                         if (!empty($field['field_options'])) {
                              $options = [];
-                             $lines = explode("\n", $field['field_options']);
-                             foreach ($lines as $line) {
-                                $parts = explode(':', $line, 2);
-                                if(count($parts) === 2) $options[trim($parts[0])] = trim($parts[1]);
-                                else $options[trim($line)] = trim($line);
+                             
+                             // Check if it's the new complex field format (array of arrays)
+                             if (is_array($field['field_options'])) {
+                                 $first = reset($field['field_options']);
+                                 if (is_array($first) && isset($first['option_value']) && isset($first['option_label'])) {
+                                     // New complex field format
+                                     foreach ($field['field_options'] as $option) {
+                                         $options[$option['option_value']] = $option['option_label'];
+                                     }
+                                 }
+                             } 
+                             // Old textarea format (string with newlines)
+                             elseif (is_string($field['field_options'])) {
+                                 $lines = explode("\n", $field['field_options']);
+                                 foreach ($lines as $line) {
+                                     $parts = explode(':', $line, 2);
+                                     if(count($parts) === 2) $options[trim($parts[0])] = trim($parts[1]);
+                                     else $options[trim($line)] = trim($line);
+                                 }
                              }
+                             
                              if (is_array($val)) {
                                  $mapped = [];
                                  foreach($val as $v) $mapped[] = isset($options[$v]) ? $options[$v] : $v;
