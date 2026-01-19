@@ -18,8 +18,8 @@
                 prevBtn: document.getElementById('quiz-prev-btn'),
                 nextBtn: document.getElementById('quiz-next-btn'),
                 submitBtn: document.getElementById('quiz-submit-btn'),
-                progressFill: document.getElementById('quiz-progress-fill'),
-                stepIndicator: document.getElementById('quiz-step-indicator'),
+                progressLineFill: document.getElementById('quiz-steps-line-fill'),
+                stepIndicators: document.querySelectorAll('.quiz-step-indicator-item'),
                 body: document.getElementById('quiz-body'),
                 summaryContent: document.getElementById('quiz-summary-content')
             };
@@ -183,14 +183,39 @@
         validateField(field) {
             let isValid = true;
 
-            // Check Required
-            if (field.hasAttribute('required') && !field.value.trim()) {
-                isValid = false;
+
+
+            // Check Required first
+            if (field.hasAttribute('required')) {
+                // For select elements, check if value is empty string (placeholder)
+                if (field.tagName === 'SELECT') {
+                    if (!field.value || field.value === '') {
+                        isValid = false;
+
+                    }
+                } else {
+                    // For other inputs, check if trimmed value is empty
+                    if (!field.value.trim()) {
+                        isValid = false;
+
+                    }
+                }
             }
 
-            // Check Email
-            if (field.type === 'email' && field.value.trim() && !this.isValidEmail(field.value)) {
-                isValid = false;
+            // Check Email format - validate if:
+            // 1. Field type is 'email' OR
+            // 2. Field has data-purpose='email' (set in admin)
+            const shouldValidateEmail = field.type === 'email' || field.dataset.purpose === 'email';
+
+            if (shouldValidateEmail) {
+                const emailValue = field.value.trim();
+                if (emailValue) {
+                    const emailIsValid = this.isValidEmail(emailValue);
+
+                    if (!emailIsValid) {
+                        isValid = false;
+                    }
+                }
             }
 
             // Apply styling
@@ -199,7 +224,7 @@
                 field.classList.remove('valid');
             } else {
                 field.classList.remove('invalid');
-                if (field.value.trim()) {
+                if (field.value && field.value.trim()) {
                     field.classList.add('valid');
                 } else {
                     field.classList.remove('valid'); // Empty but optional
@@ -281,12 +306,32 @@
         }
 
         updateUI() {
-            // Update step indicator
-            this.dom.stepIndicator.textContent = `Step ${this.currentStep} of ${this.totalSteps}`;
+            // Update Progress Line
+            // (currentStep - 1) / (totalSteps - 1) because lines are between steps
+            let progress = 0;
+            if (this.totalSteps > 1) {
+                progress = ((this.currentStep - 1) / (this.totalSteps - 1)) * 100;
+            }
+            if (this.dom.progressLineFill) {
+                this.dom.progressLineFill.style.width = progress + '%';
+            }
 
-            // Update progress bar
-            const progress = (this.currentStep / this.totalSteps) * 100;
-            this.dom.progressFill.style.width = progress + '%';
+            // Update Circles
+            if (this.dom.stepIndicators) {
+                this.dom.stepIndicators.forEach((el, index) => {
+                    const stepNum = index + 1;
+
+                    if (stepNum < this.currentStep) {
+                        el.classList.add('completed');
+                        el.classList.remove('active');
+                    } else if (stepNum === this.currentStep) {
+                        el.classList.add('active');
+                        el.classList.remove('completed');
+                    } else {
+                        el.classList.remove('active', 'completed');
+                    }
+                });
+            }
 
             // Show/hide steps
             const steps = document.querySelectorAll('.quiz-step');
@@ -446,7 +491,14 @@
         }
 
         isValidEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            // More strict email validation
+            // Requires: 
+            // - At least 2 characters before @
+            // - At least 2 characters for domain name
+            // - At least 2 characters for TLD
+            // - Valid characters only
+            const emailRegex = /^[a-zA-Z0-9._-]{2,}@[a-zA-Z0-9.-]{2,}\.[a-zA-Z]{2,}$/;
+            return emailRegex.test(email);
         }
 
         showSuccess() {
@@ -454,8 +506,8 @@
             this.dom.submitBtn.style.display = 'none';
             this.dom.prevBtn.style.display = 'none';
             this.dom.nextBtn.style.display = 'none';
-            this.dom.stepIndicator.style.display = 'none'; // Hide partial step info
-            this.dom.progressFill.parentElement.style.display = 'none';
+            const stepsWrapper = this.dom.modal.querySelector('.quiz-steps-wrapper');
+            if (stepsWrapper) stepsWrapper.style.display = 'none';
 
             const successHTML = `
                 <div class="quiz-success-message" style="text-align: center; padding: 40px 20px; animation: fadeInUp 0.5s ease;">

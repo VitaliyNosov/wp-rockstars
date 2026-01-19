@@ -113,8 +113,24 @@ function crb_register_quiz_settings() {
                                 ))
                                 ->set_default_value('none')
                                 ->set_width(50),
-                            Field::make('textarea', 'field_options', 'Options')
-                                ->set_help_text('Enter one option per line in format: value:Label'),
+                            Field::make('text', 'field_placeholder', 'Placeholder'),
+                            Field::make('complex', 'field_options', 'Options')
+                                ->set_layout('tabbed-horizontal')
+                                ->setup_labels(array(
+                                    'plural_name' => 'Options',
+                                    'singular_name' => 'Option',
+                                ))
+                                ->add_fields(array(
+                                    Field::make('text', 'option_value', 'Value')
+                                        ->set_help_text('Internal value (e.g. "kyiv")')
+                                        ->set_required(true)
+                                        ->set_width(50),
+                                    Field::make('text', 'option_label', 'Label')
+                                        ->set_help_text('Display text (e.g. "Киев")')
+                                        ->set_required(true)
+                                        ->set_width(50),
+                                ))
+                                ->set_header_template('<%- option_label %>'),
                             Field::make('checkbox', 'field_required', 'Required?'),
                         ))
                         ->add_fields('info', 'Info Text Only', array(

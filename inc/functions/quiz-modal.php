@@ -119,20 +119,21 @@ function render_quiz_modal_html() {
         }
         
         .quiz-header {
-            background: var(--quiz-primary);
-            color: white;
+            background: transparent;
+            color: var(--quiz-text);
             padding: 24px;
             position: relative;
             flex-shrink: 0;
+            text-align: center;
         }
         
         .quiz-close {
             position: absolute;
             top: 16px;
             right: 16px;
-            background: rgba(255, 255, 255, 0.2);
+            background: transparent;
             border: none;
-            color: white;
+            color: var(--quiz-text);
             width: 32px;
             height: 32px;
             border-radius: 50%;
@@ -144,7 +145,11 @@ function render_quiz_modal_html() {
         }
         
         .quiz-close:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .dark .quiz-close:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
         
         .quiz-progress-bar {
@@ -474,6 +479,84 @@ function render_quiz_modal_html() {
             background-color: var(--quiz-border);
             border-radius: 3px;
         }
+        /* Step Indicator Styles */
+        .quiz-steps-wrapper {
+            margin: 20px 0 24px;
+            padding: 0 10px;
+        }
+
+        .quiz-steps-container {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            max-width: 400px; /* Adjust as needed */
+            margin: 0 auto;
+        }
+
+        /* Connecting Line Background */
+        .quiz-steps-line-bg {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #E5E7EB; /* Grey line */
+            transform: translateY(-50%);
+            z-index: 0;
+            border-radius: 2px;
+        }
+
+        .dark .quiz-steps-line-bg {
+            background: #2E3038;
+        }
+
+        /* Active Line Fill (Dynamic width) */
+        .quiz-steps-line-fill {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 4px;
+            background: var(--quiz-primary);
+            transform: translateY(-50%);
+            z-index: 1;
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+
+        .quiz-step-indicator-item {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #D1D5DB; /* Default Grey */
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 4px var(--quiz-bg); /* Gap around circle for line */
+        }
+
+        .dark .quiz-step-indicator-item {
+            background: #4B5563;
+        }
+
+        /* Active / Completed State */
+        .quiz-step-indicator-item.active,
+        .quiz-step-indicator-item.completed {
+            background: var(--quiz-primary);
+            box-shadow: 0 0 0 4px var(--quiz-bg), 0 0 15px rgba(74, 108, 247, 0.5); /* Glowing effect */
+            transform: scale(1.1);
+        }
+
+        .quiz-step-indicator-item.completed {
+            transform: scale(1);
+             box-shadow: 0 0 0 4px var(--quiz-bg);
+        }
+
     </style>
     
     <script>
@@ -572,10 +655,16 @@ function render_quiz_modal_html() {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
-                <h2 style="margin: 0 0 8px 0; font-size: 24px;">Quiz Form</h2>
-                <p style="margin: 0; opacity: 0.9; font-size: 14px;" id="quiz-step-indicator">Step 1 of <?php echo $total_steps; ?></p>
-                <div class="quiz-progress-bar">
-                    <div class="quiz-progress-fill" id="quiz-progress-fill" style="width: <?php echo (1 / $total_steps) * 100; ?>%;"></div>
+                <div class="quiz-steps-wrapper">
+                    <div class="quiz-steps-container">
+                        <div class="quiz-steps-line-bg"></div>
+                        <div class="quiz-steps-line-fill" id="quiz-steps-line-fill" style="width: 0%;"></div>
+                        <?php for ($i = 1; $i <= $total_steps; $i++): ?>
+                            <div class="quiz-step-indicator-item <?php echo $i === 1 ? 'active' : ''; ?>" data-index="<?php echo $i; ?>">
+                                <?php echo $i; ?>
+                            </div>
+                        <?php endfor; ?>
+                    </div>
                 </div>
             </div>
 
@@ -595,20 +684,41 @@ function render_quiz_modal_html() {
                         
                         <?php 
                         foreach ($step['step_fields'] as $field): 
-                            // Helper to parse options
-                            $parse_options = function($options_str) {
+                            // Helper to parse options - supports both textarea and complex field formats
+                            $parse_options = function($options_data) {
                                 $options = [];
-                                $lines = explode("\n", $options_str);
-                                foreach ($lines as $line) {
-                                    $parts = explode(':', $line, 2);
-                                    if (count($parts) === 2) {
-                                        $options[trim($parts[0])] = trim($parts[1]);
-                                    } else {
-                                        // Fallback if no colon
-                                        $val = trim($line);
-                                        $options[$val] = $val;
+                                
+                                // Check if it's the new complex field format (array of arrays)
+                                if (is_array($options_data) && !empty($options_data)) {
+                                    // Check if first element has option_value and option_label keys
+                                    $first = reset($options_data);
+                                    if (is_array($first) && isset($first['option_value']) && isset($first['option_label'])) {
+                                        // New complex field format
+                                        foreach ($options_data as $option) {
+                                            $options[$option['option_value']] = $option['option_label'];
+                                        }
+                                        return $options;
                                     }
                                 }
+                                
+                                // Old textarea format (string with newlines)
+                                if (is_string($options_data)) {
+                                    $lines = explode("\n", $options_data);
+                                    foreach ($lines as $line) {
+                                        $line = trim($line);
+                                        if (empty($line)) continue;
+                                        
+                                        $parts = explode(':', $line, 2);
+                                        if (count($parts) === 2) {
+                                            $options[trim($parts[0])] = trim($parts[1]);
+                                        } else {
+                                            // Fallback if no colon
+                                            $val = trim($line);
+                                            $options[$val] = $val;
+                                        }
+                                    }
+                                }
+                                
                                 return $options;
                             };
                             
