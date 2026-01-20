@@ -32,6 +32,9 @@
             console.log('Quiz Widget: Initializing (Dynamic)...');
             this.bindEvents();
             this.updateUI();
+
+            // Initial icon check
+            this.initIcons(3);
         }
 
         bindEvents() {
@@ -66,20 +69,69 @@
 
             // Radio and checkbox selection styling
             this.setupOptionListeners();
+
+            // Range slider listeners
+            this.setupRangeListeners();
+
+            // File upload listeners
+            this.setupFileListeners();
+
+            // Phone masking listeners
+            this.setupPhoneMasks();
+
+            // Switch listeners
+            this.setupSwitchListeners();
+
+            // Date picker listeners
+            this.setupDatePickers();
+
+            // Init backgrounds
+            this.dom.modal.querySelectorAll('.quiz-range-input').forEach(s => this.updateSliderBackground(s));
+        }
+
+        updateSliderBackground(slider) {
+            const min = parseFloat(slider.min) || 0;
+            const max = parseFloat(slider.max) || 100;
+            const val = parseFloat(slider.value);
+            const percentage = ((val - min) / (max - min)) * 100;
+
+            // Get CSS variables
+            const primary = getComputedStyle(document.documentElement).getPropertyValue('--quiz-primary').trim() || '#4A6CF7';
+            const border = getComputedStyle(document.documentElement).getPropertyValue('--quiz-border').trim() || '#2E3038';
+
+            slider.style.background = `linear-gradient(to right, ${primary} 0%, ${primary} ${percentage}%, ${border} ${percentage}%, ${border} 100%)`;
+        }
+
+        setupRangeListeners() {
+            this.dom.modal.addEventListener('input', (e) => {
+                if (e.target.matches('.quiz-range-input')) {
+                    const slider = e.target;
+                    const displayId = `${slider.id}-display`;
+                    const display = document.getElementById(displayId);
+
+                    if (display) {
+                        const prefix = slider.dataset.prefix || '';
+                        const suffix = slider.dataset.suffix || '';
+                        display.textContent = `${prefix}${slider.value}${suffix}`;
+                    }
+
+                    this.updateSliderBackground(slider);
+                }
+            });
         }
 
         setupOptionListeners() {
             // Delegate change event for better performance with dynamic elements
             this.dom.modal.addEventListener('change', (e) => {
                 if (e.target.matches('input[type="radio"]') || e.target.matches('input[type="checkbox"]')) {
-                    const option = e.target.closest('.quiz-option');
+                    const option = e.target.closest('.quiz-option') || e.target.closest('.quiz-tile-option');
                     if (!option) return;
 
                     if (e.target.type === 'radio') {
                         // Remove selected class from all options in this group
-                        const group = e.target.closest('.quiz-radio-group');
+                        const group = e.target.closest('.quiz-radio-group') || e.target.closest('.quiz-options-grid');
                         if (group) {
-                            group.querySelectorAll('.quiz-option').forEach(opt => {
+                            group.querySelectorAll('.quiz-option, .quiz-tile-option').forEach(opt => {
                                 opt.classList.remove('selected');
                             });
                         }
@@ -95,9 +147,156 @@
             });
         }
 
+        setupFileListeners() {
+            this.dom.modal.addEventListener('change', (e) => {
+                if (e.target.matches('.quiz-file-input')) {
+                    const fileInput = e.target;
+                    const wrapper = fileInput.closest('.quiz-file-upload-wrapper');
+                    const fileNameDisplay = wrapper.querySelector('.quiz-file-name');
+
+                    if (fileInput.files.length > 0) {
+                        const fileName = fileInput.files[0].name;
+                        fileNameDisplay.textContent = fileName;
+                        wrapper.classList.add('has-file');
+
+                        // Check extension
+                        const allowed = fileInput.dataset.allowed ? fileInput.dataset.allowed.split(',').map(ext => ext.trim().toLowerCase()) : [];
+                        const ext = fileName.split('.').pop().toLowerCase();
+
+                        if (allowed.length > 0 && !allowed.includes(ext)) {
+                            alert('Invalid file type. Allowed: ' + allowed.join(', '));
+                            fileInput.value = '';
+                            fileNameDisplay.textContent = 'No file chosen';
+                            wrapper.classList.remove('has-file');
+                        }
+                    } else {
+                        fileNameDisplay.textContent = 'No file chosen';
+                        wrapper.classList.remove('has-file');
+                    }
+
+                    this.validateField(fileInput);
+                }
+            });
+        }
+
+        /**
+         * INITIALIZE FLATICKR DATEPICKERS
+         */
+        setupDatePickers() {
+            if (typeof flatpickr !== 'undefined') {
+                flatpickr('.quiz-datepicker', {
+                    locale: 'ru',
+                    dateFormat: 'd.m.Y',
+                    allowInput: true,
+                    disableMobile: "true", // Force flatpickr UI on mobile
+                    onOpen: function (selectedDates, dateStr, instance) {
+                        // Ensure it stays on top of modal
+                        instance.calendarContainer.style.zIndex = "2147483647";
+                    }
+                });
+            }
+        }
+
+        setupPhoneMasks() {
+            this.dom.modal.addEventListener('input', (e) => {
+                if (e.target.matches('.quiz-phone-input')) {
+                    this.applyPhoneMask(e.target);
+                }
+            });
+
+            // Prevent cursor moving if mask is present
+            this.dom.modal.addEventListener('click', (e) => {
+                if (e.target.matches('.quiz-phone-input')) {
+                    const input = e.target;
+                    const val = input.value;
+                    // If empty or only prefix, put cursor at end of static part
+                    if (!val || val === input.dataset.mask.replace(/9/g, '_')) {
+                        // Find first placeholder
+                        const idx = input.dataset.mask.indexOf('9');
+                        if (idx !== -1) input.setSelectionRange(idx, idx);
+                    }
+                }
+            });
+        }
+
+        setupSwitchListeners() {
+            this.dom.modal.addEventListener('change', (e) => {
+                if (e.target.matches('.quiz-switch-input')) {
+                    const input = e.target;
+                    const statusEl = input.closest('.quiz-switch-wrapper').querySelector('.quiz-switch-status');
+                    if (statusEl) {
+                        statusEl.textContent = input.checked ? (input.dataset.on || 'Yes') : (input.dataset.off || 'No');
+                    }
+                }
+            });
+        }
+
+        applyPhoneMask(input) {
+            const mask = input.dataset.mask || '+7 (999) 999-99-99';
+            let value = input.value;
+
+            // Clean value from non-digits if mask is numeric
+            const digits = value.replace(/\D/g, '');
+            const maskDigits = mask.replace(/\D/g, '');
+
+            // If user cleared everything, just show empty or prefix
+            if (digits.length === 0) {
+                input.value = '';
+                return;
+            }
+
+            let result = '';
+            let digitIdx = 0;
+
+            // Iterate through mask
+            for (let i = 0; i < mask.length; i++) {
+                if (mask[i] === '9') {
+                    if (digitIdx < digits.length) {
+                        result += digits[digitIdx++];
+                    } else {
+                        result += '_';
+                    }
+                } else {
+                    // Static character
+                    result += mask[i];
+
+                    // If this static char matches a digit user typed (e.g. leading 7), skip it from digits if needed
+                    // But usually masks like +7 (999) expect user to start with first 9
+                    // So we only skip if prefix matches digits
+                    if (digitIdx < digits.length && digits[digitIdx] === mask[i]) {
+                        // Optional: logic to skip leading digits if they match prefix
+                        // digitIdx++; 
+                    }
+                }
+            }
+
+            input.value = result;
+
+            // Set cursor to first placeholder
+            const firstPlaceholder = result.indexOf('_');
+            if (firstPlaceholder !== -1) {
+                input.setSelectionRange(firstPlaceholder, firstPlaceholder);
+            }
+        }
+
         open() {
             this.dom.modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            this.initIcons(5);
+        }
+
+        initIcons(retries) {
+            if (window.lucide) {
+                window.lucide.createIcons();
+
+                // Double check after a short delay for elements that might be rendering
+                setTimeout(() => window.lucide.createIcons(), 300);
+            } else if (retries > 0) {
+                setTimeout(() => this.initIcons(retries - 1), 300);
+            } else {
+                console.error('Quiz Widget: Lucide library NOT found.');
+            }
         }
 
         close() {
@@ -197,7 +396,18 @@
                     // For other inputs, check if trimmed value is empty
                     if (!field.value.trim()) {
                         isValid = false;
+                    }
+                }
 
+                // For File inputs specifically
+                if (field.type === 'file' && !field.files.length) {
+                    isValid = false;
+                }
+
+                // For masked phone inputs
+                if (field.classList.contains('quiz-phone-input')) {
+                    if (field.value.includes('_')) {
+                        isValid = false;
                     }
                 }
             }
@@ -303,6 +513,14 @@
                     }
                 }
             });
+
+            // Save Switches
+            const switches = activeStep.querySelectorAll('.quiz-switch-input');
+            switches.forEach(sw => {
+                const label = sw.checked ? (sw.dataset.on || 'Yes') : (sw.dataset.off || 'No');
+                this.answers[sw.name] = label;
+                this.labels[sw.name] = sw.dataset.label || sw.name;
+            });
         }
 
         updateUI() {
@@ -359,9 +577,13 @@
                 this.dom.nextBtn.style.display = 'block';
                 this.dom.submitBtn.style.display = 'none';
             }
+            // Ensure icons are processed for the current visible step
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
 
             // Scroll to top
-            this.dom.body.scrollTop = 0;
+            if (this.dom.body) this.dom.body.scrollTop = 0;
         }
 
         generateSummary() {
@@ -376,11 +598,11 @@
                 let stepContent = '';
 
                 // Find all fields in this step to show them
-                // 1. Inputs
+                // 1. Inputs (Text, Email, Textarea, Select, Range)
                 stepDiv.querySelectorAll('.quiz-input').forEach(input => {
                     const label = input.dataset.label || input.name;
                     const val = this.answers[input.name];
-                    if (val) {
+                    if (val !== undefined && val !== '') {
                         // Convert selects to readable
                         let displayVal = val;
                         if (input.tagName === 'SELECT') {
@@ -388,13 +610,20 @@
                             if (option) displayVal = option.textContent;
                         }
 
+                        // Add prefix/suffix for range if available in summary
+                        if (input.type === 'range') {
+                            const prefix = input.dataset.prefix || '';
+                            const suffix = input.dataset.suffix || '';
+                            displayVal = `${prefix}${val}${suffix}`;
+                        }
+
                         stepContent += `<p><strong>${this.escapeHtml(label)}:</strong> ${this.escapeHtml(displayVal)}</p>`;
                     }
                 });
 
                 // 2. Radios
-                stepDiv.querySelectorAll('.quiz-radio-group').forEach(group => {
-                    const input = group.querySelector('input');
+                stepDiv.querySelectorAll('.quiz-radio-group, .quiz-options-grid').forEach(group => {
+                    const input = group.querySelector('input[type="radio"]');
                     if (input) {
                         const name = input.name;
                         const val = this.answers[name];
@@ -404,8 +633,14 @@
                             const selectedLabel = selectedInput ? selectedInput.dataset.label : val;
 
                             let groupLabel = 'Choice';
-                            const labelEl = group.previousElementSibling;
+                            const labelEl = group.closest('.quiz-step').querySelector('h3');
                             if (labelEl && labelEl.tagName === 'LABEL') groupLabel = labelEl.textContent.replace('*', '').trim();
+                            // Fallback if label is before the group
+                            if (!labelEl || labelEl.tagName !== 'LABEL') {
+                                const prevLabel = group.previousElementSibling;
+                                if (prevLabel && prevLabel.tagName === 'LABEL') groupLabel = prevLabel.textContent.replace('*', '').trim();
+                                else if (title) groupLabel = title;
+                            }
 
                             stepContent += `<p><strong>${this.escapeHtml(groupLabel)}:</strong> ${this.escapeHtml(selectedLabel)}</p>`;
                         }
@@ -413,8 +648,8 @@
                 });
 
                 // 3. Checkboxes
-                stepDiv.querySelectorAll('.quiz-checkbox-group').forEach(group => {
-                    const input = group.querySelector('input');
+                stepDiv.querySelectorAll('.quiz-checkbox-group, .quiz-options-grid').forEach(group => {
+                    const input = group.querySelector('input[type="checkbox"]');
                     if (input) {
                         const name = input.name.replace('[]', '');
                         const vals = this.answers[name]; // Array
@@ -422,6 +657,7 @@
                             let groupLabel = 'Selection';
                             const labelEl = group.previousElementSibling;
                             if (labelEl && labelEl.tagName === 'LABEL') groupLabel = labelEl.textContent.replace('*', '').trim();
+                            else if (title) groupLabel = title;
 
                             // Map vals to labels
                             const displayVals = vals.map(v => {
@@ -434,6 +670,22 @@
                             stepContent += `<p><strong>${this.escapeHtml(groupLabel)}:</strong> ${this.escapeHtml(displayVals)}</p>`;
                         }
                     }
+
+                    // 4. File uploads
+                    stepDiv.querySelectorAll('.quiz-file-input').forEach(fileInput => {
+                        const label = fileInput.dataset.label || fileInput.name;
+                        const file = fileInput.files[0];
+                        if (file) {
+                            stepContent += `<p><strong>${this.escapeHtml(label)}:</strong> ${this.escapeHtml(file.name)}</p>`;
+                        }
+                    });
+
+                    // 5. Switches
+                    stepDiv.querySelectorAll('.quiz-switch-input').forEach(sw => {
+                        const label = sw.dataset.label || sw.name;
+                        const status = sw.checked ? (sw.dataset.on || 'Yes') : (sw.dataset.off || 'No');
+                        stepContent += `<p><strong>${this.escapeHtml(label)}:</strong> ${this.escapeHtml(status)}</p>`;
+                    });
                 });
 
                 if (stepContent) {
@@ -467,6 +719,13 @@
                         formData.append(key, value);
                     }
                 }
+
+                // Add FILES
+                this.dom.modal.querySelectorAll('.quiz-file-input').forEach(input => {
+                    if (input.files[0]) {
+                        formData.append(input.name, input.files[0]);
+                    }
+                });
 
                 const response = await fetch(quiz_ajax.ajax_url, {
                     method: 'POST',

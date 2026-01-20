@@ -3,6 +3,7 @@
  * Quiz Modal - HTML markup and inline script
  */
 
+
 /**
  * Get Quiz Structure (from Carbon Fields or Default Fallback)
  */
@@ -220,6 +221,13 @@ function render_quiz_modal_html() {
         
         .quiz-input.invalid {
             border-color: var(--quiz-error);
+        }
+        
+        /* Remove validation borders for range inputs */
+        input[type="range"].quiz-input {
+            border: none !important;
+            padding: 0;
+            background: transparent;
         }
         
         .quiz-radio-group, .quiz-checkbox-group {
@@ -557,6 +565,354 @@ function render_quiz_modal_html() {
              box-shadow: 0 0 0 4px var(--quiz-bg);
         }
 
+        /* Range Slider Styles */
+        .quiz-range-wrapper {
+            margin-bottom: 24px;
+            padding: 10px 0;
+        }
+
+        .quiz-range-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .quiz-range-value-display {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--quiz-primary);
+            background: rgba(74, 108, 247, 0.1);
+            padding: 4px 12px;
+            border-radius: 6px;
+        }
+
+        .quiz-range-input {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: linear-gradient(to right, var(--quiz-primary) 0%, var(--quiz-primary) 50%, var(--quiz-border) 50%, var(--quiz-border) 100%);
+            border-radius: 10px;
+            outline: none;
+            cursor: pointer;
+            margin: 15px 0;
+        }
+
+        .quiz-range-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px;
+            height: 28px;
+            background: var(--quiz-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(74, 108, 247, 0.4);
+            border: 4px solid var(--quiz-bg);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: -11px; /* Center thumb on track */
+        }
+
+        .quiz-range-input::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .quiz-range-input:hover::-webkit-slider-thumb {
+            transform: scale(1.15);
+            box-shadow: 0 6px 15px rgba(74, 108, 247, 0.5);
+        }
+
+        .quiz-range-limits {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--quiz-text);
+            opacity: 0.6;
+        }
+
+        .quiz-range-limits {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--quiz-text);
+            opacity: 0.6;
+        }
+
+        /* Tile Selection Styles */
+        .quiz-options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .quiz-tile-option {
+            position: relative;
+            background: var(--quiz-card-bg);
+            border: 2px solid var(--quiz-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+        }
+
+        .quiz-tile-option:hover {
+            border-color: var(--quiz-primary);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-tile-option.selected {
+            border-color: var(--quiz-primary);
+            background: rgba(74, 108, 247, 0.05);
+            box-shadow: 0 0 0 1px var(--quiz-primary);
+        }
+
+        .quiz-tile-icon {
+            margin-bottom: 12px;
+            color: var(--quiz-primary);
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quiz-tile-icon svg {
+            width: 32px !important;
+            height: 32px !important;
+            stroke-width: 2px;
+            color: inherit;
+        }
+
+        .quiz-tile-option:hover .quiz-tile-icon {
+            transform: scale(1.1);
+        }
+
+        .quiz-tile-image {
+            width: 100%;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 12px;
+            border-radius: 6px;
+        }
+
+        .quiz-tile-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--quiz-text);
+            line-height: 1.2;
+        }
+
+        .quiz-tile-option input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        /* File Upload Styles */
+        .quiz-file-wrapper {
+            margin-bottom: 24px;
+        }
+        .quiz-file-container {
+            position: relative;
+            width: 100%;
+            height: 56px;
+            background: var(--quiz-card-bg);
+            border: 2px dashed var(--quiz-border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .quiz-file-container:hover {
+            border-color: var(--quiz-primary);
+            background: rgba(74, 108, 247, 0.02);
+        }
+        .quiz-file-container.has-file {
+            border-style: solid;
+            border-color: var(--quiz-primary);
+            background: rgba(74, 108, 247, 0.05);
+        }
+        .quiz-file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .quiz-file-btn {
+            background: var(--quiz-primary);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 12px;
+            pointer-events: none;
+        }
+        .quiz-file-name {
+            color: var(--quiz-text);
+            font-size: 14px;
+            opacity: 0.7;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            pointer-events: none;
+        }
+        .quiz-file-container.has-file .quiz-file-name {
+            opacity: 1;
+            font-weight: 500;
+        }
+        .quiz-file-info {
+            font-size: 11px;
+            color: var(--quiz-text);
+            opacity: 0.5;
+            margin-top: 6px;
+            display: block;
+        }
+
+        /* Toggle Switch Styles */
+        .quiz-switch-wrapper {
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--quiz-card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--quiz-border);
+        }
+        .quiz-switch-label {
+            font-weight: 600;
+            color: var(--quiz-text);
+            font-size: 16px;
+        }
+        .quiz-switch-container {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+        .quiz-switch-container input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .quiz-switch-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--quiz-border);
+            transition: .4s;
+            border-radius: 28px;
+        }
+        .quiz-switch-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        input:checked + .quiz-switch-slider {
+            background-color: var(--quiz-primary);
+        }
+        input:focus + .quiz-switch-slider {
+            box-shadow: 0 0 1px var(--quiz-primary);
+        }
+        input:checked + .quiz-switch-slider:before {
+            transform: translateX(22px);
+        }
+        .quiz-switch-status {
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 10px;
+            color: var(--quiz-text);
+            opacity: 0.7;
+            min-width: 30px;
+        }
+
+        /* Date Picker Styles */
+        input[type="date"].quiz-input {
+            position: relative;
+            appearance: none;
+            -webkit-appearance: none;
+            min-height: 50px;
+        }
+        input[type="date"].quiz-input::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+            z-index: 1;
+        }
+        .quiz-date-wrapper {
+            position: relative;
+            margin-bottom: 24px;
+        }
+        .quiz-date-wrapper:after {
+            content: "";
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+            background-color: var(--quiz-primary);
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") no-repeat center;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") no-repeat center;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        .quiz-date-wrapper:focus-within:after {
+            opacity: 1;
+        }
+        /* Custom Flatpickr Theme Adjustments */
+        .flatpickr-calendar {
+            background: var(--quiz-bg) !important;
+            border: 1px solid var(--quiz-border) !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2) !important;
+        }
+        .flatpickr-day.selected {
+            background: var(--quiz-primary) !important;
+            border-color: var(--quiz-primary) !important;
+        }
+        .flatpickr-months .flatpickr-month, 
+        .flatpickr-weekdays,
+        .flatpickr-day {
+            color: var(--quiz-text) !important;
+        }
+        .flatpickr-innerContainer, .flatpickr-rContainer {
+            background: transparent !important;
+        }
     </style>
     
     <script>
@@ -687,38 +1043,39 @@ function render_quiz_modal_html() {
                             // Helper to parse options - supports both textarea and complex field formats
                             $parse_options = function($options_data) {
                                 $options = [];
-                                
-                                // Check if it's the new complex field format (array of arrays)
-                                if (is_array($options_data) && !empty($options_data)) {
-                                    // Check if first element has option_value and option_label keys
-                                    $first = reset($options_data);
-                                    if (is_array($first) && isset($first['option_value']) && isset($first['option_label'])) {
-                                        // New complex field format
-                                        foreach ($options_data as $option) {
-                                            $options[$option['option_value']] = $option['option_label'];
+                                if (empty($options_data)) return $options;
+
+                                // Handle complex field format (array of arrays)
+                                if (is_array($options_data)) {
+                                    foreach ($options_data as $option) {
+                                        if (is_array($option)) {
+                                            $val = isset($option['option_value']) ? $option['option_value'] : '';
+                                            $label = isset($option['option_label']) ? $option['option_label'] : $val;
+                                            
+                                            $options[$val] = [
+                                                'label' => $label,
+                                                'icon'  => isset($option['option_icon']) ? $option['option_icon'] : '',
+                                                'image' => isset($option['option_image']) ? $option['option_image'] : '',
+                                            ];
                                         }
-                                        return $options;
                                     }
+                                    if (!empty($options)) return $options;
                                 }
                                 
-                                // Old textarea format (string with newlines)
+                                // Old textarea format fallback
                                 if (is_string($options_data)) {
                                     $lines = explode("\n", $options_data);
                                     foreach ($lines as $line) {
                                         $line = trim($line);
                                         if (empty($line)) continue;
-                                        
                                         $parts = explode(':', $line, 2);
                                         if (count($parts) === 2) {
-                                            $options[trim($parts[0])] = trim($parts[1]);
+                                            $options[trim($parts[0])] = ['label' => trim($parts[1]), 'icon' => '', 'image' => ''];
                                         } else {
-                                            // Fallback if no colon
-                                            $val = trim($line);
-                                            $options[$val] = $val;
+                                            $options[trim($line)] = ['label' => trim($line), 'icon' => '', 'image' => ''];
                                         }
                                     }
                                 }
-                                
                                 return $options;
                             };
                             
@@ -759,63 +1116,167 @@ function render_quiz_modal_html() {
                                           placeholder="<?php echo esc_attr($placeholder); ?>" 
                                           <?php echo $is_required; ?>></textarea>
 
-                            <?php elseif ($field['_type'] === 'radio'): ?>
+                            <?php elseif ($field['_type'] === 'radio' || $field['_type'] === 'checkbox'): 
+                                $is_checkbox = ($field['_type'] === 'checkbox');
+                                $layout = isset($field['field_layout']) ? $field['field_layout'] : 'list';
+                                $options = $parse_options($field['field_options']);
+                            ?>
                                 <label style="display: block; color: var(--quiz-text); margin-bottom: 8px; font-weight: 600;">
                                     <?php echo esc_html($field['field_label'] . $required_mark); ?>
                                 </label>
-                                <div class="quiz-radio-group" data-name="<?php echo esc_attr($field_name); ?>" <?php echo $is_required ? 'data-required="true"' : ''; ?> data-purpose="<?php echo esc_attr($purpose); ?>">
-                                    <?php 
-                                    $options = $parse_options($field['field_options']);
-                                    foreach ($options as $val => $label): 
-                                    ?>
-                                        <label class="quiz-option">
-                                            <input type="radio" 
-                                                   name="<?php echo esc_attr($field_name); ?>" 
-                                                   value="<?php echo esc_attr($val); ?>"
-                                                   data-label="<?php echo esc_attr($label); ?>">
-                                            <span style="color: var(--quiz-text);"><?php echo esc_html($label); ?></span>
-                                        </label>
-                                    <?php endforeach; ?>
-                                </div>
-
-                            <?php elseif ($field['_type'] === 'checkbox'): ?>
-                                <label style="display: block; color: var(--quiz-text); margin-bottom: 8px; font-weight: 600;">
-                                    <?php echo esc_html($field['field_label'] . $required_mark); ?>
-                                </label>
-                                <div class="quiz-checkbox-group" data-name="<?php echo esc_attr($field_name); ?>" <?php echo $is_required ? 'data-required="true"' : ''; ?> data-purpose="<?php echo esc_attr($purpose); ?>">
-                                    <?php 
-                                    $options = $parse_options($field['field_options']);
-                                    foreach ($options as $val => $label): 
-                                    ?>
-                                        <label class="quiz-option">
-                                            <input type="checkbox" 
-                                                   name="<?php echo esc_attr($field_name); ?>[]" 
-                                                   value="<?php echo esc_attr($val); ?>"
-                                                   data-label="<?php echo esc_attr($label); ?>">
-                                            <span style="color: var(--quiz-text);"><?php echo esc_html($label); ?></span>
-                                        </label>
+                                <div class="<?php echo $layout === 'tiles' ? 'quiz-options-grid' : ($is_checkbox ? 'quiz-checkbox-group' : 'quiz-radio-group'); ?>" 
+                                     data-name="<?php echo esc_attr($field_name); ?>" 
+                                     <?php echo $is_required ? 'data-required="true"' : ''; ?> 
+                                     data-purpose="<?php echo esc_attr($purpose); ?>">
+                                    <?php foreach ($options as $val => $opt_data): ?>
+                                        <?php if ($layout === 'tiles'): ?>
+                                            <label class="quiz-tile-option <?php echo $is_checkbox ? 'quiz-tile-checkbox' : 'quiz-tile-radio'; ?>">
+                                                <input type="<?php echo $is_checkbox ? 'checkbox' : 'radio'; ?>" 
+                                                       name="<?php echo esc_attr($is_checkbox ? $field_name . '[]' : $field_name); ?>" 
+                                                       value="<?php echo esc_attr($val); ?>"
+                                                       data-label="<?php echo esc_attr($opt_data['label']); ?>">
+                                                
+                                                <?php if (!empty($opt_data['image'])): ?>
+                                                    <img src="<?php echo esc_url($opt_data['image']); ?>" class="quiz-tile-image" alt="">
+                                                <?php elseif (!empty($opt_data['icon'])): ?>
+                                                    <div class="quiz-tile-icon">
+                                                        <i data-lucide="<?php echo esc_attr($opt_data['icon']); ?>" style="width: 32px; height: 32px;"></i>
+                                                    </div>
+                                                <?php endif; ?>
+                                                
+                                                <span class="quiz-tile-label"><?php echo esc_html($opt_data['label']); ?></span>
+                                            </label>
+                                        <?php else: ?>
+                                            <label class="quiz-option">
+                                                <input type="<?php echo $is_checkbox ? 'checkbox' : 'radio'; ?>" 
+                                                       name="<?php echo esc_attr($is_checkbox ? $field_name . '[]' : $field_name); ?>" 
+                                                       value="<?php echo esc_attr($val); ?>"
+                                                       data-label="<?php echo esc_attr($opt_data['label']); ?>">
+                                                <span style="color: var(--quiz-text);"><?php echo esc_html($opt_data['label']); ?></span>
+                                            </label>
+                                        <?php endif; ?>
                                     <?php endforeach; ?>
                                 </div>
 
                             <?php elseif ($field['_type'] === 'select'): ?>
+
                                 <label style="display: block; color: var(--quiz-text); margin-bottom: 8px; font-weight: 600;">
                                     <?php echo esc_html($field['field_label'] . $required_mark); ?>
                                 </label>
                                 <select class="quiz-input" 
                                         id="<?php echo esc_attr($field_id); ?>"
-                                        name="<?php echo esc_attr($field_name); ?>" 
+                                        name="<?php echo esc_attr($field_name); ?>"
                                         data-label="<?php echo esc_attr($field['field_label']); ?>"
                                         data-purpose="<?php echo esc_attr($purpose); ?>"
                                         <?php echo $is_required; ?>>
-                                    <option value="">-- <?php echo esc_html($placeholder ?: 'Select'); ?> --</option>
+                                    <option value=""><?php echo esc_html($placeholder ? $placeholder : 'Select option...'); ?></option>
                                     <?php 
                                     $options = $parse_options($field['field_options']);
-                                    foreach ($options as $val => $label): 
+                                    foreach ($options as $val => $opt_data): 
                                     ?>
-                                        <option value="<?php echo esc_attr($val); ?>"><?php echo esc_html($label); ?></option>
+                                        <option value="<?php echo esc_attr($val); ?>"><?php echo esc_html($opt_data['label']); ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                                
+
+                            <?php elseif ($field['_type'] === 'range'): ?>
+                                <div class="quiz-range-wrapper">
+                                    <div class="quiz-range-header">
+                                        <label style="display: block; color: var(--quiz-text); margin-bottom: 0; font-weight: 600;">
+                                            <?php echo esc_html($field['field_label'] . $required_mark); ?>
+                                        </label>
+                                        <div class="quiz-range-value-display" id="<?php echo esc_attr($field_id); ?>-display">
+                                            <?php echo esc_html($field['field_prefix'] . $field['field_default'] . $field['field_suffix']); ?>
+                                        </div>
+                                    </div>
+                                    <input type="range" 
+                                           class="quiz-range-input quiz-input" 
+                                           id="<?php echo esc_attr($field_id); ?>"
+                                           name="<?php echo esc_attr($field_name); ?>"
+                                           data-label="<?php echo esc_attr($field['field_label']); ?>"
+                                           min="<?php echo esc_attr($field['field_min']); ?>"
+                                           max="<?php echo esc_attr($field['field_max']); ?>"
+                                           step="<?php echo esc_attr($field['field_step']); ?>"
+                                           value="<?php echo esc_attr($field['field_default']); ?>"
+                                           data-prefix="<?php echo esc_attr($field['field_prefix']); ?>"
+                                           data-suffix="<?php echo esc_attr($field['field_suffix']); ?>"
+                                           <?php echo $is_required; ?>>
+                                    <div class="quiz-range-limits">
+                                        <span><?php echo esc_html($field['field_prefix'] . $field['field_min'] . $field['field_suffix']); ?></span>
+                                        <span><?php echo esc_html($field['field_prefix'] . $field['field_max'] . $field['field_suffix']); ?></span>
+                                    </div>
+                                </div>
+
+                            <?php elseif ($field['_type'] === 'file'): ?>
+                                <div class="quiz-file-wrapper">
+                                    <label style="display: block; color: var(--quiz-text); margin-bottom: 8px; font-weight: 600;">
+                                        <?php echo esc_html($field['field_label'] . $required_mark); ?>
+                                    </label>
+                                    <div class="quiz-file-container" id="file-container-<?php echo esc_attr($field_id); ?>">
+                                        <div class="quiz-file-btn">Choose file</div>
+                                        <div class="quiz-file-name"><?php echo esc_html($placeholder ? $placeholder : 'No file selected'); ?></div>
+                                        <input type="file" 
+                                               class="quiz-file-input quiz-input" 
+                                               id="<?php echo esc_attr($field_id); ?>"
+                                               name="<?php echo esc_attr($field_name); ?>"
+                                               data-label="<?php echo esc_attr($field['field_label']); ?>"
+                                               data-allowed="<?php echo esc_attr($field['field_file_types']); ?>"
+                                               <?php echo $is_required; ?>>
+                                    </div>
+                                    <?php if (!empty($field['field_file_types'])): ?>
+                                        <span class="quiz-file-info">Allowed: <?php echo esc_html($field['field_file_types']); ?></span>
+                                    <?php endif; ?>
+                                </div>
+
+                            <?php elseif ($field['_type'] === 'phone'): ?>
+                                <label style="display: block; color: var(--quiz-text); margin-bottom: 8px; font-weight: 600;">
+                                    <?php echo esc_html($field['field_label'] . $required_mark); ?>
+                                </label>
+                                <input type="text" 
+                                       class="quiz-input quiz-phone-input" 
+                                       id="<?php echo esc_attr($field_id); ?>"
+                                       name="<?php echo esc_attr($field_name); ?>" 
+                                       placeholder="<?php echo esc_attr($placeholder ?: '+7 (___) ___-__-__'); ?>"
+                                       data-label="<?php echo esc_attr($field['field_label']); ?>"
+                                       data-mask="<?php echo esc_attr($field['field_mask'] ?: '+7 (999) 999-99-99'); ?>"
+                                       inputmode="tel"
+                                       <?php echo $is_required; ?>>
+
+                            <?php elseif ($field['_type'] === 'switch'): ?>
+                                <div class="quiz-switch-wrapper">
+                                    <span class="quiz-switch-label"><?php echo esc_html($field['field_label']); ?></span>
+                                    <div style="display: flex; align-items: center;">
+                                        <label class="quiz-switch-container">
+                                            <input type="checkbox" 
+                                                   class="quiz-input quiz-switch-input" 
+                                                   id="<?php echo esc_attr($field_id); ?>"
+                                                   name="<?php echo esc_attr($field_name); ?>"
+                                                   data-label="<?php echo esc_attr($field['field_label']); ?>"
+                                                   data-on="<?php echo esc_attr($field['field_on_label'] ?: 'Yes'); ?>"
+                                                   data-off="<?php echo esc_attr($field['field_off_label'] ?: 'No'); ?>"
+                                                   <?php echo $field['field_default_state'] ? 'checked' : ''; ?>>
+                                            <span class="quiz-switch-slider"></span>
+                                        </label>
+                                        <span class="quiz-switch-status">
+                                            <?php echo $field['field_default_state'] ? esc_html($field['field_on_label'] ?: 'Yes') : esc_html($field['field_off_label'] ?: 'No'); ?>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            <?php elseif ($field['_type'] === 'date'): ?>
+                                <div class="quiz-date-wrapper">
+                                    <label style="display: block; color: var(--quiz-text); margin-bottom: 8px; font-weight: 600;">
+                                        <?php echo esc_html($field['field_label'] . $required_mark); ?>
+                                    </label>
+                                    <input type="text" 
+                                           class="quiz-input quiz-datepicker" 
+                                           id="<?php echo esc_attr($field_id); ?>"
+                                           name="<?php echo esc_attr($field_name); ?>" 
+                                           placeholder="<?php echo esc_attr($placeholder ?: 'Select date'); ?>"
+                                           data-label="<?php echo esc_attr($field['field_label']); ?>"
+                                           autocomplete="off"
+                                           <?php echo $is_required; ?>>
+                                </div>
+
                             <?php elseif ($field['_type'] === 'info'): ?>
                                 <div style="margin-bottom: 16px; color: var(--quiz-text);">
                                     <?php echo wpautop($field['field_content']); ?>

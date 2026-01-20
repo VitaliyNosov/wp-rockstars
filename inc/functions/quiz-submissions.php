@@ -178,7 +178,19 @@ function quiz_get_submission_html($post_id) {
                         
                         echo '<div style="background: #f1f5f9; padding: 12px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #cbd5e1;">';
                         echo '<strong style="color: #64748b; display:block; margin-bottom: 6px; font-size: 0.85em; text-transform:uppercase; letter-spacing:0.5px;">' . esc_html($label) . '</strong>';
-                        echo '<div style="color: #0f172a; white-space: pre-wrap; line-height: 1.5; font-size: 1.05em;">' . wp_kses_post($display_value) . '</div>';
+                        
+                        // Check if it's a file link (starts with http and points to an upload)
+                        if (is_string($display_value) && (strpos($display_value, 'http') === 0) && (strpos($display_value, '/uploads/') !== false)) {
+                            $file_name = basename($display_value);
+                            echo '<div style="color: #0f172a; line-height: 1.5; font-size: 1.05em;">';
+                            echo '<a href="' . esc_url($display_value) . '" target="_blank" style="color: #2563eb; text-decoration: underline; display: flex; align-items: center; gap: 6px;">';
+                            echo '<span class="dashicons dashicons-media-document" style="font-size: 18px; width: 18px; height: 18px; margin-top: -3px;"></span>';
+                            echo esc_html($file_name);
+                            echo '</a>';
+                            echo '</div>';
+                        } else {
+                            echo '<div style="color: #0f172a; white-space: pre-wrap; line-height: 1.5; font-size: 1.05em;">' . wp_kses_post($display_value) . '</div>';
+                        }
                         echo '</div>';
                     }
                 }
@@ -404,6 +416,25 @@ function quiz_handle_submission() {
         }
         
         update_post_meta($post_id, '_quiz_' . $key, $clean_val);
+    }
+    
+    // Process File Uploads
+    if (!empty($_FILES)) {
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+        require_once(ABSPATH . 'wp-admin/includes/media.php');
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+
+        foreach ($_FILES as $key => $file) {
+            if (empty($file['name'])) continue;
+
+            // Handle the upload
+            $upload_id = media_handle_upload($key, $post_id);
+
+            if (!is_wp_error($upload_id)) {
+                $file_url = wp_get_attachment_url($upload_id);
+                update_post_meta($post_id, '_quiz_' . $key, $file_url);
+            }
+        }
     }
     
     // Debug: Save raw POST data

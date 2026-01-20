@@ -112,7 +112,14 @@ function theme_enqueue_assets() {
     ));
 
     // Quiz Widget Script
-    wp_enqueue_script('quiz-widget', get_template_directory_uri() . '/common/js/quiz-widget.js', array('jquery'), '1.0', true);
+    wp_enqueue_script('lucide-icons', 'https://unpkg.com/lucide@latest', array(), null, true);
+    
+    // Flatpickr (Premium Date Picker)
+    wp_enqueue_style('flatpickr-css', 'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css', [], '4.6.13');
+    wp_enqueue_script('flatpickr-js', 'https://cdn.jsdelivr.net/npm/flatpickr', [], '4.6.13', true);
+    wp_enqueue_script('flatpickr-ru', 'https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js', ['flatpickr-js'], '4.6.13', true);
+
+    wp_enqueue_script('quiz-widget', get_template_directory_uri() . '/common/js/quiz-widget.js', array('jquery', 'lucide-icons', 'flatpickr-js'), '1.0.2', true);
 
 }
 add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
