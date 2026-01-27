@@ -67,7 +67,78 @@ add_action('admin_enqueue_scripts', function() {
 function crb_register_quiz_settings() {
     Container::make('theme_options', 'Quiz Builder')
         ->set_page_parent('edit.php?post_type=quiz_submission')
-        ->add_fields(array(
+        ->add_tab('Settings', array(
+            Field::make('color', 'quiz_accent_color', 'Accent Color')
+                ->set_help_text('Main color for buttons, active steps, and borders.')
+                ->set_default_value('#4A6CF7')
+                ->set_width(50),
+            
+            Field::make('separator', 'quiz_typography_sep', 'Typography & Text'),
+
+            Field::make('select', 'quiz_font_family', 'Font Family')
+                ->set_options(array(
+                    '' => 'Theme Default (Inherit)',
+                    'custom' => 'Custom Google Font',
+                    "'Inter', sans-serif" => 'Inter',
+                    "'Roboto', sans-serif" => 'Roboto',
+                    "'Open Sans', sans-serif" => 'Open Sans',
+                    "'Montserrat', sans-serif" => 'Montserrat',
+                    "'Merriweather', serif" => 'Merriweather (Serif)',
+                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" => 'System Sans',
+                ))
+                ->set_width(33),
+
+            Field::make('text', 'quiz_custom_font_name', 'Google Font Name')
+                ->set_help_text('Enter the font family name as specified in Google Fonts (e.g. "Montserrat" or "\'Open Sans\', sans-serif").')
+                ->set_width(33)
+                ->set_conditional_logic(array(
+                    array('field' => 'quiz_font_family', 'value' => 'custom', 'compare' => '='),
+                )),
+
+            Field::make('text', 'quiz_custom_font_url', 'Google Font CSS URL')
+                ->set_help_text('Paste the "href" URL from the Google Fonts embed code (starts with https://fonts.googleapis.com/css2...).')
+                ->set_width(33)
+                ->set_conditional_logic(array(
+                    array('field' => 'quiz_font_family', 'value' => 'custom', 'compare' => '='),
+                )),
+
+            Field::make('text', 'quiz_btn_prev', 'Back Button Text')
+                ->set_default_value('Back')
+                ->set_width(33),
+            
+            Field::make('text', 'quiz_btn_next', 'Next Button Text')
+                ->set_default_value('Next')
+                ->set_width(33),
+
+            Field::make('text', 'quiz_btn_submit', 'Submit Button Text')
+                ->set_default_value('Submit')
+                ->set_width(33),
+            
+            Field::make('html', 'quiz_trigger_info')
+                ->set_html('
+                    <div style="background: #fff; border-left: 4px solid #4A6CF7; padding: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); margin-bottom: 20px;">
+                        <h3 style="margin-top: 0; color: #1f2937; margin-bottom: 12px; font-size: 18px;">🚀 Quiz Launch Triggers</h3>
+                        <p style="font-size: 14px; margin-bottom: 16px; color: #4b5563; line-height: 1.5;">To launch the quiz modal from <strong>anywhere</strong> on your site (WordPress Menu, Elementor Buttons, Text Links, etc.), simply use one of the methods below:</p>
+                        
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <strong style="display: block; color: #0f172a; margin-bottom: 4px; font-size: 15px;">1. CSS Class (Best for Menus & Buttons)</strong>
+                                <span style="font-size: 13px; color: #64748b;">Add this class to "CSS Classes" field in Menu Items or Advanced tab in Page Builders.</span>
+                            </div>
+                            <code style="background: #ffffff; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; color: #d63384; font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.2s;" onclick="navigator.clipboard.writeText(\'js-open-quiz\'); this.style.borderColor=\'#10b981\'; this.innerText=\'Copied!\'; setTimeout(()=>{this.innerText=\'js-open-quiz\';this.style.borderColor=\'#cbd5e1\'}, 1500);" title="Click to copy">js-open-quiz</code>
+                        </div>
+
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <strong style="display: block; color: #0f172a; margin-bottom: 4px; font-size: 15px;">2. URL Parameter (for Links)</strong>
+                                <span style="font-size: 13px; color: #64748b;">Add this to the end of any URL to auto-open the quiz.</span>
+                            </div>
+                            <code style="background: #ffffff; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; color: #2563eb; font-size: 14px;">?open-quiz=true</code>
+                        </div>
+                    </div>
+                ')
+        ))
+        ->add_tab('Structure', array(
             Field::make('complex', 'quiz_structure', 'Quiz Steps')
                 ->set_layout('tabbed-vertical')
                 ->setup_labels(array(

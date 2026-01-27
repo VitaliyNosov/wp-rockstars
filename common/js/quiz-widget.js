@@ -19,22 +19,58 @@
                 nextBtn: document.getElementById('quiz-next-btn'),
                 submitBtn: document.getElementById('quiz-submit-btn'),
                 progressLineFill: document.getElementById('quiz-steps-line-fill'),
+                stepIndicatorsContainer: document.getElementById('quiz-steps-container'),
                 stepIndicators: document.querySelectorAll('.quiz-step-indicator-item'),
                 body: document.getElementById('quiz-body'),
                 summaryContent: document.getElementById('quiz-summary-content')
             };
 
             this.init();
+
+            // Expose globally
+            window.rockstarsQuiz = this;
         }
 
         init() {
             if (!this.dom.modal) return;
             console.log('Quiz Widget: Initializing (Dynamic)...');
             this.bindEvents();
+            this.setupTriggers();
             this.updateUI();
 
             // Initial icon check
             this.initIcons(3);
+        }
+
+        setupTriggers() {
+            // 1. CSS Class & Data Attribute (Delegation)
+            document.body.addEventListener('click', (e) => {
+                const target = e.target.closest('.js-open-quiz, [data-quiz-trigger]');
+                if (target) {
+                    e.preventDefault();
+                    let step = target.dataset.quizStep || target.dataset.step;
+                    this.open(step ? parseInt(step) : null);
+                }
+            });
+
+            // 2. URL Parameter (?open-quiz=true)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('open-quiz')) {
+                this.open();
+            }
+
+            // 3. URL Hash (#open-quiz)
+            if (window.location.hash === '#open-quiz') {
+                this.open();
+                // Optional: remove hash?
+                // history.replaceState(null, null, ' ');
+            }
+
+            // 4. Custom Event
+            window.addEventListener('open-quiz', (e) => {
+                const step = e.detail && e.detail.step ? e.detail.step : null;
+                this.open(step);
+            });
         }
 
         bindEvents() {
@@ -279,9 +315,14 @@
             }
         }
 
-        open() {
+        open(step = null) {
             this.dom.modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            if (step && step > 0 && step <= this.totalSteps) {
+                this.currentStep = parseInt(step);
+                this.updateUI();
+            }
 
             this.initIcons(5);
         }
@@ -545,6 +586,22 @@
                     } else if (stepNum === this.currentStep) {
                         el.classList.add('active');
                         el.classList.remove('completed');
+
+                        // Auto-scroll to center active step
+                        if (this.dom.stepIndicatorsContainer) {
+                            // Calculate center position
+                            const container = this.dom.stepIndicatorsContainer;
+                            const itemLeft = el.offsetLeft;
+                            const itemWidth = el.offsetWidth;
+                            const containerWidth = container.offsetWidth;
+
+                            const scrollPos = itemLeft - (containerWidth / 2) + (itemWidth / 2);
+
+                            container.scrollTo({
+                                left: scrollPos,
+                                behavior: 'smooth'
+                            });
+                        }
                     } else {
                         el.classList.remove('active', 'completed');
                     }
@@ -738,13 +795,16 @@
                     this.showSuccess();
                 } else {
                     this.showError(data.data || 'An error occurred while submitting');
-                    this.dom.submitBtn.textContent = 'Submit';
+                    this.showError(data.data || 'An error occurred while submitting');
+                    this.dom.submitBtn.textContent = this.dom.submitBtn.dataset.originalText || 'Submit';
                     this.dom.submitBtn.disabled = false;
                 }
             } catch (error) {
                 console.error('Quiz Error:', error);
                 this.showError('Network error. Please try again.');
-                this.dom.submitBtn.textContent = 'Submit';
+                console.error('Quiz Error:', error);
+                this.showError('Network error. Please try again.');
+                this.dom.submitBtn.textContent = this.dom.submitBtn.dataset.originalText || 'Submit';
                 this.dom.submitBtn.disabled = false;
             }
         }
@@ -841,12 +901,15 @@
     }
 
     // Init on DOM ready
+    // Init on DOM ready
     document.addEventListener('DOMContentLoaded', () => {
-        const quiz = new QuizWidget();
+        new QuizWidget();
 
-        // Expose to global scope for button clicks
-        window.openQuizModal = function () {
-            quiz.open();
+        // Expose to global scope for button clicks (Backward Compatibility)
+        window.openQuizModal = function (step = null) {
+            if (window.rockstarsQuiz) {
+                window.rockstarsQuiz.open(step);
+            }
         };
     });
 

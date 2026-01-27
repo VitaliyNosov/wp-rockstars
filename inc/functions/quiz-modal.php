@@ -47,11 +47,46 @@ function get_quiz_structure() {
 function render_quiz_modal_html() {
     $steps = get_quiz_structure();
     $total_steps = count($steps) + 1; // +1 for Summary step
+    
+    // Get custom accent color
+    $accent_color = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_accent_color') : '';
+    if (empty($accent_color)) $accent_color = '#4A6CF7';
+
+    // Get Typography & Text
+    $font_family = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_font_family') : '';
+    
+    // Handle Custom Font
+    if ($font_family === 'custom') {
+        $custom_font_name = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_custom_font_name') : '';
+        $custom_font_url = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_custom_font_url') : '';
+        
+        if (!empty($custom_font_url)) {
+            echo '<link rel="stylesheet" href="' . esc_url($custom_font_url) . '">';
+        }
+        
+        if (!empty($custom_font_name)) {
+            // Ensure font name is quoted if not already
+            $font_family = (strpos($custom_font_name, "'") === false && strpos($custom_font_name, '"') === false) 
+                ? "'" . $custom_font_name . "', sans-serif" 
+                : $custom_font_name;
+        } else {
+            $font_family = ''; // Fallback
+        }
+    }
+    
+    $btn_prev = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_btn_prev') : 'Back';
+    if (empty($btn_prev)) $btn_prev = 'Back';
+
+    $btn_next = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_btn_next') : 'Next';
+    if (empty($btn_next)) $btn_next = 'Next';
+
+    $btn_submit = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_btn_submit') : 'Submit';
+    if (empty($btn_submit)) $btn_submit = 'Submit';
     ?>
     <style>
         /* Quiz Modal Styles - Matching Site Theme */
         :root {
-            --quiz-primary: #4A6CF7; /* Site primary color */
+            --quiz-primary: <?php echo esc_attr($accent_color); ?>; /* Site primary color */
             --quiz-success: #10b981;
             --quiz-error: #ef4444;
             --quiz-warning: #f59e0b;
@@ -113,6 +148,9 @@ function render_quiz_modal_html() {
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             transform: scale(0.9);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            <?php if (!empty($font_family)): ?>
+            font-family: <?php echo $font_family; ?>;
+            <?php endif; ?>
         }
         
         #quiz-modal.active .quiz-container {
@@ -487,26 +525,118 @@ function render_quiz_modal_html() {
             background-color: var(--quiz-border);
             border-radius: 3px;
         }
-        /* Step Indicator Styles */
+        /* Step Indicator Styles (Scrollable) */
         .quiz-steps-wrapper {
             margin: 20px 0 24px;
-            padding: 0 10px;
+            padding: 0;
+            position: relative;
+        }
+        
+        .quiz-steps-container {
+            width: 100%;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #9CA3AF #E5E7EB; /* Firefox: Gray thumb, Light track */
+            /* Padding for shadow safety (5px), offset by margin -5px to keep grid alignment */
+            padding: 0 5px 12px;
+            margin: 0 -5px;
+            scroll-behavior: smooth;
+            scroll-snap-type: x mandatory;
+            box-sizing: content-box; 
         }
 
-        .quiz-steps-container {
-            display: flex;
-            justify-content: space-between;
+        .dark .quiz-steps-container {
+            scrollbar-color: #9CA3AF #2E3038; /* Firefox Dark: Gray thumb, Dark track */
+        }
+        
+        .quiz-steps-track {
+            /* inline-flex makes the parent grow with content, ensuring 
+               absolute children (like the line) see the full width. */
+            display: inline-flex;
+            align-items: center;
+            /* Auto-distribute if <= 8 items, cluster if > 8 */
+            justify-content: space-between; 
             position: relative;
-            max-width: 400px; /* Adjust as needed */
-            margin: 0 auto;
+            margin: 0;
+            /* Fixed gap calculated to fit ~8 items on standard modal width */
+            gap: 33px; 
+            min-width: 100%;
+            padding: 10px 0;
+            box-sizing: border-box;
+        }
+        
+        .quiz-step-indicator-item {
+            scroll-snap-align: center; 
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #D1D5DB; /* Default Grey */
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 4px var(--quiz-bg);
+            flex-shrink: 0;
+        }
+        
+        /* Custom Scrollbar (Minimalist) */
+        .quiz-steps-container::-webkit-scrollbar {
+            height: 4px; /* Thinner */
+            display: block; 
+        }
+        
+        /* Hide ALL arrows (start, end, horizontal, vertical) */
+        .quiz-steps-container::-webkit-scrollbar-button,
+        .quiz-steps-container::-webkit-scrollbar-button:start,
+        .quiz-steps-container::-webkit-scrollbar-button:end,
+        .quiz-steps-container::-webkit-scrollbar-button:decrement,
+        .quiz-steps-container::-webkit-scrollbar-button:increment {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+        
+        .quiz-steps-container::-webkit-scrollbar-track {
+            background: transparent; /* Invisible track for cleaner look */
+            border-radius: 2px;
+            margin: 0 20px; 
+        }
+
+        .quiz-steps-container::-webkit-scrollbar-thumb {
+            background-color: #4B5563; /* Darker neutral gray */
+            border-radius: 2px;
+            transition: background 0.3s;
+        }
+
+        .dark .quiz-steps-container::-webkit-scrollbar-thumb {
+            background-color: #374151; /* Dark grey thumb for dark theme */
+        }
+
+        .quiz-steps-container::-webkit-scrollbar-thumb:hover {
+            background-color: #6B7280;
+        }
+
+        /* Firefox Support */
+        .quiz-steps-container {
+            scrollbar-width: thin;
+            scrollbar-color: #4B5563 transparent;
+        }
+        .dark .quiz-steps-container {
+            scrollbar-color: #374151 transparent;
         }
 
         /* Connecting Line Background */
         .quiz-steps-line-bg {
             position: absolute;
             top: 50%;
-            left: 0;
-            right: 0;
+            /* Start/End exactly at center of first/last circles (40px -> 20px) */
+            left: 20px; 
+            right: 20px;
             height: 4px;
             background: #E5E7EB; /* Grey line */
             transform: translateY(-50%);
@@ -546,6 +676,7 @@ function render_quiz_modal_html() {
             font-size: 16px;
             transition: all 0.3s ease;
             box-shadow: 0 0 0 4px var(--quiz-bg); /* Gap around circle for line */
+            flex-shrink: 0; /* Prevent shrinking */
         }
 
         .dark .quiz-step-indicator-item {
@@ -1012,14 +1143,16 @@ function render_quiz_modal_html() {
                     </svg>
                 </button>
                 <div class="quiz-steps-wrapper">
-                    <div class="quiz-steps-container">
-                        <div class="quiz-steps-line-bg"></div>
-                        <div class="quiz-steps-line-fill" id="quiz-steps-line-fill" style="width: 0%;"></div>
-                        <?php for ($i = 1; $i <= $total_steps; $i++): ?>
-                            <div class="quiz-step-indicator-item <?php echo $i === 1 ? 'active' : ''; ?>" data-index="<?php echo $i; ?>">
-                                <?php echo $i; ?>
-                            </div>
-                        <?php endfor; ?>
+                    <div class="quiz-steps-container" id="quiz-steps-container">
+                        <div class="quiz-steps-track">
+                            <div class="quiz-steps-line-bg"></div>
+                            <div class="quiz-steps-line-fill" id="quiz-steps-line-fill" style="width: 0%;"></div>
+                            <?php for ($i = 1; $i <= $total_steps; $i++): ?>
+                                <div class="quiz-step-indicator-item <?php echo $i === 1 ? 'active' : ''; ?>" data-index="<?php echo $i; ?>">
+                                    <?php echo $i; ?>
+                                </div>
+                            <?php endfor; ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1301,9 +1434,9 @@ function render_quiz_modal_html() {
 
             <!-- Footer -->
             <div class="quiz-footer">
-                <button class="quiz-btn quiz-btn-secondary" id="quiz-prev-btn" style="display: none;">Back</button>
-                <button class="quiz-btn quiz-btn-primary" id="quiz-next-btn">Next</button>
-                <button class="quiz-btn quiz-btn-primary" id="quiz-submit-btn" style="display: none;">Submit</button>
+                <button class="quiz-btn quiz-btn-secondary" id="quiz-prev-btn" style="display: none;"><?php echo esc_html($btn_prev); ?></button>
+                <button class="quiz-btn quiz-btn-primary" id="quiz-next-btn"><?php echo esc_html($btn_next); ?></button>
+                <button class="quiz-btn quiz-btn-primary" id="quiz-submit-btn" style="display: none;" data-original-text="<?php echo esc_attr($btn_submit); ?>"><?php echo esc_html($btn_submit); ?></button>
             </div>
         </div>
     </div>
