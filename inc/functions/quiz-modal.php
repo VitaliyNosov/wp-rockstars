@@ -92,6 +92,57 @@ function render_quiz_modal_html() {
             --quiz-warning: #f59e0b;
         }
         
+        /* 
+           ==========================================================================
+           THE DEFINITIVE SCROLLBAR FIX (NO ARROWS)
+           ========================================================================== 
+        */
+
+        /* Scoped to anything inside the modal */
+        #quiz-modal *::-webkit-scrollbar {
+            width: 6px !important;
+            height: 6px !important;
+            background: transparent !important;
+        }
+
+        #quiz-modal *::-webkit-scrollbar-track {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        #quiz-modal *::-webkit-scrollbar-thumb {
+            background-color: var(--quiz-border) !important;
+            border-radius: 10px !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        #quiz-modal *::-webkit-scrollbar-thumb:hover {
+            background-color: #9CA3AF !important;
+        }
+
+        /* Definitively kill all scrollbar buttons/arrows */
+        #quiz-modal *::-webkit-scrollbar-button,
+        #quiz-modal ::-webkit-scrollbar-button,
+        #quiz-modal ::-webkit-scrollbar-button:start,
+        #quiz-modal ::-webkit-scrollbar-button:end,
+        #quiz-modal ::-webkit-scrollbar-button:decrement,
+        #quiz-modal ::-webkit-scrollbar-button:increment {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            background: transparent !important;
+        }
+
+        /* Firefox Support */
+        #quiz-modal * {
+            scrollbar-width: thin !important;
+            scrollbar-color: var(--quiz-border) transparent !important;
+        }
+
         /* Light theme (default) */
         :root {
             --quiz-bg: #ffffff;
@@ -388,20 +439,14 @@ function render_quiz_modal_html() {
         .loading-dot:nth-child(2) { animation-delay: 0.2s; }
         .loading-dot:nth-child(3) { animation-delay: 0.4s; }
         
-        /* Scrollbar */
-        .quiz-body::-webkit-scrollbar {
-            width: 6px;
+        /* Scrollbar styles moved to top of block */
+        /* Extra safety: global hide for arrows while modal is present */
+        #quiz-modal *::-webkit-scrollbar-button {
+            display: none !important;
+            height: 0 !important;
+            width: 0 !important;
         }
         
-        .quiz-body::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        
-        .quiz-body::-webkit-scrollbar-thumb {
-            background-color: var(--quiz-border);
-            border-radius: 3px;
-        }
-
         /* CUSTOM SELECT STYLES */
         .quiz-custom-select-wrapper {
             position: relative;
@@ -517,14 +562,7 @@ function render_quiz_modal_html() {
             display: none; 
         }
 
-        /* Custom scrollbar for options */
-        .quiz-custom-select__options::-webkit-scrollbar {
-            width: 6px;
-        }
-        .quiz-custom-select__options::-webkit-scrollbar-thumb {
-            background-color: var(--quiz-border);
-            border-radius: 3px;
-        }
+        /* Custom scrollbar for options - now covered by consolidated styles */
         /* Step Indicator Styles (Scrollable) */
         .quiz-steps-wrapper {
             margin: 20px 0 24px;
@@ -535,18 +573,12 @@ function render_quiz_modal_html() {
         .quiz-steps-container {
             width: 100%;
             overflow-x: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #9CA3AF #E5E7EB; /* Firefox: Gray thumb, Light track */
             /* Padding for shadow safety (5px), offset by margin -5px to keep grid alignment */
             padding: 0 5px 12px;
             margin: 0 -5px;
             scroll-behavior: smooth;
             scroll-snap-type: x mandatory;
             box-sizing: content-box; 
-        }
-
-        .dark .quiz-steps-container {
-            scrollbar-color: #9CA3AF #2E3038; /* Firefox Dark: Gray thumb, Dark track */
         }
         
         .quiz-steps-track {
@@ -584,51 +616,7 @@ function render_quiz_modal_html() {
             flex-shrink: 0;
         }
         
-        /* Custom Scrollbar (Minimalist) */
-        .quiz-steps-container::-webkit-scrollbar {
-            height: 4px; /* Thinner */
-            display: block; 
-        }
-        
-        /* Hide ALL arrows (start, end, horizontal, vertical) */
-        .quiz-steps-container::-webkit-scrollbar-button,
-        .quiz-steps-container::-webkit-scrollbar-button:start,
-        .quiz-steps-container::-webkit-scrollbar-button:end,
-        .quiz-steps-container::-webkit-scrollbar-button:decrement,
-        .quiz-steps-container::-webkit-scrollbar-button:increment {
-            display: none !important;
-            width: 0 !important;
-            height: 0 !important;
-        }
-        
-        .quiz-steps-container::-webkit-scrollbar-track {
-            background: transparent; /* Invisible track for cleaner look */
-            border-radius: 2px;
-            margin: 0 20px; 
-        }
-
-        .quiz-steps-container::-webkit-scrollbar-thumb {
-            background-color: #4B5563; /* Darker neutral gray */
-            border-radius: 2px;
-            transition: background 0.3s;
-        }
-
-        .dark .quiz-steps-container::-webkit-scrollbar-thumb {
-            background-color: #374151; /* Dark grey thumb for dark theme */
-        }
-
-        .quiz-steps-container::-webkit-scrollbar-thumb:hover {
-            background-color: #6B7280;
-        }
-
-        /* Firefox Support */
-        .quiz-steps-container {
-            scrollbar-width: thin;
-            scrollbar-color: #4B5563 transparent;
-        }
-        .dark .quiz-steps-container {
-            scrollbar-color: #374151 transparent;
-        }
+        /* Step Container Scrollbar - now covered by consolidated styles */
 
         /* Connecting Line Background */
         .quiz-steps-line-bg {

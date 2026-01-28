@@ -439,6 +439,22 @@ function quiz_handle_submission() {
     
     // Debug: Save raw POST data
     update_post_meta($post_id, '_quiz_debug_dump', print_r($_POST, true));
+
+    // Send Email Notification
+    if (function_exists('carbon_get_theme_option')) {
+        $to = carbon_get_theme_option('quiz_notification_email');
+        $subject_template = carbon_get_theme_option('quiz_notification_subject');
+        
+        if (!empty($to)) {
+            $subject = str_replace('{user_name}', $user_name, $subject_template);
+            $message = quiz_get_submission_html($post_id);
+            
+            $headers = array('Content-Type: text/html; charset=UTF-8');
+            
+            // Send to specified email(s)
+            wp_mail($to, $subject, $message, $headers);
+        }
+    }
     
     wp_send_json_success(array(
         'message' => 'Quiz submitted successfully',

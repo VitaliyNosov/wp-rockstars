@@ -138,6 +138,13 @@ function crb_register_quiz_settings() {
                     </div>
                 ')
         ))
+        ->add_tab('Notifications', array(
+            Field::make('text', 'quiz_notification_email', 'Notification Email')
+                ->set_help_text('Enter the email address(es) to receive quiz results. Separate multiple emails with commas.')
+                ->set_default_value(get_option('admin_email')),
+            Field::make('text', 'quiz_notification_subject', 'Email Subject')
+                ->set_default_value('New Quiz Submission from {user_name}'),
+        ))
         ->add_tab('Structure', array(
             Field::make('complex', 'quiz_structure', 'Quiz Steps')
                 ->set_layout('tabbed-vertical')
