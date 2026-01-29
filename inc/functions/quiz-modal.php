@@ -1001,7 +1001,7 @@ function render_quiz_modal_html() {
             content: "";
             position: absolute;
             right: 15px;
-            top: 42px;
+            top: 47px;
             width: 20px;
             height: 20px;
             pointer-events: none;
@@ -1020,9 +1020,18 @@ function render_quiz_modal_html() {
             border: 1px solid var(--quiz-border) !important;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2) !important;
         }
-        .flatpickr-day.selected {
+        .flatpickr-day.selected, .flatpickr-day.selected:hover {
             background: var(--quiz-primary) !important;
             border-color: var(--quiz-primary) !important;
+            color: white !important;
+        }
+        .flatpickr-day:hover, 
+        .flatpickr-day.prevMonthDay:hover, 
+        .flatpickr-day.nextMonthDay:hover, 
+        .flatpickr-day.today:hover {
+            background: var(--quiz-primary) !important;
+            border-color: var(--quiz-primary) !important;
+            color: #fff !important;
         }
         .flatpickr-months .flatpickr-month, 
         .flatpickr-weekdays,

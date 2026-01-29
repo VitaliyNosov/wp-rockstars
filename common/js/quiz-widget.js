@@ -187,7 +187,9 @@
             this.dom.modal.addEventListener('change', (e) => {
                 if (e.target.matches('.quiz-file-input')) {
                     const fileInput = e.target;
-                    const wrapper = fileInput.closest('.quiz-file-upload-wrapper');
+                    const wrapper = fileInput.closest('.quiz-file-container');
+                    if (!wrapper) return;
+
                     const fileNameDisplay = wrapper.querySelector('.quiz-file-name');
 
                     if (fileInput.files.length > 0) {
