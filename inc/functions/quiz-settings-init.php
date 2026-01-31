@@ -138,6 +138,29 @@ function crb_register_quiz_settings() {
                     </div>
                 ')
         ))
+        ->add_tab('Telegram', array(
+            Field::make('checkbox', 'quiz_telegram_active', 'Enable Telegram Notifications')
+                ->set_option_value('yes')
+                ->set_default_value(false),
+            
+            Field::make('text', 'quiz_telegram_token', 'Bot Token')
+                ->set_help_text('Get this from @BotFather')
+                ->set_conditional_logic(array(
+                    array('field' => 'quiz_telegram_active', 'value' => true, 'compare' => '='),
+                )),
+            
+            Field::make('text', 'quiz_telegram_chat_id', 'Chat ID')
+                ->set_help_text('User ID or Channel ID (e.g. -100xxxxxxxxxx)')
+                ->set_conditional_logic(array(
+                    array('field' => 'quiz_telegram_active', 'value' => true, 'compare' => '='),
+                )),
+
+            Field::make('text', 'quiz_telegram_subject', 'Message Header')
+                ->set_default_value('🔥 New Quiz Submission')
+                ->set_conditional_logic(array(
+                    array('field' => 'quiz_telegram_active', 'value' => true, 'compare' => '='),
+                )),
+        ))
         ->add_tab('Notifications', array(
             Field::make('text', 'quiz_notification_email', 'Notification Email')
                 ->set_help_text('Enter the email address(es) to receive quiz results. Separate multiple emails with commas.')

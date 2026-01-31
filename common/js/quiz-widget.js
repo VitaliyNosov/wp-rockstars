@@ -98,7 +98,7 @@
 
             // Input validation (Real-time)
             this.dom.modal.addEventListener('input', (e) => {
-                if (e.target.matches('.quiz-input')) {
+                if (e.target.matches('.quiz-input') && e.target.type !== 'file') {
                     this.validateField(e.target);
                 }
             });
@@ -191,30 +191,42 @@
                     if (!wrapper) return;
 
                     const fileNameDisplay = wrapper.querySelector('.quiz-file-name');
+                    const originalPlaceholder = fileInput.dataset.placeholder || 'No file selected';
 
                     if (fileInput.files.length > 0) {
-                        const fileName = fileInput.files[0].name;
-                        fileNameDisplay.textContent = fileName;
-                        wrapper.classList.add('has-file');
+                        const file = fileInput.files[0];
+                        const fileName = file.name;
 
                         // Check extension
-                        const allowed = fileInput.dataset.allowed ? fileInput.dataset.allowed.split(',').map(ext => ext.trim().toLowerCase()) : [];
+                        const allowed = (fileInput.dataset.allowed || '')
+                            .split(',')
+                            .map(ext => ext.trim().toLowerCase())
+                            .filter(ext => ext !== '');
+
                         const ext = fileName.split('.').pop().toLowerCase();
 
                         if (allowed.length > 0 && !allowed.includes(ext)) {
-                            alert('Invalid file type. Allowed: ' + allowed.join(', '));
-                            fileInput.value = '';
-                            fileNameDisplay.textContent = 'No file chosen';
-                            wrapper.classList.remove('has-file');
+                            this.showError('Invalid file type. Allowed: ' + allowed.join(', '));
+                            this.resetFileInput(fileInput, fileNameDisplay, originalPlaceholder, wrapper);
+                            return;
                         }
+
+                        // Success
+                        fileNameDisplay.textContent = fileName;
+                        wrapper.classList.add('has-file');
                     } else {
-                        fileNameDisplay.textContent = 'No file chosen';
-                        wrapper.classList.remove('has-file');
+                        this.resetFileInput(fileInput, fileNameDisplay, originalPlaceholder, wrapper);
                     }
 
                     this.validateField(fileInput);
                 }
             });
+        }
+
+        resetFileInput(input, display, placeholder, wrapper) {
+            input.value = '';
+            display.textContent = placeholder;
+            wrapper.classList.remove('has-file');
         }
 
         /**
@@ -577,6 +589,12 @@
                 this.dom.progressLineFill.style.width = progress + '%';
             }
 
+            // Update Mobile Progress Bar (CSS Variable)
+            const stepsWrapper = document.querySelector('.quiz-steps-wrapper');
+            if (stepsWrapper) {
+                stepsWrapper.style.setProperty('--mobile-progress', progress + '%');
+            }
+
             // Update Circles
             if (this.dom.stepIndicators) {
                 this.dom.stepIndicators.forEach((el, index) => {
@@ -648,6 +666,9 @@
         generateSummary() {
             let html = '';
 
+            // Track processed fields GLOBALLY to avoid duplicates across all steps
+            const processedFields = new Set();
+
             // Loop through all previous steps (1 to totalSteps - 1)
             for (let i = 1; i < this.totalSteps; i++) {
                 const stepDiv = this.dom.modal.querySelector(`.quiz-step[data-step="${i}"]`);
@@ -659,6 +680,9 @@
                 // Find all fields in this step to show them
                 // 1. Inputs (Text, Email, Textarea, Select, Range)
                 stepDiv.querySelectorAll('.quiz-input').forEach(input => {
+                    // Skip if already processed
+                    if (processedFields.has(input.name)) return;
+
                     const label = input.dataset.label || input.name;
                     const val = this.answers[input.name];
                     if (val !== undefined && val !== '') {
@@ -677,13 +701,17 @@
                         }
 
                         stepContent += `<p><strong>${this.escapeHtml(label)}:</strong> ${this.escapeHtml(displayVal)}</p>`;
+                        processedFields.add(input.name);
                     }
                 });
 
                 // 2. Radios
-                stepDiv.querySelectorAll('.quiz-radio-group, .quiz-options-grid').forEach(group => {
+                stepDiv.querySelectorAll('.quiz-radio-group').forEach(group => {
                     const input = group.querySelector('input[type="radio"]');
                     if (input) {
+                        // Skip if already processed
+                        if (processedFields.has(input.name)) return;
+
                         const name = input.name;
                         const val = this.answers[name];
                         if (val) {
@@ -702,15 +730,51 @@
                             }
 
                             stepContent += `<p><strong>${this.escapeHtml(groupLabel)}:</strong> ${this.escapeHtml(selectedLabel)}</p>`;
+                            processedFields.add(name);
                         }
                     }
                 });
 
+                // 2b. Radio Tiles (quiz-options-grid with radios)
+                stepDiv.querySelectorAll('.quiz-options-grid').forEach(group => {
+                    const input = group.querySelector('input[type="radio"]');
+                    if (input) {
+                        // Skip if already processed
+                        if (processedFields.has(input.name)) return;
+
+                        const name = input.name;
+                        const val = this.answers[name];
+                        if (val) {
+                            // Find label for value
+                            const selectedInput = group.querySelector(`input[value="${val}"]`);
+                            const selectedLabel = selectedInput ? selectedInput.dataset.label : val;
+
+                            let groupLabel = 'Choice';
+                            const labelEl = group.closest('.quiz-step').querySelector('h3');
+                            if (labelEl && labelEl.tagName === 'LABEL') groupLabel = labelEl.textContent.replace('*', '').trim();
+                            // Fallback if label is before the group
+                            if (!labelEl || labelEl.tagName !== 'LABEL') {
+                                const prevLabel = group.previousElementSibling;
+                                if (prevLabel && prevLabel.tagName === 'LABEL') groupLabel = prevLabel.textContent.replace('*', '').trim();
+                                else if (title) groupLabel = title;
+                            }
+
+                            stepContent += `<p><strong>${this.escapeHtml(groupLabel)}:</strong> ${this.escapeHtml(selectedLabel)}</p>`;
+                            processedFields.add(name);
+                        }
+                    }
+                });
+
+
                 // 3. Checkboxes
-                stepDiv.querySelectorAll('.quiz-checkbox-group, .quiz-options-grid').forEach(group => {
+                stepDiv.querySelectorAll('.quiz-checkbox-group').forEach(group => {
                     const input = group.querySelector('input[type="checkbox"]');
                     if (input) {
                         const name = input.name.replace('[]', '');
+
+                        // Skip if already processed
+                        if (processedFields.has(name)) return;
+
                         const vals = this.answers[name]; // Array
                         if (vals && vals.length > 0) {
                             let groupLabel = 'Selection';
@@ -727,24 +791,63 @@
                             }).join(', ');
 
                             stepContent += `<p><strong>${this.escapeHtml(groupLabel)}:</strong> ${this.escapeHtml(displayVals)}</p>`;
+                            processedFields.add(name);
                         }
                     }
+                });
 
-                    // 4. File uploads
-                    stepDiv.querySelectorAll('.quiz-file-input').forEach(fileInput => {
-                        const label = fileInput.dataset.label || fileInput.name;
-                        const file = fileInput.files[0];
-                        if (file) {
-                            stepContent += `<p><strong>${this.escapeHtml(label)}:</strong> ${this.escapeHtml(file.name)}</p>`;
+                // 3b. Checkbox Tiles (quiz-options-grid with checkboxes)
+                stepDiv.querySelectorAll('.quiz-options-grid').forEach(group => {
+                    const input = group.querySelector('input[type="checkbox"]');
+                    if (input) {
+                        const name = input.name.replace('[]', '');
+
+                        // Skip if already processed
+                        if (processedFields.has(name)) return;
+
+                        const vals = this.answers[name]; // Array
+                        if (vals && vals.length > 0) {
+                            let groupLabel = 'Selection';
+                            const labelEl = group.previousElementSibling;
+                            if (labelEl && labelEl.tagName === 'LABEL') groupLabel = labelEl.textContent.replace('*', '').trim();
+                            else if (title) groupLabel = title;
+
+                            // Map vals to labels
+                            const displayVals = vals.map(v => {
+                                const cb = group.querySelector(`input[value="${v}"]`);
+                                var label = v;
+                                if (cb && cb.dataset.label) label = cb.dataset.label;
+                                return label;
+                            }).join(', ');
+
+                            stepContent += `<p><strong>${this.escapeHtml(groupLabel)}:</strong> ${this.escapeHtml(displayVals)}</p>`;
+                            processedFields.add(name);
                         }
-                    });
+                    }
+                });
 
-                    // 5. Switches
-                    stepDiv.querySelectorAll('.quiz-switch-input').forEach(sw => {
-                        const label = sw.dataset.label || sw.name;
-                        const status = sw.checked ? (sw.dataset.on || 'Yes') : (sw.dataset.off || 'No');
-                        stepContent += `<p><strong>${this.escapeHtml(label)}:</strong> ${this.escapeHtml(status)}</p>`;
-                    });
+                // 4. File uploads
+                stepDiv.querySelectorAll('.quiz-file-input').forEach(fileInput => {
+                    // Skip if already processed
+                    if (processedFields.has(fileInput.name)) return;
+
+                    const label = fileInput.dataset.label || fileInput.name;
+                    const file = fileInput.files[0];
+                    if (file) {
+                        stepContent += `<p><strong>${this.escapeHtml(label)}:</strong> ${this.escapeHtml(file.name)}</p>`;
+                        processedFields.add(fileInput.name);
+                    }
+                });
+
+                // 5. Switches
+                stepDiv.querySelectorAll('.quiz-switch-input').forEach(sw => {
+                    // Skip if already processed
+                    if (processedFields.has(sw.name)) return;
+
+                    const label = sw.dataset.label || sw.name;
+                    const status = sw.checked ? (sw.dataset.on || 'Yes') : (sw.dataset.off || 'No');
+                    stepContent += `<p><strong>${this.escapeHtml(label)}:</strong> ${this.escapeHtml(status)}</p>`;
+                    processedFields.add(sw.name);
                 });
 
                 if (stepContent) {
@@ -797,13 +900,10 @@
                     this.showSuccess();
                 } else {
                     this.showError(data.data || 'An error occurred while submitting');
-                    this.showError(data.data || 'An error occurred while submitting');
                     this.dom.submitBtn.textContent = this.dom.submitBtn.dataset.originalText || 'Submit';
                     this.dom.submitBtn.disabled = false;
                 }
             } catch (error) {
-                console.error('Quiz Error:', error);
-                this.showError('Network error. Please try again.');
                 console.error('Quiz Error:', error);
                 this.showError('Network error. Please try again.');
                 this.dom.submitBtn.textContent = this.dom.submitBtn.dataset.originalText || 'Submit';

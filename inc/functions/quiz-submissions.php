@@ -134,8 +134,9 @@ function quiz_get_submission_html($post_id) {
                         $label = $field['field_label'];
                         $meta_key = '_quiz_' . $key;
                         $val = get_post_meta($post_id, $meta_key, true);
+                        $field_error = get_post_meta($post_id, $meta_key . '_error', true);
                         
-                        if ($val === '' || $val === false || $val === []) continue;
+                        if (($val === '' || $val === false || $val === []) && !$field_error) continue;
                         
                         $displayed_keys[] = $meta_key;
                         $has_data_in_step = true;
@@ -179,6 +180,13 @@ function quiz_get_submission_html($post_id) {
                         echo '<div style="background: #f1f5f9; padding: 12px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #cbd5e1;">';
                         echo '<strong style="color: #64748b; display:block; margin-bottom: 6px; font-size: 0.85em; text-transform:uppercase; letter-spacing:0.5px;">' . esc_html($label) . '</strong>';
                         
+                        // Check for error for this field
+                        if ($field_error) {
+                            echo '<div style="background: #fee2e2; color: #b91c1c; padding: 8px; border-radius: 4px; margin-bottom: 8px; font-size: 0.9em; border: 1px solid #fecaca;">';
+                            echo '<strong>Error:</strong> ' . esc_html($field_error);
+                            echo '</div>';
+                        }
+
                         // Check if it's a file link (starts with http and points to an upload)
                         if (is_string($display_value) && (strpos($display_value, 'http') === 0) && (strpos($display_value, '/uploads/') !== false)) {
                             $file_name = basename($display_value);
@@ -211,6 +219,7 @@ function quiz_get_submission_html($post_id) {
             if (strpos($key, '_quiz_') !== 0) continue;
             if (in_array($key, $system_keys)) continue;
             if (in_array($key, $displayed_keys)) continue; 
+            if (strpos($key, '_error') !== false) continue; // Skip error fields here
             
             $clean_key = str_replace('_quiz_', '', $key);
             $val = $values[0];
@@ -406,6 +415,10 @@ function quiz_handle_submission() {
     // Save All Dynamic Fields
     $exclude_keys = ['action', 'nonce', 'user_name', 'user_email'];
     
+    // Also exclude file fields (they will be handled separately via $_FILES)
+    $file_field_keys = array_keys($_FILES);
+    $exclude_keys = array_merge($exclude_keys, $file_field_keys);
+    
     foreach ($_POST as $key => $value) {
         if (in_array($key, $exclude_keys)) continue;
         
@@ -419,6 +432,7 @@ function quiz_handle_submission() {
     }
     
     // Process File Uploads
+    $attachments = array();
     if (!empty($_FILES)) {
         require_once(ABSPATH . 'wp-admin/includes/file.php');
         require_once(ABSPATH . 'wp-admin/includes/media.php');
@@ -433,12 +447,26 @@ function quiz_handle_submission() {
             if (!is_wp_error($upload_id)) {
                 $file_url = wp_get_attachment_url($upload_id);
                 update_post_meta($post_id, '_quiz_' . $key, $file_url);
+                
+                // Collect for email attachment
+                $file_path = get_attached_file($upload_id);
+                if ($file_path) {
+                    $attachments[] = $file_path;
+                }
+            } else {
+                // Log error for debugging
+                $error_message = $upload_id->get_error_message();
+                update_post_meta($post_id, '_quiz_' . $key . '_error', $error_message);
+                error_log('Quiz file upload error for key ' . $key . ': ' . $error_message);
             }
         }
     }
     
-    // Debug: Save raw POST data
-    update_post_meta($post_id, '_quiz_debug_dump', print_r($_POST, true));
+    // Debug: Save raw POST and FILES data
+    update_post_meta($post_id, '_quiz_debug_dump', print_r([
+        'POST' => $_POST,
+        'FILES' => $_FILES
+    ], true));
 
     // Send Email Notification
     if (function_exists('carbon_get_theme_option')) {
@@ -451,8 +479,123 @@ function quiz_handle_submission() {
             
             $headers = array('Content-Type: text/html; charset=UTF-8');
             
-            // Send to specified email(s)
-            wp_mail($to, $subject, $message, $headers);
+            // Send to specified email(s) with attachments
+            wp_mail($to, $subject, $message, $headers, $attachments);
+        }
+    }
+
+    // --- TELEGRAM NOTIFICATION START ---
+    if (function_exists('carbon_get_theme_option')) {
+        $tg_active = carbon_get_theme_option('quiz_telegram_active');
+        $tg_token = carbon_get_theme_option('quiz_telegram_token');
+        $tg_chat_id = carbon_get_theme_option('quiz_telegram_chat_id');
+        
+        if ($tg_active && !empty($tg_token) && !empty($tg_chat_id)) {
+            $tg_header = carbon_get_theme_option('quiz_telegram_subject') ?: '🔥 New Quiz Submission';
+            
+            // 1. Build Text Message
+            $tg_message = "<b>" . $tg_header . "</b>\n\n";
+            $tg_message .= "👤 <b>Name:</b> " . ($user_name ?: 'Anonymous') . "\n";
+            $tg_message .= "📧 <b>Email:</b> " . ($user_email ?: 'N/A') . "\n";
+            $tg_message .= "⏱ <b>Time:</b> " . $submission_time . "\n\n";
+            
+            // Add Answers
+            $structure = quiz_get_structure_helper();
+            if (!empty($structure)) {
+                foreach ($structure as $step) {
+                   $step_has_data = false;
+                   $step_text = "";
+                   
+                   if (!empty($step['step_fields'])) {
+                       foreach ($step['step_fields'] as $field) {
+                            $key = $field['field_name'];
+                            $val = get_post_meta($post_id, '_quiz_' . $key, true);
+                            
+                            // Skip empty or if it's strictly a file URL (we send files separately)
+                            // But keeping text reference is good.
+                            if ($val === '' || $val === false || $val === []) continue;
+                            
+                            $step_has_data = true;
+                            $label = strip_tags($field['field_label']);
+                            
+                            // Format Value
+                            $display_value = $val;
+                            
+                            // Map Options if available
+                             if (!empty($field['field_options'])) {
+                                 $options = [];
+                                 if (is_array($field['field_options'])) {
+                                     foreach ($field['field_options'] as $option) {
+                                         if(isset($option['option_value']) && isset($option['option_label'])) {
+                                             $options[$option['option_value']] = $option['option_label'];
+                                         }
+                                     }
+                                 } elseif (is_string($field['field_options'])) {
+                                    $lines = explode("\n", $field['field_options']);
+                                    foreach ($lines as $line) {
+                                        $parts = explode(':', $line, 2);
+                                        if(count($parts) === 2) $options[trim($parts[0])] = trim($parts[1]);
+                                        else $options[trim($line)] = trim($line);
+                                    }
+                                 }
+                                 
+                                 if (is_array($val)) {
+                                     $mapped = [];
+                                     foreach($val as $v) $mapped[] = isset($options[$v]) ? $options[$v] : $v;
+                                     $display_value = implode(', ', $mapped);
+                                 } else {
+                                     $display_value = isset($options[$val]) ? $options[$val] : $val;
+                                 }
+                             } elseif (is_array($val)) {
+                                 $display_value = implode(', ', $val);
+                             }
+                            
+                            $step_text .= "🔹 <b>" . $label . ":</b> " . strip_tags($display_value) . "\n";
+                       }
+                   }
+                   
+                   if ($step_has_data) {
+                       $tg_message .= "------------- " . strip_tags($step['step_title']) . " -------------\n";
+                       $tg_message .= $step_text . "\n";
+                   }
+                }
+            }
+            
+            $tg_message .= "\n🔗 <a href='" . admin_url('post.php?post='.$post_id.'&action=edit') . "'>View in Admin Panel</a>";
+
+            // 2. Send Text
+            $api_url = "https://api.telegram.org/bot$tg_token/";
+            wp_remote_post($api_url . "sendMessage", [
+                'body' => [
+                    'chat_id' => $tg_chat_id,
+                    'text' => $tg_message,
+                    'parse_mode' => 'HTML',
+                    'disable_web_page_preview' => 'true'
+                ]
+            ]);
+            
+            // 3. Send Files
+            if (!empty($attachments)) {
+                foreach ($attachments as $file_path) {
+                    if (file_exists($file_path)) {
+                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                        $mime_type = finfo_file($finfo, $file_path);
+                        finfo_close($finfo);
+                        
+                        $cfile = new CURLFile($file_path, $mime_type, basename($file_path));
+                        
+                        $ch = curl_init($api_url . "sendDocument");
+                        curl_setopt($ch, CURLOPT_POST, 1);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, [
+                            'chat_id' => $tg_chat_id,
+                            'document' => $cfile
+                        ]);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        curl_exec($ch);
+                        curl_close($ch);
+                    }
+                }
+            }
         }
     }
     

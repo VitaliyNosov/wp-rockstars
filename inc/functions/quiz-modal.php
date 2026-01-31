@@ -1041,6 +1041,44 @@ function render_quiz_modal_html() {
         .flatpickr-innerContainer, .flatpickr-rContainer {
             background: transparent !important;
         }
+
+        /* Mobile Progress Bar - Clean Linear Style */
+        @media (max-width: 768px) {
+            /* Hide numbered step indicators on mobile */
+            .quiz-steps-container {
+                display: none !important;
+            }
+            
+            /* Wrapper becomes the progress bar container */
+            .quiz-steps-wrapper {
+                margin: 30px 0 24px;
+                padding: 0;
+                position: relative;
+                height: 8px;
+                background: var(--quiz-border);
+                border-radius: 4px;
+                overflow: hidden;
+            }
+            
+            /* Dark theme background */
+            .dark .quiz-steps-wrapper {
+                background: #2E3038;
+            }
+            
+            /* Progress fill bar */
+            .quiz-steps-wrapper::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: var(--mobile-progress, 0%);
+                background: var(--quiz-primary);
+                border-radius: 4px;
+                transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                box-shadow: 0 0 8px rgba(74, 108, 247, 0.4);
+            }
+        }
     </style>
     
     <script>
@@ -1350,6 +1388,7 @@ function render_quiz_modal_html() {
                                                name="<?php echo esc_attr($field_name); ?>"
                                                data-label="<?php echo esc_attr($field['field_label']); ?>"
                                                data-allowed="<?php echo esc_attr($field['field_file_types']); ?>"
+                                               data-max-size="<?php echo esc_attr(!empty($field['field_max_size']) ? $field['field_max_size'] : '2'); ?>"
                                                <?php echo $is_required; ?>>
                                     </div>
                                     <?php if (!empty($field['field_file_types'])): ?>
