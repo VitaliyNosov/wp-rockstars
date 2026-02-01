@@ -232,10 +232,12 @@ function quiz_get_submission_html($post_id) {
             $orphan_content .= '</div>';
         }
         
+        /*
         if (!empty($orphan_content)) {
             echo '<h5 style="color: #ef4444; margin: 25px 0 10px 0; border-top: 1px dashed #fecaca; padding-top: 15px;">⚠️ Additional Data (Not in current Quiz Structure)</h5>';
             echo $orphan_content;
         }
+        */
         
         ?>
     </div>
@@ -370,21 +372,89 @@ function quiz_process_submission($data, $files = []) {
     
     // Save All Dynamic Fields
     $exclude_keys = ['action', 'nonce', 'user_name', 'user_email'];
+    // error_log("Quiz Raw Data: " . print_r($data, true));
+    $attachments = array(); // Initialize early for base64 files
     
     foreach ($data as $key => $value) {
         if (in_array($key, $exclude_keys)) continue;
         
-        if (is_array($value)) {
+        // Handle Base64 Uploads from GraphQL
+        if (is_string($value) && strpos($value, 'data:') === 0 && strpos($value, 'base64,') !== false) {
+             // Debug log (can be seen in PHP error log)
+             error_log("Quiz: Processing base64 field '$key'");
+             
+             $parts = explode('base64,', $value);
+             if (count($parts) === 2) {
+                 $header = $parts[0];
+                 $base64_data = $parts[1];
+                 
+                 // Extract mime
+                 $mime = 'application/octet-stream';
+                 if (preg_match('/data:([^;]+)/', $header, $mime_matches)) {
+                     $mime = $mime_matches[1];
+                 }
+                 
+                 // Extract filename
+                 $filename = 'upload_' . time();
+                 if (preg_match('/(?:name|filename):([^;]+)/', $header, $name_matches)) {
+                     $filename = $name_matches[1];
+                 }
+                 
+                 error_log("Quiz: Filename: $filename, Mime: $mime");
+
+                 $file_content = base64_decode($base64_data);
+                 if ($file_content) {
+                     $upload_dir = wp_upload_dir();
+                     $temp_file = $upload_dir['path'] . '/' . wp_unique_filename($upload_dir['path'], $filename);
+                     file_put_contents($temp_file, $file_content);
+                     
+                     $file_array = [
+                         'name' => $filename,
+                         'type' => $mime,
+                         'tmp_name' => $temp_file,
+                         'error' => 0,
+                         'size' => strlen($file_content)
+                     ];
+                     
+                     require_once(ABSPATH . 'wp-admin/includes/file.php');
+                     require_once(ABSPATH . 'wp-admin/includes/media.php');
+                     require_once(ABSPATH . 'wp-admin/includes/image.php');
+                     
+                     $upload_id = media_handle_sideload($file_array, $post_id);
+                     if (!is_wp_error($upload_id)) {
+                         $clean_val = wp_get_attachment_url($upload_id);
+                         $file_path = get_attached_file($upload_id);
+                         if ($file_path) {
+                             $attachments[] = $file_path;
+                         }
+                         error_log("Quiz: Sideload success. URL: $clean_val");
+                     } else {
+                         @unlink($temp_file);
+                         $clean_val = 'Error uploading: ' . $upload_id->get_error_message();
+                         error_log("Quiz: Sideload error: " . $upload_id->get_error_message());
+                     }
+                 } else {
+                     $clean_val = 'Error: Invalid base64 data';
+                     error_log("Quiz: Base64 decode failed");
+                 }
+             } else {
+                 $clean_val = sanitize_textarea_field($value);
+             }
+        } elseif (is_array($value)) {
             $clean_val = array_map('sanitize_text_field', $value);
         } else {
             $clean_val = sanitize_textarea_field($value);
         }
         
+        // Prevent saving the infamous "[object File]" string
+        if ($clean_val === '[object File]') {
+            $clean_val = '(File data received, waiting for processing...)';
+        }
+        
         update_post_meta($post_id, '_quiz_' . $key, $clean_val);
     }
     
-    // Process File Uploads (Only if provided via $_FILES style array)
-    $attachments = array();
+    // Process File Uploads (Existing AJAX handler support)
     if (!empty($files)) {
         require_once(ABSPATH . 'wp-admin/includes/file.php');
         require_once(ABSPATH . 'wp-admin/includes/media.php');

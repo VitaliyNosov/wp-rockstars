@@ -3,6 +3,7 @@ import '../styles/style.sass';
 import '../styles/common/style.css';
 import '../styles/tailwind.css';
 import '../styles/style-mod.sass';
+import '../styles/Quiz.scss';
 import Layout from '../components/Layout';
 import Script from 'next/script';
 import { useEffect } from 'react';
@@ -96,7 +97,11 @@ function MyApp({ Component, pageProps }) {
       />
       <link
         rel="stylesheet"
-        href="https://cdn.plyr.io/3.7.8/plyr.css"
+        href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css"
+      />
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
       />
 
       {/* External JS Libraries */}
@@ -150,6 +155,16 @@ function MyApp({ Component, pageProps }) {
 
       <Script
         src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"
+        strategy="lazyOnload"
+      />
+
+      {/* Flatpickr */}
+      <Script
+        src="https://cdn.jsdelivr.net/npm/flatpickr"
+        strategy="lazyOnload"
+      />
+      <Script
+        src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"
         strategy="lazyOnload"
       />
 

@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 import client from '../lib/apolloClient';
+import { fetchQuizSettings } from '../lib/quiz';
 import HeroSection from '../components/HeroSection';
 import FeaturesSection from '../components/FeaturesSection';
 import VideoSection from '../components/VideoSection';
@@ -10,11 +11,13 @@ import BenefitsSection from '../components/BenefitsSection';
 import TestimonialsSection from '../components/TestimonialsSection';
 import PricingSection from '../components/PricingSection';
 import BlogSection from '../components/BlogSection';
+import { QuizProvider } from '../components/Quiz/QuizContext';
+import QuizModal from '../components/Quiz/QuizModal';
 import ContactSection from '../components/ContactSection';
 
-export default function Home({ heroData, featuresData, videoData, brandsData, portfolioData, aboutData, benefitsData, testimonialsData, pricingData, blogPosts }) {
+export default function Home({ heroData, featuresData, videoData, brandsData, portfolioData, aboutData, benefitsData, testimonialsData, pricingData, blogPosts, quizSettings }) {
   return (
-    <>
+    <QuizProvider settings={quizSettings}>
       <HeroSection
         title={heroData?.title}
         description={heroData?.description}
@@ -79,7 +82,9 @@ export default function Home({ heroData, featuresData, videoData, brandsData, po
         posts={blogPosts}
       />
       <ContactSection />
-    </>
+
+      <QuizModal />
+    </QuizProvider>
   );
 }
 
@@ -222,6 +227,9 @@ export async function getServerSideProps() {
       author: post.author,
     })) || [];
 
+    // Fetch Quiz Settings
+    const quizSettings = await fetchQuizSettings(client);
+
     return {
       props: {
         heroData: data?.nodeByUri?.heroSection || null,
@@ -234,6 +242,7 @@ export async function getServerSideProps() {
         testimonialsData: data?.testimonialsSection || null,
         pricingData: data?.pricingSection || null,
         blogPosts: posts,
+        quizSettings: quizSettings,
       },
     };
   } catch (error) {
@@ -250,6 +259,7 @@ export async function getServerSideProps() {
         testimonialsData: null,
         pricingData: null,
         blogPosts: [],
+        quizSettings: null,
       },
     };
   }

@@ -506,6 +506,7 @@
             // Save Inputs (Text, Email, Textarea, Select)
             const inputs = activeStep.querySelectorAll('.quiz-input');
             inputs.forEach(input => {
+                if (input.type === 'file') return;
                 this.answers[input.name] = input.value;
                 this.labels[input.name] = input.dataset.label || input.name;
 

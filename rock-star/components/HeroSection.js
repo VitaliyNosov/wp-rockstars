@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { useQuiz } from './Quiz/QuizContext';
 
 const HeroSection = ({
     title,
@@ -9,6 +10,7 @@ const HeroSection = ({
     button2Text,
     button2Url
 }) => {
+    const { openQuiz } = useQuiz();
     return (
         <section id="home" className="relative overflow-hidden z-10 pt-[120px] pb-[110px] md:pt-[150px] md:pb-[120px] xl:pt-[180px] xl:pb-[160px] 2xl:pt-[210px] 2xl:pb-[200px] bg-white dark:bg-dark">
             <div className="container">
@@ -34,6 +36,13 @@ const HeroSection = ({
                                         {button1Text}
                                     </Link>
                                 )}
+
+                                <button
+                                    onClick={() => openQuiz(1)}
+                                    className="text-base font-semibold text-white bg-blue-600 py-4 px-8 hover:bg-opacity-80 mx-2 rounded-md transition duration-300 ease-in-out shadow-lg"
+                                >
+                                    Take the Quiz
+                                </button>
 
                                 {button2Text && button2Url && (
                                     <Link href={button2Url} className="text-base font-semibold text-black bg-black bg-opacity-10 dark:text-white dark:bg-white dark:bg-opacity-10 py-4 px-8 hover:bg-opacity-20 dark:hover:bg-opacity-20 mx-2 rounded-md transition duration-300 ease-in-out">

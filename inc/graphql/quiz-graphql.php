@@ -26,15 +26,22 @@ function register_quiz_graphql_logic() {
             'placeholder' => [ 'type' => 'String' ],
             'required'    => [ 'type' => 'Boolean' ],
             'options'     => [ 'type' => [ 'list_of' => 'QuizFieldOption' ] ],
+            'rows'        => [ 'type' => 'Int' ],
+            'fileTypes'   => [ 'type' => 'String' ],
+            'maxSize'     => [ 'type' => 'String' ],
             'min'         => [ 'type' => 'String' ],
             'max'         => [ 'type' => 'String' ],
             'step'        => [ 'type' => 'String' ],
-            'defaultValue' => [ 'type' => 'String' ],
             'prefix'      => [ 'type' => 'String' ],
             'suffix'      => [ 'type' => 'String' ],
-            'fileTypes'   => [ 'type' => 'String' ],
+            'defaultValue' => [ 'type' => 'String' ],
+            'mask'        => [ 'type' => 'String' ],
+            'onLabel'     => [ 'type' => 'String' ],
+            'offLabel'    => [ 'type' => 'String' ],
+            'defaultState' => [ 'type' => 'Boolean' ],
             'purpose'     => [ 'type' => 'String' ],
             'content'     => [ 'type' => 'String' ],
+            'layout'      => [ 'type' => 'String' ],
         ]
     ] );
 
@@ -52,6 +59,7 @@ function register_quiz_graphql_logic() {
             'btnPrev'     => [ 'type' => 'String' ],
             'btnNext'     => [ 'type' => 'String' ],
             'btnSubmit'   => [ 'type' => 'String' ],
+            'fontFamily'  => [ 'type' => 'String' ],
             'steps'       => [ 'type' => [ 'list_of' => 'QuizStep' ] ],
             'nonce'       => [ 'type' => 'String' ],
         ]
@@ -83,22 +91,31 @@ function register_quiz_graphql_logic() {
                                     ];
                                 }
                             }
+                            $field_type = $f['_type'] ?? ($f['type'] ?? '');
+                            if ( empty( $field_type ) ) continue; // Skip invalid fields
+
                             $fields[] = [
-                                'type'        => $f['_type'] ?? '',
+                                'type'        => $field_type,
                                 'label'       => $f['field_label'] ?? '',
                                 'name'        => $f['field_name'] ?? '',
                                 'placeholder' => $f['field_placeholder'] ?? '',
                                 'required'    => ! empty( $f['field_required'] ),
                                 'options'     => $opts,
+                                'rows'        => $f['field_rows'] ?? 4,
+                                'fileTypes'   => $f['field_file_types'] ?? '',
                                 'min'         => $f['field_min'] ?? '',
                                 'max'         => $f['field_max'] ?? '',
                                 'step'        => $f['field_step'] ?? '',
                                 'defaultValue' => $f['field_default'] ?? '',
                                 'prefix'      => $f['field_prefix'] ?? '',
                                 'suffix'      => $f['field_suffix'] ?? '',
-                                'fileTypes'   => $f['field_file_types'] ?? '',
+                                'mask'        => $f['field_mask'] ?? '',
+                                'onLabel'     => $f['field_on_label'] ?? '',
+                                'offLabel'    => $f['field_off_label'] ?? '',
+                                'defaultState' => ! empty( $f['field_default_state'] ),
                                 'purpose'     => $f['field_purpose'] ?? '',
                                 'content'     => $f['field_content'] ?? '',
+                                'layout'      => $f['field_layout'] ?? 'list',
                             ];
                         }
                     }
@@ -115,6 +132,7 @@ function register_quiz_graphql_logic() {
                 'btnPrev'     => carbon_get_theme_option( 'quiz_btn_prev' ) ?: 'Back',
                 'btnNext'     => carbon_get_theme_option( 'quiz_btn_next' ) ?: 'Next',
                 'btnSubmit'   => carbon_get_theme_option( 'quiz_btn_submit' ) ?: 'Submit',
+                'fontFamily'  => carbon_get_theme_option( 'quiz_font_family' ) ?: '',
                 'steps'       => $steps,
                 'nonce'       => wp_create_nonce( 'quiz_nonce' ),
             ];
@@ -140,38 +158,46 @@ function register_quiz_graphql_logic() {
             'submissionId' => [ 'type' => 'Int' ],
         ],
         'mutateAndGetPayload' => function( $input, $context, $info ) {
-            $answers = $input['answers'] ?? [];
-            $nonce = $input['nonce'] ?? '';
+            try {
+                $answers = $input['answers'] ?? [];
+                $nonce = $input['nonce'] ?? '';
 
-            if ( ! wp_verify_nonce( $nonce, 'quiz_nonce' ) ) {
-                return [ 'success' => false, 'message' => 'Security check failed' ];
-            }
-
-            // Transform answers list to associative array (handling multiple values for same key)
-            $data = [];
-            foreach ( $answers as $ans ) {
-                $name = $ans['name'] ?? '';
-                $val  = $ans['value'] ?? '';
-                if ( isset( $data[$name] ) ) {
-                    if ( ! is_array( $data[$name] ) ) {
-                        $data[$name] = [ $data[$name] ];
-                    }
-                    $data[$name][] = $val;
-                } else {
-                    $data[$name] = $val;
+                if ( ! wp_verify_nonce( $nonce, 'quiz_nonce' ) ) {
+                    return [ 'success' => false, 'message' => 'Security check failed (Invalid Nonce)' ];
                 }
-            }
 
-            if ( function_exists( 'quiz_process_submission' ) ) {
-                $res = quiz_process_submission( $data );
-                return [
-                    'success' => $res['success'],
-                    'message' => $res['success'] ? 'Quiz submitted successfully' : ($res['message'] ?? 'Unknown error'),
-                    'submissionId' => $res['submission_id'] ?? 0,
+                // Transform answers list to associative array (handling multiple values for same key)
+                $data = [];
+                foreach ( $answers as $ans ) {
+                    $name = $ans['name'] ?? '';
+                    $val  = $ans['value'] ?? '';
+                    if ( isset( $data[$name] ) ) {
+                        if ( ! is_array( $data[$name] ) ) {
+                            $data[$name] = [ $data[$name] ];
+                        }
+                        $data[$name][] = $val;
+                    } else {
+                        $data[$name] = $val;
+                    }
+                }
+
+                if ( function_exists( 'quiz_process_submission' ) ) {
+                    $res = quiz_process_submission( $data );
+                    return [
+                        'success' => $res['success'],
+                        'message' => $res['success'] ? 'Quiz submitted successfully' : ($res['message'] ?? 'Unknown error from submission handler'),
+                        'submissionId' => $res['submission_id'] ?? 0,
+                    ];
+                }
+
+                return [ 'success' => false, 'message' => 'Internal error: quiz_process_submission function not found' ];
+
+            } catch ( \Throwable $e ) {
+                return [ 
+                    'success' => false, 
+                    'message' => 'Server Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine()
                 ];
             }
-
-            return [ 'success' => false, 'message' => 'Internal error: processor not found' ];
         }
     ] );
 
