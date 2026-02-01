@@ -5,7 +5,7 @@ use Carbon_Fields\Field;
 /**
  * Get Popular Lucide Icons for Digital Agency
  */
-function rockstars_get_quiz_icons() {
+function quiz_p_get_icons() {
     return array(
         '' => 'No Icon',
         'layout' => 'Layout (Web Design)',
@@ -49,23 +49,15 @@ function rockstars_get_quiz_icons() {
     );
 }
 
-add_action('carbon_fields_register_fields', 'crb_register_quiz_settings');
+add_action('carbon_fields_register_fields', 'quiz_p_register_settings');
+
 
 /**
- * Enqueue Admin Scripts for Quiz Builder
+ * Quiz Settings (Carbon Fields)
  */
-add_action('admin_enqueue_scripts', function() {
-    wp_enqueue_script('lucide-icons', 'https://unpkg.com/lucide@latest', array(), null, true);
-    wp_enqueue_script('quiz-admin-js', get_template_directory_uri() . '/common/js/quiz-admin.js', array('jquery'), '1.0.1', true);
-    
-    // Pass icon list to JS
-    wp_localize_script('quiz-admin-js', 'quizIconData', array(
-        'icons' => rockstars_get_quiz_icons()
-    ));
-});
 
-function crb_register_quiz_settings() {
-    Container::make('theme_options', 'Quiz Builder')
+function quiz_p_register_settings() {
+    Container::make('theme_options', 'Quiz Plugin Settings')
         ->set_page_parent('edit.php?post_type=quiz_submission')
         ->add_tab('Settings', array(
             Field::make('color', 'quiz_accent_color', 'Accent Color')
@@ -257,7 +249,7 @@ function crb_register_quiz_settings() {
                                     Field::make('text', 'option_value', 'Value')->set_required(true)->set_width(50),
                                     Field::make('text', 'option_label', 'Label')->set_required(true)->set_width(50),
                                     Field::make('select', 'option_icon', 'Icon')
-                                        ->set_options('rockstars_get_quiz_icons')
+                                        ->set_options('quiz_p_get_icons')
                                         ->set_width(50),
                                     Field::make('image', 'option_image', 'Image')
                                         ->set_value_type('url')
@@ -291,7 +283,7 @@ function crb_register_quiz_settings() {
                                     Field::make('text', 'option_value', 'Value')->set_required(true)->set_width(50),
                                     Field::make('text', 'option_label', 'Label')->set_required(true)->set_width(50),
                                     Field::make('select', 'option_icon', 'Icon')
-                                        ->set_options('rockstars_get_quiz_icons')
+                                        ->set_options('quiz_p_get_icons')
                                         ->set_width(50),
                                     Field::make('image', 'option_image', 'Image')
                                         ->set_value_type('url')
@@ -402,27 +394,4 @@ function crb_register_quiz_settings() {
         ));
 }
 
-add_action('admin_head', 'quiz_admin_styles');
-function quiz_admin_styles() {
-    ?>
-    <style>
-        /* Exact CSS numbering based on provided HTML structure */
-        
-        /* 1. Reset counter on the UL container */
-        .cf-complex__tabs-list {
-            counter-reset: quiz-step-counter;
-        }
 
-        /* 2. Increment counter on each LI item */
-        .cf-complex__tabs-item {
-            counter-increment: quiz-step-counter;
-        }
-        
-        /* 3. Simply append the number to existing "Step" text */
-        /* No hiding, no custom colors - just native styles */
-        .cf-complex__tabs-title:after {
-            content: " " counter(quiz-step-counter);
-        }
-    </style>
-    <?php
-}

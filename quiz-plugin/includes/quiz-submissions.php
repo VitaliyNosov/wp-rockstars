@@ -4,7 +4,7 @@
  */
 
 // 1. Register Custom Post Type 'Quiz Submission'
-function quiz_register_post_type() {
+function quiz_p_register_post_type() {
     $args = array(
         'labels' => array(
             'name' => 'Quiz Submissions',
@@ -37,21 +37,48 @@ function quiz_register_post_type() {
     );
     register_post_type('quiz_submission', $args);
 }
-add_action('init', 'quiz_register_post_type');
+add_action('init', 'quiz_p_register_post_type');
 
 // Helper to get structure
-function quiz_get_structure_helper() {
-    $structure = [];
-    if (function_exists('get_quiz_structure')) {
-        $structure = get_quiz_structure();
-    } elseif (function_exists('carbon_get_theme_option')) {
-         $structure = carbon_get_theme_option('quiz_structure');
+function quiz_p_get_structure() {
+    // 1. Try Carbon Fields
+    if (function_exists('carbon_get_theme_option')) {
+        $structure = carbon_get_theme_option('quiz_structure');
+        if (!empty($structure)) {
+            return $structure;
+        }
     }
-    return $structure;
+
+    // 2. Default Fallback
+    return array(
+        array(
+            '_type' => 'step',
+            'step_title' => 'Personal Information',
+            'step_description' => 'Tell us about yourself',
+            'step_fields' => array(
+                array(
+                    '_type' => 'text',
+                    'field_label' => 'Your Name *',
+                    'field_name' => 'user_name',
+                    'field_placeholder' => 'Enter your name',
+                    'field_required' => true,
+                    'field_purpose' => 'name',
+                ),
+                array(
+                    '_type' => 'email',
+                    'field_label' => 'Email *',
+                    'field_name' => 'user_email',
+                    'field_placeholder' => 'your@email.com',
+                    'field_required' => true,
+                    'field_purpose' => 'email',
+                )
+            )
+        )
+    );
 }
 
 // 2. Add custom columns to admin list
-function quiz_custom_columns($columns) {
+function quiz_p_custom_columns($columns) {
     $new_columns = array(
         'cb' => $columns['cb'],
         'title' => 'Submission',
@@ -62,10 +89,10 @@ function quiz_custom_columns($columns) {
     );
     return $new_columns;
 }
-add_filter('manage_quiz_submission_posts_columns', 'quiz_custom_columns');
+add_filter('manage_quiz_submission_posts_columns', 'quiz_p_custom_columns');
 
 // 3. Fill custom columns with data
-function quiz_column_content($column, $post_id) {
+function quiz_p_column_content($column, $post_id) {
     if ($column === 'user_name') {
         echo esc_html(get_post_meta($post_id, '_quiz_user_name', true));
     }
@@ -76,27 +103,27 @@ function quiz_column_content($column, $post_id) {
         echo '<button type="button" class="button button-small open-quiz-modal" data-id="' . $post_id . '"><span class="dashicons dashicons-visibility" style="vertical-align: text-top; color: #444;"></span> View Details</button>';
     }
 }
-add_action('manage_quiz_submission_posts_custom_column', 'quiz_column_content', 10, 2);
+add_action('manage_quiz_submission_posts_custom_column', 'quiz_p_column_content', 10, 2);
 
 // 4. Add meta box to show quiz details in admin
-function quiz_meta_box() {
+function quiz_p_meta_box() {
     add_meta_box(
         'quiz-details',
         'Quiz Details',
-        'quiz_meta_box_callback',
+        'quiz_p_meta_box_callback',
         'quiz_submission',
         'normal',
         'high'
     );
 }
-add_action('add_meta_boxes', 'quiz_meta_box');
+add_action('add_meta_boxes', 'quiz_p_meta_box');
 
-function quiz_meta_box_callback($post) {
-    echo quiz_get_submission_html($post->ID);
+function quiz_p_meta_box_callback($post) {
+    echo quiz_p_get_submission_html($post->ID);
 }
 
 // SHARED RENDER LOGIC (Used by MetaBox and AJAX Modal)
-function quiz_get_submission_html($post_id) {
+function quiz_p_get_submission_html($post_id) {
     $user_name = get_post_meta($post_id, '_quiz_user_name', true);
     $user_email = get_post_meta($post_id, '_quiz_user_email', true);
     $submission_time = get_post_meta($post_id, '_quiz_submission_time', true);
@@ -118,7 +145,7 @@ function quiz_get_submission_html($post_id) {
         <h4 style="color: #3b82f6; border-bottom: 2px solid #3b82f6; padding-bottom: 8px; margin-bottom: 15px; margin-top: 20px; font-size: 1.2em;">📋 Quiz Responses</h4>
         
         <?php
-        $structure = quiz_get_structure_helper();
+        $structure = quiz_p_get_structure();
         $displayed_keys = [];
 
         // 1. PRIMARY LOOP
@@ -244,61 +271,24 @@ function quiz_get_submission_html($post_id) {
 }
 
 // 7. AJAX Handler for Quick View
-function quiz_ajax_get_details() {
+function quiz_p_ajax_get_details() {
     // Basic formatting for AJAX response
     $id = intval($_POST['id']);
     if (!$id || get_post_type($id) !== 'quiz_submission') {
         wp_send_json_error('Invalid ID');
     }
     
-    $html = quiz_get_submission_html($id);
+    $html = quiz_p_get_submission_html($id);
     wp_send_json_success($html);
 }
-add_action('wp_ajax_quiz_get_details', 'quiz_ajax_get_details');
+add_action('wp_ajax_quiz_p_get_details', 'quiz_p_ajax_get_details');
 
 // 8. Admin Footer Scripts
-function quiz_admin_footer_scripts() {
+function quiz_p_admin_footer_scripts() {
     $screen = get_current_screen();
     if ($screen->post_type !== 'quiz_submission') return;
     ?>
-    <style>
-        /* Simple Admin Modal */
-        #quiz-admin-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 100000;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(2px);
-        }
-        #quiz-admin-modal.active { display: flex; }
-        .quiz-admin-modal-content {
-            background: #fff;
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            position: relative;
-        }
-        .quiz-admin-modal-body {
-            /* Content injected here */
-        }
-        .quiz-admin-close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 30px;
-            color: #333;
-            cursor: pointer;
-            z-index: 10;
-            opacity: 0.6;
-        }
-        .quiz-admin-close:hover { opacity: 1; }
-    </style>
+
     
     <div id="quiz-admin-modal">
         <div class="quiz-admin-modal-content">
@@ -319,7 +309,7 @@ function quiz_admin_footer_scripts() {
             modal.addClass('active');
             
             $.post(ajaxurl, {
-                action: 'quiz_get_details',
+                action: 'quiz_p_get_details',
                 id: id
             }, function(response) {
                 if (response.success) {
@@ -339,13 +329,13 @@ function quiz_admin_footer_scripts() {
     </script>
     <?php
 }
-add_action('admin_footer', 'quiz_admin_footer_scripts');
+add_action('admin_footer', 'quiz_p_admin_footer_scripts');
 
 // 5. AJAX handler for quiz submission (Keep existing)
-function quiz_handle_submission() {
+function quiz_p_handle_submission() {
     
     // Check nonce
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'quiz_nonce')) {
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'quiz_p_nonce')) {
         wp_send_json_error('Security check failed');
     }
     
@@ -475,7 +465,7 @@ function quiz_handle_submission() {
         
         if (!empty($to)) {
             $subject = str_replace('{user_name}', $user_name, $subject_template);
-            $message = quiz_get_submission_html($post_id);
+            $message = quiz_p_get_submission_html($post_id);
             
             $headers = array('Content-Type: text/html; charset=UTF-8');
             
@@ -494,13 +484,13 @@ function quiz_handle_submission() {
             $tg_header = carbon_get_theme_option('quiz_telegram_subject') ?: '🔥 New Quiz Submission';
             
             // 1. Build Text Message
-            $tg_message = "<b>" . $tg_header . "</b>\n\n";
-            $tg_message .= "👤 <b>Name:</b> " . ($user_name ?: 'Anonymous') . "\n";
-            $tg_message .= "📧 <b>Email:</b> " . ($user_email ?: 'N/A') . "\n";
-            $tg_message .= "⏱ <b>Time:</b> " . $submission_time . "\n\n";
+            $tg_message = "<b>" . htmlspecialchars($tg_header) . "</b>\n\n";
+            $tg_message .= "👤 <b>Name:</b> " . htmlspecialchars($user_name ?: 'Anonymous') . "\n";
+            $tg_message .= "📧 <b>Email:</b> " . htmlspecialchars($user_email ?: 'N/A') . "\n";
+            $tg_message .= "⏱ <b>Time:</b> " . htmlspecialchars($submission_time) . "\n\n";
             
             // Add Answers
-            $structure = quiz_get_structure_helper();
+            $structure = quiz_p_get_structure();
             if (!empty($structure)) {
                 foreach ($structure as $step) {
                    $step_has_data = false;
@@ -511,8 +501,6 @@ function quiz_handle_submission() {
                             $key = $field['field_name'];
                             $val = get_post_meta($post_id, '_quiz_' . $key, true);
                             
-                            // Skip empty or if it's strictly a file URL (we send files separately)
-                            // But keeping text reference is good.
                             if ($val === '' || $val === false || $val === []) continue;
                             
                             $step_has_data = true;
@@ -521,7 +509,6 @@ function quiz_handle_submission() {
                             // Format Value
                             $display_value = $val;
                             
-                            // Map Options if available
                              if (!empty($field['field_options'])) {
                                  $options = [];
                                  if (is_array($field['field_options'])) {
@@ -550,12 +537,13 @@ function quiz_handle_submission() {
                                  $display_value = implode(', ', $val);
                              }
                             
-                            $step_text .= "🔹 <b>" . $label . ":</b> " . strip_tags($display_value) . "\n";
+                            $tg_message_val = is_string($display_value) ? strip_tags($display_value) : print_r($display_value, true);
+                            $step_text .= "🔹 <b>" . htmlspecialchars($label) . ":</b> " . htmlspecialchars($tg_message_val) . "\n";
                        }
                    }
                    
                    if ($step_has_data) {
-                       $tg_message .= "------------- " . strip_tags($step['step_title']) . " -------------\n";
+                       $tg_message .= "------------- " . htmlspecialchars(strip_tags($step['step_title'])) . " -------------\n";
                        $tg_message .= $step_text . "\n";
                    }
                 }
@@ -565,7 +553,7 @@ function quiz_handle_submission() {
 
             // 2. Send Text
             $api_url = "https://api.telegram.org/bot$tg_token/";
-            wp_remote_post($api_url . "sendMessage", [
+            $tg_response = wp_remote_post($api_url . "sendMessage", [
                 'body' => [
                     'chat_id' => $tg_chat_id,
                     'text' => $tg_message,
@@ -573,6 +561,15 @@ function quiz_handle_submission() {
                     'disable_web_page_preview' => 'true'
                 ]
             ]);
+
+            if (is_wp_error($tg_response)) {
+                error_log('Quiz Plugin: Telegram Error - ' . $tg_response->get_error_message());
+            } else {
+                $status_code = wp_remote_retrieve_response_code($tg_response);
+                if ($status_code !== 200) {
+                    error_log('Quiz Plugin: Telegram API Response Error (' . $status_code . ') - ' . wp_remote_retrieve_body($tg_response));
+                }
+            }
             
             // 3. Send Files
             if (!empty($attachments)) {
@@ -591,7 +588,15 @@ function quiz_handle_submission() {
                             'document' => $cfile
                         ]);
                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                        curl_exec($ch);
+                        $curl_res = curl_exec($ch);
+                        if ($curl_res === false) {
+                            error_log('Quiz Plugin: Telegram File Upload Error - ' . curl_error($ch));
+                        } else {
+                            $res_data = json_decode($curl_res, true);
+                            if (!$res_data['ok']) {
+                                error_log('Quiz Plugin: Telegram File API Error - ' . $curl_res);
+                            }
+                        }
                         curl_close($ch);
                     }
                 }
@@ -604,17 +609,6 @@ function quiz_handle_submission() {
         'submission_id' => $post_id
     ));
 }
-add_action('wp_ajax_submit_quiz', 'quiz_handle_submission');
-add_action('wp_ajax_nopriv_submit_quiz', 'quiz_handle_submission');
+add_action('wp_ajax_quiz_p_submit', 'quiz_p_handle_submission');
+add_action('wp_ajax_nopriv_quiz_p_submit', 'quiz_p_handle_submission');
 
-// 6. Enqueue scripts (Keep existing)
-function quiz_enqueue_scripts() {
-    if (!is_admin()) {
-        // Localize script for AJAX
-        wp_localize_script('jquery', 'quiz_ajax', array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('quiz_nonce')
-        ));
-    }
-}
-add_action('wp_enqueue_scripts', 'quiz_enqueue_scripts');
