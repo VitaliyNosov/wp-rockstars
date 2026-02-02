@@ -234,7 +234,11 @@ function render_chat_widget_html() {
                 this.state = {
                     isOpen: false,
                     isLoading: false,
-                    messages: []
+                    isOnline: true,
+                    messages: [],
+                    sessionId: this.getOrCreateSessionId(),
+                    lastHistoryCount: 0,
+                    pollInterval: null
                 };
 
                 // DOM Elements
@@ -248,15 +252,41 @@ function render_chat_widget_html() {
                     loading: document.getElementById('chat-loading'),
                     iconChat: document.getElementById('icon-chat'),
                     iconClose: document.getElementById('icon-close'),
-                    messagesBody: document.getElementById('chat-messages')
+                    messagesBody: document.getElementById('chat-messages'),
+                    statusText: null // Will be added in header
                 };
 
                 this.init();
             }
 
-            init() {
+            getOrCreateSessionId() {
+                // Use sessionStorage: Persists on Page Refresh/Navigation, Clears on Tab Close
+                let sess = sessionStorage.getItem('chat_session_id');
+                if (!sess) {
+                    sess = 'sess_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+                    sessionStorage.setItem('chat_session_id', sess);
+                }
+                return sess;
+            }
+
+            async init() {
                 if (!this.dom.app) return;
+                
+                // Add status indicator to header
+                const headerP = this.dom.window.querySelector('header p') || this.dom.window.querySelector('div > p');
+                if (headerP) {
+                    this.dom.statusText = headerP;
+                }
+
                 this.bindEvents();
+                await this.checkStatus();
+                await this.loadHistory();
+                
+                // Start message polling (every 2s)
+                this.startPolling();
+
+                // Start status polling (every 30s)
+                setInterval(() => this.checkStatus(), 30000);
             }
 
             bindEvents() {
@@ -283,16 +313,104 @@ function render_chat_widget_html() {
 
             toggle(forceState = null) {
                 this.state.isOpen = forceState !== null ? forceState : !this.state.isOpen;
+                
+                // Persist state
+                sessionStorage.setItem('chat_is_open', this.state.isOpen ? 'true' : 'false');
 
                 if (this.state.isOpen) {
                     this.dom.window.classList.add('open');
                     this.dom.iconChat.style.display = 'none';
                     this.dom.iconClose.style.display = 'block';
                     setTimeout(() => this.dom.input.focus(), 100);
+                    
+                    // Start history polling when open
+                    this.startPolling();
                 } else {
                     this.dom.window.classList.remove('open');
                     this.dom.iconChat.style.display = 'block';
                     this.dom.iconClose.style.display = 'none';
+                    
+                    // Stop polling when closed
+                    this.stopPolling();
+                }
+            }
+
+            async checkStatus() {
+                try {
+                    const response = await fetch(`${this.config.root}qa/v1/status`);
+                    const data = await response.json();
+                    this.state.isOnline = data.is_online;
+                    if (this.dom.statusText) {
+                        this.dom.statusText.innerHTML = this.state.isOnline 
+                            ? '<span style="color: #4ade80;">●</span> Online' 
+                            : '<span style="color: #9ca3af;">●</span> Offline';
+                    }
+                } catch (e) {
+                    console.error('Status check failed', e);
+                }
+            }
+
+            async loadHistory() {
+                if (!this.state.sessionId) return;
+
+                try {
+                    // Add timestamp to prevent browser caching
+                    const response = await fetch(`${this.config.root}qa/v1/history?session_id=${this.state.sessionId}&_t=${Date.now()}`);
+                    const history = await response.json();
+                    
+                    if (Array.isArray(history) && history.length > this.state.lastHistoryCount) {
+                        // Append only new messages
+                        const newMessages = history.slice(this.state.lastHistoryCount);
+                        let hasBotReply = false;
+
+                        newMessages.forEach(msg => {
+                            // 1. Deduplication Logic
+                            const trimmedText = msg.text.trim();
+                            
+                            // A) Check against optimistic sent text
+                            if (msg.role === 'user' && this.state.lastSentMessage === trimmedText) {
+                                this.state.lastSentMessage = null; 
+                                return;
+                            }
+                            
+                            // B) Check against actual DOM (Final safety net)
+                            const lastMsg = this.dom.results.lastElementChild;
+                            if (lastMsg) {
+                                const lastText = lastMsg.innerText.trim();
+                                if (lastText === trimmedText) return; // Skip duplicate visuals
+                            }
+
+                            if (msg.role === 'user') {
+                                this.appendUserMessage(msg.text, false); 
+                            } else {
+                                this.appendBotMessage(msg.text, false);
+                                hasBotReply = true;
+                            }
+                        });
+                        
+                        // 2. Animation Logic
+                        // If we received a reply from the bot, stop the loading dots
+                        if (hasBotReply) {
+                            this.toggleLoading(false);
+                        }
+
+                        this.state.lastHistoryCount = history.length;
+                        this.scrollToBottom();
+                    }
+                } catch (e) {
+                    // console.error('History load failed', e);
+                }
+            }
+
+            startPolling() {
+                this.stopPolling();
+                this.pollInterval = setInterval(() => this.loadHistory(), 2000);
+            }
+
+            stopPolling() {
+                if (this.pollInterval) {
+                    clearInterval(this.pollInterval);
+                    this.pollInterval = null;
                 }
             }
 
@@ -302,11 +420,29 @@ function render_chat_widget_html() {
                 this.appendUserMessage(query);
                 this.dom.input.value = '';
                 
-                // Show "typing" animation
+                // Track last sent text for deduplication
+                // Normalize it (trim) to match what the backend likely does
+                this.state.lastSentMessage = query.trim();
+                
+                // If Online: Send directly to admin
+                if (this.state.isOnline) {
+                    this.toggleLoading(true);
+                    await this.sendMessageDirectly(query);
+                    // Note: We DO NOT turn off loading here. 
+                    // We wait for the poll to find a reply (or timeout).
+                    
+                    // Safety timeout: stop loading after 60s if no reply
+                    setTimeout(() => {
+                        this.toggleLoading(false);
+                    }, 60000);
+                    
+                    return;
+                }
+
+                // If Offline: Search Knowledge Base
                 this.toggleLoading(true);
 
                 try {
-                    // Simulate "reading" delay (min 600ms)
                     const [results] = await Promise.all([
                         this.fetchResults(query),
                         new Promise(resolve => setTimeout(resolve, 600))
@@ -318,6 +454,36 @@ function render_chat_widget_html() {
                     console.error('Widget Error:', error);
                     this.toggleLoading(false);
                     this.appendBotMessage("An error occurred. Please try again later.");
+                }
+            }
+
+            async sendMessageDirectly(text) {
+                try {
+                    const response = await fetch(this.config.root + 'qa/v1/contact', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-WP-Nonce': this.config.nonce
+                        },
+                        body: JSON.stringify({ 
+                            message: text,
+                            session_id: this.state.sessionId
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    if (data.success) {
+                        // Success! We wait for polling to bring the answer.
+                        // Force a poll sooner just in case
+                        setTimeout(() => this.loadHistory(), 1000);
+                    } else {
+                        this.toggleLoading(false); // Stop on error
+                        this.appendBotMessage("⚠️ Message could not be delivered to admin.");
+                    }
+                } catch (e) {
+                    console.error('Direct Message Error:', e);
+                    this.toggleLoading(false); // Stop on error
+                    this.appendBotMessage("⚠️ Network error. Please try again.");
                 }
             }
 
@@ -334,48 +500,64 @@ function render_chat_widget_html() {
                         this.appendBotResponse(post);
                     });
                 } else {
-                    // Show "Not Found" message and Contact Form button
-                    this.appendBotMessage('Sorry, I couldn\'t find an answer in the knowledge base.');
+                    // If offline, show specific message
+                    if (!this.state.isOnline) {
+                        this.appendBotMessage(this.state.offlineMsg || 'We are currently offline. Please leave a message.');
+                    } else {
+                        this.appendBotMessage('Sorry, I couldn\'t find an answer in the knowledge base.');
+                    }
                     this.appendContactOption();
                 }
             }
 
             // --- UI Rendering Methods ---
 
-            appendUserMessage(text) {
+            appendUserMessage(text, scroll = true) {
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'mb-4 flex flex-col items-end animate-fade-in-up';
+                msgDiv.style.marginBottom = '16px';
+                msgDiv.style.display = 'flex';
+                msgDiv.style.flexDirection = 'column';
+                msgDiv.style.alignItems = 'flex-end';
+
                 msgDiv.innerHTML = `
-                    <div style="background-color: var(--chat-accent); color: white; padding: 12px; border-radius: 16px; border-top-right-radius: 0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); max-width: 85%; word-break: break-word;">
+                    <div style="background-color: var(--chat-accent); color: white; padding: 12px; border-radius: 16px; border-top-right-radius: 0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); max-width: 85%; word-break: break-word; font-size: 0.875rem;">
                         ${this.escapeHtml(text)}
                     </div>
                 `;
                 this.dom.results.appendChild(msgDiv);
-                this.scrollToBottom();
+                if (scroll) this.scrollToBottom();
             }
 
-            appendBotMessage(text) {
+            appendBotMessage(text, scroll = true) {
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'mb-4 flex flex-col items-start animate-fade-in-up';
+                msgDiv.style.marginBottom = '16px';
+                msgDiv.style.display = 'flex';
+                msgDiv.style.flexDirection = 'column';
+                msgDiv.style.alignItems = 'flex-start';
+
                 msgDiv.innerHTML = `
-                     <div style="background-color: var(--chat-msg-bg); color: var(--chat-text); padding: 12px; border-radius: 16px; border-top-left-radius: 0; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid var(--chat-border); max-width: 85%;">
+                     <div style="background-color: var(--chat-msg-bg); color: var(--chat-text); padding: 12px; border-radius: 16px; border-top-left-radius: 0; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid var(--chat-border); max-width: 85%; font-size: 0.875rem;">
                         ${text}
                     </div>
                 `;
                 this.dom.results.appendChild(msgDiv);
-                this.scrollToBottom();
+                if (scroll) this.scrollToBottom();
             }
 
             appendBotResponse(post) {
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'mb-4 flex flex-col items-start w-full animate-fade-in-up';
-                
+                msgDiv.style.marginBottom = '16px';
+                msgDiv.style.width = '100%';
+
                 msgDiv.innerHTML = `
-                     <div style="background-color: var(--chat-msg-bg); color: var(--chat-text); padding: 16px; border-radius: 16px; border-top-left-radius: 0; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid var(--chat-border); width: 100%; max-width: 95%;">
-                        <div style="font-weight: bold; margin-bottom: 8px; color: var(--chat-accent); padding-bottom: 8px; border-bottom: 1px solid var(--chat-border);">
+                     <div style="background-color: var(--chat-msg-bg); color: var(--chat-text); padding: 16px; border-radius: 16px; border-top-left-radius: 0; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid var(--chat-border); width: 100%; max-width: 95%; box-sizing: border-box;">
+                        <div style="font-weight: bold; margin-bottom: 8px; color: var(--chat-accent); padding-bottom: 8px; border-bottom: 1px solid var(--chat-border); font-size: 0.9rem;">
                             ${post.title.rendered}
                         </div>
-                        <div style="font-size: 0.75rem; opacity: 0.9; max-height: 160px; overflow-y: auto;">
+                        <div style="font-size: 0.85rem; opacity: 0.9; max-height: 160px; overflow-y: auto;">
                             ${post.content.rendered}
                         </div>
                     </div>
@@ -387,11 +569,14 @@ function render_chat_widget_html() {
             appendContactOption() {
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'mb-4 flex flex-col items-start animate-fade-in-up';
+                msgDiv.style.marginBottom = '16px';
+                msgDiv.style.width = '100%';
+
                 const formId = 'contact-form-' + Date.now();
                 
                 msgDiv.innerHTML = `
-                     <div style="background-color: var(--chat-msg-bg); color: var(--chat-text); padding: 16px; border-radius: 16px; border-top-left-radius: 0; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid var(--chat-border); max-width: 95%; width: 100%;">
-                        <p style="margin-top: 0; margin-bottom: 12px; font-weight: bold;">Want to ask a human?</p>
+                     <div style="background-color: var(--chat-msg-bg); color: var(--chat-text); padding: 16px; border-radius: 16px; border-top-left-radius: 0; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid var(--chat-border); max-width: 95%; width: 100%; box-sizing: border-box;">
+                        <p style="margin-top: 0; margin-bottom: 12px; font-weight: bold; font-size: 0.9rem;">Want to ask a human?</p>
                         <form id="${formId}" onsubmit="return false;" novalidate>
                             
                             <!-- Honeypot -->
@@ -479,14 +664,17 @@ function render_chat_widget_html() {
                             name: nameInput.value, 
                             email: emailInput.value, 
                             message: msgInput.value,
-                            website_url: honeypot 
+                            website_url: honeypot,
+                            session_id: this.state.sessionId
                         })
                     });
                     
                     const data = await response.json();
 
                     if (data.success) {
-                        form.innerHTML = '<div style="color: var(--chat-accent); font-weight: bold; text-align: center; padding: 20px;">✅ Message sent!<br>We will contact you soon.</div>';
+                        form.innerHTML = '<div style="color: var(--chat-accent); font-weight: bold; text-align: center; padding: 20px; font-size: 0.9rem;">✅ Message sent!<br>We will contact you soon.</div>';
+                        // Refresh history immediately to show the user's message as confirmed
+                        setTimeout(() => this.loadHistory(), 1000);
                     } else {
                         btn.innerText = 'Error, try again';
                         btn.disabled = false;
@@ -523,20 +711,21 @@ function render_chat_widget_html() {
             }
         }
 
-        // Init immediately
-        function initHelpWidget() {
-            if (document.getElementById('chat-widget-app')) {
-                new HelpWidget(chatWidgetConfig);
-                console.log('Chat Widget: Initialized (Inline)');
-            } else {
-                console.warn('Chat Widget container not found');
-            }
-        }
-
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initHelpWidget);
         } else {
             initHelpWidget();
+        }
+
+        // Init immediately
+        function initHelpWidget() {
+            if (window.rockStarsChatInitialized) return; 
+            window.rockStarsChatInitialized = true;
+
+            if (document.getElementById('chat-widget-app')) {
+                new HelpWidget(chatWidgetConfig);
+                // console.log('Chat Widget: Initialized');
+            }
         }
 
     })();

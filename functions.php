@@ -78,6 +78,10 @@ foreach (glob($functions_dir . '/*.php') as $file) {
 require_once get_template_directory() . '/inc/quiz/quiz-init.php';
 
 
+// Chat Module
+require_once get_template_directory() . '/inc/chat/chat-init.php';
+
+
 // Enqueue styles and scripts
 
 function theme_enqueue_assets() {
