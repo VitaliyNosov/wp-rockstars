@@ -30,6 +30,16 @@ function rock_stars_register_chat_settings() {
                 ->set_default_value( __( 'We are currently offline. Feel free to search our knowledge base or leave a message.', 'rock-star' ) )
                 ->set_rows(3),
 
+            Field::make( 'separator', 'crb_audio_sep', __( 'Audio Settings', 'rock-star' ) ),
+
+            Field::make( 'file', 'chat_sound_file', __( 'Custom Notification Sound', 'rock-star' ) )
+                // Storing ID is standard and safer for retrieval
+                ->set_type( array( 'audio' ) )
+                ->set_help_text( __( 'Upload an MP3/WAV file. Plays when a new message arrives from admin.', 'rock-star' ) ),
+
+            Field::make( 'text', 'chat_sound_url', __( 'Direct Sound URL', 'rock-star' ) )
+                ->set_help_text( __( 'Overrides the uploaded file if set. Useful for external hosting.', 'rock-star' ) ),
+
             Field::make( 'separator', 'crb_webhook_sep', __( 'Technical Info', 'rock-star' ) ),
             
             Field::make( 'html', 'chat_webhook_info' )

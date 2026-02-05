@@ -43,6 +43,133 @@ function rock_stars_send_to_telegram( $text, $keyboard = null ) {
 }
 
 /**
+ * Send file to Telegram Admin
+ */
+function rock_stars_send_file_to_telegram( $file_path, $caption = '' ) {
+    $token = carbon_get_theme_option( 'chat_bot_token' );
+    $admin_id = carbon_get_theme_option( 'chat_admin_id' );
+
+    if ( ! $token || ! $admin_id || ! file_exists( $file_path ) ) {
+        return false;
+    }
+
+    $url = "https://api.telegram.org/bot{$token}/sendDocument";
+    
+    // PHP 5.5+ safe way to send files with CURL via wp_remote_post is tricky.
+    // We'll use a more direct approach for multipart/form-data with files.
+    
+    $args = array(
+        'chat_id' => $admin_id,
+        'caption' => $caption,
+        'document' => new CURLFile( $file_path ),
+        'parse_mode' => 'Markdown'
+    );
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $args);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    return json_decode( $result, true );
+}
+
+/**
+ * Send voice message to Telegram Admin
+ */
+function rock_stars_send_voice_to_telegram( $file_path, $caption = '', $duration = 0 ) {
+    $token = carbon_get_theme_option( 'chat_bot_token' );
+    $admin_id = carbon_get_theme_option( 'chat_admin_id' );
+
+    if ( ! $token || ! $admin_id || ! file_exists( $file_path ) ) {
+        return false;
+    }
+
+    $extension = strtolower( pathinfo( $file_path, PATHINFO_EXTENSION ) );
+    
+    // Telegram sendVoice only supports OGG with Opus. 
+    // If it's something else (like webm, m4a), we use sendAudio instead.
+    $method = ( $extension === 'ogg' || $extension === 'opus' ) ? 'sendVoice' : 'sendAudio';
+    $field = ( $method === 'sendVoice' ) ? 'voice' : 'audio';
+
+    $url = "https://api.telegram.org/bot{$token}/{$method}";
+    
+    $args = array(
+        'chat_id' => $admin_id,
+        'caption' => $caption,
+        $field     => new CURLFile( $file_path ),
+        'duration' => $duration,
+        'parse_mode' => 'Markdown'
+    );
+
+    $ch = curl_init();
+    curl_setopt( $ch, CURLOPT_URL, $url );
+    curl_setopt( $ch, CURLOPT_POST, 1 );
+    curl_setopt( $ch, CURLOPT_POSTFIELDS, $args );
+    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+    curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+    $result = curl_exec( $ch );
+    curl_close( $ch );
+
+    $response = json_decode( $result, true );
+    
+    // If sendVoice/sendAudio failed, try sendDocument as last resort
+    if ( ! isset( $response['ok'] ) || ! $response['ok'] ) {
+        error_log('Telegram ' . $method . ' failed: ' . $result);
+        return rock_stars_send_file_to_telegram( $file_path, $caption );
+    }
+
+    return $response;
+}
+
+/**
+ * Send video message to Telegram Admin
+ */
+function rock_stars_send_video_to_telegram( $file_path, $caption = '', $duration = 0 ) {
+    $token = carbon_get_theme_option( 'chat_bot_token' );
+    $admin_id = carbon_get_theme_option( 'chat_admin_id' );
+
+    if ( ! $token || ! $admin_id || ! file_exists( $file_path ) ) {
+        return false;
+    }
+
+    $url = "https://api.telegram.org/bot{$token}/sendVideo";
+    
+    $args = array(
+        'chat_id' => $admin_id,
+        'caption' => $caption,
+        'video'   => new CURLFile( $file_path ),
+        'duration' => $duration,
+        'supports_streaming' => true,
+        'width' => 640,
+        'height' => 480,
+        'parse_mode' => 'Markdown'
+    );
+
+    $ch = curl_init();
+    curl_setopt( $ch, CURLOPT_URL, $url );
+    curl_setopt( $ch, CURLOPT_POST, 1 );
+    curl_setopt( $ch, CURLOPT_POSTFIELDS, $args );
+    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+    curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+    $result = curl_exec( $ch );
+    curl_close( $ch );
+
+    $response = json_decode( $result, true );
+
+    // If sendVideo failed, try sendDocument as last resort
+    if ( ! isset( $response['ok'] ) || ! $response['ok'] ) {
+        error_log('Telegram sendVideo failed: ' . $result);
+        return rock_stars_send_file_to_telegram( $file_path, $caption );
+    }
+
+    return $response;
+}
+
+/**
  * Process incoming Telegram Webhook
  */
 function rock_stars_handle_telegram_webhook( $data ) {
