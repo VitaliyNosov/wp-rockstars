@@ -147,7 +147,7 @@ function handle_get_chat_history( $request ) {
         'orderby' => 'date',
         'order' => 'DESC'
     ) );
-
+    
     if ( empty( $tickets ) ) {
         return array();
     }

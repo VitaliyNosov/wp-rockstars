@@ -6,38 +6,15 @@
 // Вывод HTML разметки и скриптов в футере
 function render_chat_widget_html() {
     // Конфигурация для JS
+    // Universal Fix: Use Relative URLs to avoid Protocol/Domain mismatches
+    // The browser will automatically use the current protocol and domain.
+    // Universal Fix: Use Relative URLs to avoid Protocol/Domain mismatches
     $config = array(
-        'apiUrl'  => get_rest_url( null, 'wp/v2/qa' ),
-        'siteUrl' => get_site_url(),
-        'root'    => esc_url_raw( rest_url() ),
+        'apiUrl'  => wp_make_link_relative( get_rest_url( null, 'wp/v2/qa' ) ),
+        'siteUrl' => wp_make_link_relative( get_site_url() ),
+        'root'    => wp_make_link_relative( rest_url() ),
         'nonce'   => wp_create_nonce( 'wp_rest' )
     );
-
-    // Helpers for Ngrok/Localhost mismatch
-    $current_host = $_SERVER['HTTP_HOST'] ?? '';
-    
-    $fix_url_for_ngrok = function($url) use ($current_host) {
-        if (!$url) return $url;
-        $url_parts = parse_url($url);
-        if (isset($url_parts['host']) && $current_host) {
-            $old_authority = $url_parts['host'] . (isset($url_parts['port']) ? ':' . $url_parts['port'] : '');
-            if ($old_authority !== $current_host) {
-                $url = str_replace($old_authority, $current_host, $url);
-            }
-        }
-        // Force HTTPS if we are on an Ngrok-like domain or if the current request is HTTPS
-        if (strpos($current_host, 'ngrok') !== false || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')) {
-            $url = str_replace('http://', 'https://', $url);
-        } else if (strpos($current_host, 'localhost') !== false) {
-            // Keep http for localhost usually, unless forced
-        }
-        return $url;
-    };
-
-    // Apply fixes to main config
-    $config['apiUrl'] = $fix_url_for_ngrok($config['apiUrl']);
-    $config['siteUrl'] = $fix_url_for_ngrok($config['siteUrl']);
-    $config['root'] = $fix_url_for_ngrok($config['root']);
 
     // Resolving Sound URL
     $sound_url = carbon_get_theme_option('chat_sound_url');
@@ -49,7 +26,7 @@ function render_chat_widget_html() {
     }
     
     if ($sound_url) {
-        $config['notificationSound'] = $fix_url_for_ngrok($sound_url);
+        $config['notificationSound'] = wp_make_link_relative($sound_url);
     }
     ?>
     <style>
@@ -584,6 +561,9 @@ function render_chat_widget_html() {
                 // Start status polling (every 30s)
                 setInterval(() => this.checkStatus(), 30000);
 
+                // Initial Visibility Check
+                this.updateMediaButtonsVisibility();
+
                 // Initialize Mute Button State
                 this.updateMuteUI();
             }
@@ -1019,17 +999,33 @@ function render_chat_widget_html() {
 
             async checkStatus() {
                 try {
-                    const response = await fetch(`${this.config.root}qa/v1/status`);
+                    // Add timestamp to prevent caching
+                    const response = await fetch(`${this.config.root}qa/v1/status?_t=${Date.now()}`);
                     const data = await response.json();
+                    
                     this.state.isOnline = data.is_online;
+                    
+                    // Update Status Text
                     if (this.dom.statusText) {
                         this.dom.statusText.innerHTML = this.state.isOnline 
                             ? '<span style="color: #4ade80;">●</span> Online' 
                             : '<span style="color: #9ca3af;">●</span> Offline';
                     }
+
+                    // Toggle Media Buttons
+                    this.updateMediaButtonsVisibility();
+
                 } catch (e) {
                     console.error('Status check failed', e);
                 }
+            }
+
+            updateMediaButtonsVisibility() {
+                const displayStyle = this.state.isOnline ? 'flex' : 'none';
+                
+                if (this.dom.voiceBtn) this.dom.voiceBtn.style.display = displayStyle;
+                if (this.dom.videoBtn) this.dom.videoBtn.style.display = displayStyle;
+                if (this.dom.attachBtn) this.dom.attachBtn.style.display = displayStyle;
             }
 
             async loadHistory() {

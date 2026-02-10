@@ -180,8 +180,6 @@ function rock_stars_handle_telegram_webhook( $data ) {
         $chat_id = $callback['message']['chat']['id'] ?? '';
         $admin_id = carbon_get_theme_option( 'chat_admin_id' );
 
-
-
         if ( (string)$chat_id === (string)$admin_id && strpos( $callback_data, 'reply:' ) === 0 ) {
             $ticket_id = str_replace( 'reply:', '', $callback_data );
             
@@ -190,8 +188,6 @@ function rock_stars_handle_telegram_webhook( $data ) {
                 "✍️ Пожалуйста, введите ваш ответ для пользователя:", 
                 array( 'force_reply' => true, 'selective' => true ) 
             );
-
-
 
             if ( ! empty( $tg_response['result']['message_id'] ) ) {
                 add_post_meta( $ticket_id, '_tg_message_id', $tg_response['result']['message_id'] );
@@ -209,11 +205,8 @@ function rock_stars_handle_telegram_webhook( $data ) {
     $chat_id = $message['chat']['id'] ?? '';
     $admin_id = carbon_get_theme_option( 'chat_admin_id' );
 
-
-
     // Ensure it's from the admin
     if ( (string)$chat_id !== (string)$admin_id ) {
-
         return;
     }
 
@@ -234,7 +227,6 @@ function rock_stars_handle_telegram_webhook( $data ) {
     if ( ! empty( $message['reply_to_message'] ) ) {
         $reply_to_id = $message['reply_to_message']['message_id'];
         
-        // Use a more direct meta query
         global $wpdb;
         $ticket_id = $wpdb->get_var( $wpdb->prepare(
             "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_tg_message_id' AND meta_value = %s LIMIT 1",
@@ -245,14 +237,21 @@ function rock_stars_handle_telegram_webhook( $data ) {
             $reply_text = $text;
 
             $history = get_post_meta( $ticket_id, '_chat_history', true ) ?: array();
-            $history[] = array(
-                'role' => 'bot',
-                'text' => $reply_text,
-                'time' => current_time( 'mysql' ),
-            );
-            update_post_meta( $ticket_id, '_chat_history', $history );
             
-            // Mark as modified so polling might pick it up correctly if relying on timestamps (optional but good practice)
+            // Simple check: if last message is same text and role is bot
+            $last_msg = end($history);
+            if ($last_msg && $last_msg['role'] === 'bot' && $last_msg['text'] === $reply_text) {
+                 // Duplicate check skipped saving.
+            } else {
+                $history[] = array(
+                    'role' => 'bot',
+                    'text' => $reply_text,
+                    'time' => current_time( 'mysql' ),
+                );
+                update_post_meta( $ticket_id, '_chat_history', $history );
+            }
+            
+            // Mark as modified
             wp_update_post( array( 'ID' => $ticket_id, 'post_modified' => current_time('mysql') ) );
         }
     }

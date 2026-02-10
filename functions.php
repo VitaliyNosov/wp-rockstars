@@ -60,6 +60,7 @@ add_action( 'after_setup_theme', function() {
     require_once get_template_directory() . '/inc/graphql-register.php';
     require_once get_template_directory() . '/inc/graphql/landing-graphql.php';
     require_once get_template_directory() . '/inc/graphql/quiz-graphql.php';
+    require_once get_template_directory() . '/inc/graphql/chat-graphql.php';
 });
 
 
