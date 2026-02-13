@@ -179,8 +179,9 @@ function rock_stars_handle_telegram_webhook( $data ) {
         $callback_data = $callback['data'] ?? '';
         $chat_id = $callback['message']['chat']['id'] ?? '';
         $admin_id = carbon_get_theme_option( 'chat_admin_id' );
-
-        if ( (string)$chat_id === (string)$admin_id && strpos( $callback_data, 'reply:' ) === 0 ) {
+        
+        // Match Chat ID and Admin ID
+        if ( (string)$chat_id == (string)$admin_id && strpos( $callback_data, 'reply:' ) === 0 ) {
             $ticket_id = str_replace( 'reply:', '', $callback_data );
             
             // Send message with ForceReply
@@ -192,6 +193,10 @@ function rock_stars_handle_telegram_webhook( $data ) {
             if ( ! empty( $tg_response['result']['message_id'] ) ) {
                 add_post_meta( $ticket_id, '_tg_message_id', $tg_response['result']['message_id'] );
             }
+            
+            // Answer callback query to stop loading animation on button
+            $token = carbon_get_theme_option( 'chat_bot_token' );
+            file_get_contents("https://api.telegram.org/bot{$token}/answerCallbackQuery?callback_query_id={$callback['id']}");
         }
         return;
     }
@@ -235,19 +240,27 @@ function rock_stars_handle_telegram_webhook( $data ) {
 
         if ( $ticket_id ) {
             $reply_text = $text;
+            // Handle captions for files if text is empty
+            if ( empty( $reply_text ) ) {
+                $reply_text = $message['caption'] ?? '';
+            }
 
-            $history = get_post_meta( $ticket_id, '_chat_history', true ) ?: array();
+            $history = get_post_meta( $ticket_id, '_chat_history', true );
+            if ( ! is_array( $history ) ) {
+                $history = array();
+            }
             
             // Simple check: if last message is same text and role is bot
             $last_msg = end($history);
-            if ($last_msg && $last_msg['role'] === 'bot' && $last_msg['text'] === $reply_text) {
-                 // Duplicate check skipped saving.
+            if ($last_msg && isset($last_msg['role']) && $last_msg['role'] === 'bot' && isset($last_msg['text']) && $last_msg['text'] === $reply_text) {
+                 // Duplicate message detected. Skipping.
             } else {
                 $history[] = array(
                     'role' => 'bot',
                     'text' => $reply_text,
                     'time' => current_time( 'mysql' ),
                 );
+                
                 update_post_meta( $ticket_id, '_chat_history', $history );
             }
             
@@ -256,3 +269,32 @@ function rock_stars_handle_telegram_webhook( $data ) {
         }
     }
 }
+
+/**
+ * Manual Webhook Setup Trigger
+ * Usage: Visit yoursite/wp-admin/?setup_bot=1 (must be admin)
+ */
+add_action( 'init', 'rock_stars_setup_webhook_trigger' );
+function rock_stars_setup_webhook_trigger() {
+    if ( isset( $_GET['setup_bot'] ) && current_user_can( 'manage_options' ) ) {
+        $token = carbon_get_theme_option( 'chat_bot_token' );
+        if ( ! $token ) {
+            wp_die( 'Error: Bot Token not set in Theme Options.' );
+        }
+
+        $webhook_url = get_rest_url( null, 'qa/v1/webhook' );
+        
+        // Telegram API
+        $url = "https://api.telegram.org/bot{$token}/setWebhook?url=" . urlencode( $webhook_url );
+        
+        $response = wp_remote_get( $url );
+        $body = wp_remote_retrieve_body( $response );
+        
+        echo "<h1>Telegram Webhook Setup</h1>";
+        echo "<p><strong>Webhook URL:</strong> " . esc_html( $webhook_url ) . "</p>";
+        echo "<p><strong>Result:</strong> " . esc_html( $body ) . "</p>";
+        exit;
+    }
+}
+
+
