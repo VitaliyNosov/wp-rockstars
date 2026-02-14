@@ -85,19 +85,49 @@ function register_chat_graphql_logic() {
 
             $messages = [];
             if ( ! empty( $tickets ) ) {
-                // Reuse logic from chat-cpt.php if possible, but for now duplicate to be safe within closure
-                // Or better, assume handle_get_chat_history logic logic needs to be respected (like relative URLs)
-                // But GraphQL usually prefers absolute URLs. 
-                // Let's use get_post_meta directly.
-                
                 $raw_history = get_post_meta( $tickets[0]->ID, '_chat_history', true ) ?: [];
                 
+                // URL Resolving logic for Proxy/Ngrok/Ports (aligned with chat-cpt.php)
+                $current_host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'] ?? '';
+                if (strpos($current_host, ',') !== false) {
+                    $parts = explode(',', $current_host);
+                    $current_host = trim($parts[0]);
+                }
+                $current_proto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ( (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http' );
+                
+                $site_url = get_site_url();
+                $url_parts = parse_url($site_url);
+                $old_authority = isset($url_parts['host']) ? $url_parts['host'] . (isset($url_parts['port']) ? ':' . $url_parts['port'] : '') : '';
+                $old_proto = $url_parts['scheme'] ?? 'http';
+
                 foreach ( $raw_history as $index => $msg ) {
+                    $text = $msg['text'] ?? '';
+                    $attachment = $msg['attachment'] ?? '';
+
+                    if ($current_host && $old_authority) {
+                        // Fix text links
+                        $text = str_replace($old_authority, $current_host, $text);
+                        if ($old_proto !== $current_proto) {
+                            $text = str_replace($old_proto . '://' . $current_host, $current_proto . '://' . $current_host, $text);
+                        }
+
+                        // Fix attachment links
+                        if ($attachment) {
+                            $attachment = str_replace($old_authority, $current_host, $attachment);
+                            if ($old_proto !== $current_proto) {
+                                $attachment = str_replace($old_proto . '://' . $current_host, $current_proto . '://' . $current_host, $attachment);
+                            }
+                            if (function_exists('set_url_scheme')) {
+                                $attachment = set_url_scheme($attachment, $current_proto);
+                            }
+                        }
+                    }
+
                     $messages[] = [
                         'id'            => (string)$index,
                         'role'          => $msg['role'] ?? '',
-                        'text'          => $msg['text'] ?? '',
-                        'attachmentUrl' => $msg['attachment'] ?? '',
+                        'text'          => $text,
+                        'attachmentUrl' => $attachment,
                         'isVoice'       => !empty($msg['is_voice']),
                         'isVideo'       => !empty($msg['is_video']),
                         'timestamp'     => $msg['time'] ?? '',
@@ -292,8 +322,8 @@ function register_chat_graphql_logic() {
                 
                 if ( $post_id ) {
                     update_post_meta( $post_id, '_chat_session_id', $session_id );
-                    update_post_meta( $post_id, '_chat_name', $name );
-                    update_post_meta( $post_id, '_chat_email', $email );
+                    update_post_meta( $post_id, '_wp_custom_sender_name', $name );
+                    update_post_meta( $post_id, '_wp_custom_sender_email', $email );
                     if ($tg_message_id) update_post_meta( $post_id, '_tg_message_id', $tg_message_id );
                     
                     $history = array();
@@ -307,6 +337,14 @@ function register_chat_graphql_logic() {
                     );
                     update_post_meta( $post_id, '_chat_history', $history );
                 }
+            }
+            
+            // 6. Send Email only for new inquiries (aligned with chat-cpt.php)
+            if ( ! $existing_ticket_id ) {
+                $to = get_option( 'admin_email' );
+                $subject = 'New Chat Inquiry (via GraphQL): ' . $name;
+                $body = "Name: $name\nEmail: $email\nQuestion:\n$message_text";
+                wp_mail( $to, $subject, $body );
             }
 
             return [
