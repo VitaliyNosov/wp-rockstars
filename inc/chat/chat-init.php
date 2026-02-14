@@ -17,6 +17,9 @@ require_once __DIR__ . '/chat-cpt.php';
 // 3. Bot Logic Handler
 require_once __DIR__ . '/chat-bot-handler.php';
 
+// 4. Webhook Management (Auto-update & Manual)
+require_once __DIR__ . '/chat-webhook.php';
+
 // 4. Render Chat Widget HTML in footer
 require_once __DIR__ . '/chat-widget.php';
 

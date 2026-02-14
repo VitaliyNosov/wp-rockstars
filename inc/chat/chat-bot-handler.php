@@ -270,31 +270,6 @@ function rock_stars_handle_telegram_webhook( $data ) {
     }
 }
 
-/**
- * Manual Webhook Setup Trigger
- * Usage: Visit yoursite/wp-admin/?setup_bot=1 (must be admin)
- */
-add_action( 'init', 'rock_stars_setup_webhook_trigger' );
-function rock_stars_setup_webhook_trigger() {
-    if ( isset( $_GET['setup_bot'] ) && current_user_can( 'manage_options' ) ) {
-        $token = carbon_get_theme_option( 'chat_bot_token' );
-        if ( ! $token ) {
-            wp_die( 'Error: Bot Token not set in Theme Options.' );
-        }
 
-        $webhook_url = get_rest_url( null, 'qa/v1/webhook' );
-        
-        // Telegram API
-        $url = "https://api.telegram.org/bot{$token}/setWebhook?url=" . urlencode( $webhook_url );
-        
-        $response = wp_remote_get( $url );
-        $body = wp_remote_retrieve_body( $response );
-        
-        echo "<h1>Telegram Webhook Setup</h1>";
-        echo "<p><strong>Webhook URL:</strong> " . esc_html( $webhook_url ) . "</p>";
-        echo "<p><strong>Result:</strong> " . esc_html( $body ) . "</p>";
-        exit;
-    }
-}
 
 
