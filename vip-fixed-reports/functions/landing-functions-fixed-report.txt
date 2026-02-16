@@ -1,0 +1,15 @@
+File: inc/functions/landing-functions.php
+Status: COMPLIED (WordPress VIP Go)
+
+Summary of Changes:
+1. Refactored `add_landing_page_body_class` to `rock_stars_add_landing_page_body_class`.
+2. Renamed anonymous function in `wp_enqueue_scripts` hook to `rock_stars_enqueue_landing_assets` for better maintainability and VIP standards.
+3. Improved post detection by using `get_queried_object()` and `get_the_ID()` instead of relying on `global $post`.
+4. Cleaned up commented-out code and unused CDN links to comply with VIP production standards.
+5. Added explicit versions and dependencies for enqueued scripts and styles.
+6. Ensured all functions and hooks use the theme-specific `rock_stars_` prefix.
+
+Verification:
+- PHP_CodeSniffer ran with WordPress-VIP-Go standard.
+- Result: 0 ERRORS, 0 WARNINGS.
+- Manual check: Body classes are correctly applied to landing pages, and assets (Tailwind, Preline) are enqueued only on required pages.

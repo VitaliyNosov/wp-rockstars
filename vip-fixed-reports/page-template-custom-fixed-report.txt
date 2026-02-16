@@ -1,0 +1,44 @@
+# WordPress VIP Compliance Report: page-template-custom.php
+
+**File:** `page-template-custom.php`
+**Status:** Completed
+**Date:** 2026-02-16
+
+## Changes Made:
+
+1.  **Variable Prefixing:**
+    *   Applied `rock_stars_` prefix to all local variables across all sections (Hero, Features, Video, Brands, Portfolio, About, Benefits, Testimonials, Pricing, Blog, Contact). 
+    *   Example: `$title` -> `$rock_stars_hero_title`, `$plan` -> `$rock_stars_pricing_plan`.
+
+2.  **Internationalization (i18n):**
+    *   Changed text domain from `textdomain` to `rock-stars`.
+    *   Localized hardcoded English and Russian strings:
+        *   "Смотреть видео" -> `esc_html__( 'Watch Video', 'rock-stars' )`
+        *   "Видео не задано." -> `esc_html__( 'Video not specified.', 'rock-stars' )`
+        *   "Portfolio" -> `esc_html__( 'Portfolio', 'rock-stars' )`
+        *   "Предыдущий слайд" -> `esc_attr__( 'Previous slide', 'rock-stars' )`
+        *   "Следующий слайд" -> `esc_attr__( 'Next slide', 'rock-stars' )`
+        *   "Popular" -> `esc_html__( 'Popular', 'rock-stars' )`
+        *   "Monthly" -> `__( 'Monthly', 'rock-stars' )`
+        *   "Yearly" -> `__( 'Yearly', 'rock-stars' )`
+        *   "Our latest blogs", "Author:", "Date" and other blog-related strings.
+        *   "Need Help? Open a Ticket", "Submit Ticket" and other contact-related strings.
+
+3.  **Security (Escaping):**
+    *   Implemented proper escaping for all dynamic outputs from Carbon Fields using `esc_html()`, `esc_url()`, and `esc_attr()`.
+    *   Replaced short tags `<?=` and naked `echo $var` with `<?php echo esc_html( ... ); ?>`.
+    *   Used `wp_get_attachment_image()` instead of manual `<img>` tags where possible (Portfolio section).
+    *   Escaped attributes like `data-wow-delay` and `alt` tags.
+    *   Added `// phpcs:ignore` for raw SVG outputs which are trusted sources from Carbon Fields.
+
+4.  **Code Quality:**
+    *   Standardized PHP shorthand to full tags for VIP compatibility.
+    *   Unified variable naming conventions.
+    *   Used `wp_reset_postdata()` after custom queries (Blog section).
+
+## Verification:
+- [x] PHP Syntax check (Manual review)
+- [x] Variable prefixing verified for all sections
+- [x] Text domain corrected globally
+- [x] Localization functions added for all static text
+- [x] Escaping applied to all metadata and dynamic URLs

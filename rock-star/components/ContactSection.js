@@ -63,7 +63,7 @@ export default function ContactSection({ wpAjaxUrl: propAjaxUrl, wpNonce: propNo
 
         try {
             const requestBody = {
-                action: 'wp_custom_submit_ticket',
+                action: 'rock_stars_submit_ticket',
                 nonce: wpNonce,
                 name: formData.name,
                 email: formData.email,

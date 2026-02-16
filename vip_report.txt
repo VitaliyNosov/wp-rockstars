@@ -1,0 +1,2324 @@
+
+FILE: 404.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 1 | ERROR | The "rs" prefix is too short. Short prefixes are not unique enough
+   |       | and may cause name collisions with other code.
+   |       | (WordPress.NamingConventions.PrefixAllGlobals.ShortPrefixPassed)
+--------------------------------------------------------------------------------
+
+
+FILE: comments.php
+--------------------------------------------------------------------------------
+FOUND 10 ERRORS AND 1 WARNING AFFECTING 9 LINES
+--------------------------------------------------------------------------------
+  46 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$comment_count".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  47 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$button_text".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  49 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$button_text".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  77 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'get_the_title'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  80 | WARNING | A function call to _nx() with texts containing placeholders
+     |         | was found, but was not accompanied by a "translators:" comment
+     |         | on the line above to clarify the meaning of the placeholders.
+     |         | (WordPress.WP.I18n.MissingTranslatorsComment)
+  81 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'number_format_i18n'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  82 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'get_the_title'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 114 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'site_url'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 119 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'get_edit_user_link'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 119 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '$user_identity'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 119 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'wp_logout_url'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+--------------------------------------------------------------------------------
+
+
+FILE: functions.php
+--------------------------------------------------------------------------------
+FOUND 13 ERRORS AND 2 WARNINGS AFFECTING 11 LINES
+--------------------------------------------------------------------------------
+   6 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "theme_setup".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  69 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$functions_dir".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  71 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$file".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  88 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "theme_enqueue_assets".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 133 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "theme_widgets_init".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 156 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_SERVER['REQUEST_URI']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 156 | ERROR   | Detected usage of a possibly undefined superglobal array
+     |         | index: $_SERVER['REQUEST_URI']. Check that the array index
+     |         | exists before using it.
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 166 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "add_margin_for_admin_bar".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 197 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "custom_excerpt_length".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 254 | ERROR   | Overriding WordPress globals is prohibited. Found assignment
+     |         | to $GLOBALS['comment']
+     |         | (WordPress.WP.GlobalVariablesOverride.Prohibited)
+ 265 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'get_comment_author'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 268 | WARNING | A function call to __() with texts containing placeholders was
+     |         | found, but was not accompanied by a "translators:" comment on
+     |         | the line above to clarify the meaning of the placeholders.
+     |         | (WordPress.WP.I18n.MissingTranslatorsComment)
+ 268 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '__'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 268 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'get_comment_date'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 268 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'get_comment_time'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+--------------------------------------------------------------------------------
+
+
+FILE: header.php
+--------------------------------------------------------------------------------
+FOUND 2 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+ 74 | ERROR | Wrong escaping function. href, src, and action attributes should
+    |       | be escaped by `esc_url()`, not by `esc_attr()`.
+    |       | (WordPressVIPMinimum.Security.ProperEscapingFunction.hrefSrcEscUrl)
+ 82 | ERROR | Hook names invoked by a theme/plugin should start with the
+    |       | theme/plugin prefix. Found: "the_title".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\carbon-fields-init.php
+--------------------------------------------------------------------------------
+FOUND 27 ERRORS AFFECTING 27 LINES
+--------------------------------------------------------------------------------
+ 179 | ERROR | Functions declared in the global namespace by a theme/plugin
+     |       | should start with the theme/plugin prefix. Found:
+     |       | "pricing_section_fields".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 180 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 181 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 183 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 184 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 187 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 196 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 205 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 214 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 223 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 224 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 226 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 229 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 232 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 235 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 238 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 242 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 245 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 247 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 248 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 250 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 251 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 258 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 259 | ERROR | Missing $domain parameter in function call to __().
+     |       | (WordPress.WP.I18n.MissingArgDomain)
+ 326 | ERROR | Functions declared in the global namespace by a theme/plugin
+     |       | should start with the theme/plugin prefix. Found:
+     |       | "register_faq_admin_page".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 340 | ERROR | Functions declared in the global namespace by a theme/plugin
+     |       | should start with the theme/plugin prefix. Found:
+     |       | "wp_faq_add_class_to_paragraphs".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 352 | ERROR | Functions declared in the global namespace by a theme/plugin
+     |       | should start with the theme/plugin prefix. Found:
+     |       | "add_audio_player_fields".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\chat\chat-bot-handler.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AND 28 WARNINGS AFFECTING 31 LINES
+--------------------------------------------------------------------------------
+  28 | WARNING | json_encode() is discouraged. Use wp_json_encode() instead.
+     |         | (WordPress.WP.AlternativeFunctions.json_encode_json_encode)
+  34 | ERROR   | Detected high remote request timeout. `timeout` is set to
+     |         | `10`.
+     |         | (WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout)
+  38 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+  68 | WARNING | Using cURL functions is highly discouraged within VIP context.
+     |         | Please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_init)
+  69 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+  70 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+  71 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+  72 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+  73 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+  74 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_exec)
+  75 | WARNING | Using cURL functions is highly discouraged within VIP context.
+     |         | Please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_close)
+ 108 | WARNING | Using cURL functions is highly discouraged within VIP context.
+     |         | Please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_init)
+ 109 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 110 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 111 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 112 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 113 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 114 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_exec)
+ 115 | WARNING | Using cURL functions is highly discouraged within VIP context.
+     |         | Please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_close)
+ 121 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 152 | WARNING | Using cURL functions is highly discouraged within VIP context.
+     |         | Please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_init)
+ 153 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 154 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 155 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 156 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 157 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 158 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_exec)
+ 159 | WARNING | Using cURL functions is highly discouraged within VIP context.
+     |         | Please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_close)
+ 165 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 199 | WARNING | `file_get_contents()` is highly discouraged for remote
+     |         | requests, please use `wpcom_vip_file_get_contents()` or
+     |         | `vip_safe_wp_remote_get()` instead.
+     |         | (WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsRemoteFile)
+ 236 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 236 | WARNING | Direct database call without caching detected. Consider using
+     |         | wp_cache_get() / wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\chat\chat-cpt.php
+--------------------------------------------------------------------------------
+FOUND 27 ERRORS AND 12 WARNINGS AFFECTING 37 LINES
+--------------------------------------------------------------------------------
+   6 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "register_qa_cpt".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+   9 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  10 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  11 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  12 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  13 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  14 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  15 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  16 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  17 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  18 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  19 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  20 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  21 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  22 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  23 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  24 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  28 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  29 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  57 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  58 | ERROR   | Mismatched text domain. Expected 'rock-star' or
+     |         | 'your-theme-textdomain' but got 'rock-stars'.
+     |         | (WordPress.WP.I18n.TextDomainMismatch)
+  72 | WARNING | Please ensure that the mimes being filtered do not include
+     |         | insecure types (i.e. SVG, SWF, etc.). Manual inspection
+     |         | required.
+     |         | (WordPressVIPMinimum.Hooks.RestrictedHooks.upload_mimes)
+ 136 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "handle_get_chat_history".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 144 | WARNING | Detected usage of meta_value, possible slow query.
+     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_value)
+ 159 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_SERVER['HTTP_X_FORWARDED_HOST']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 159 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_SERVER['HTTP_HOST']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 165 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_SERVER['HTTP_X_FORWARDED_PROTO']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 169 | WARNING | parse_url() is discouraged because of inconsistency in the
+     |         | output across PHP versions; use wp_parse_url() instead.
+     |         | (WordPress.WP.AlternativeFunctions.parse_url_parse_url)
+ 174 | ERROR   | Type of `$history` must be checked before calling `foreach()`
+     |         | using that variable.
+     |         | (WordPressVIPMinimum.Functions.CheckReturnValue.NonCheckedVariable)
+ 200 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "handle_qa_contact_submission".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 201 | WARNING | This comment is 40% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 253 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 257 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 258 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 258 | WARNING | print_r() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_print_r)
+ 280 | WARNING | Detected usage of meta_value, possible slow query.
+     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_value)
+ 371 | WARNING | json_encode() is discouraged. Use wp_json_encode() instead.
+     |         | (WordPress.WP.AlternativeFunctions.json_encode_json_encode)
+ 420 | WARNING | json_encode() is discouraged. Use wp_json_encode() instead.
+     |         | (WordPress.WP.AlternativeFunctions.json_encode_json_encode)
+ 444 | WARNING | `wp_mail` should be used sparingly. For any bulk emailing
+     |         | should be handled by a 3rd party service, in order to prevent
+     |         | domain or IP addresses being flagged as spam.
+     |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.wp_mail_wp_mail)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\chat\chat-webhook.php
+--------------------------------------------------------------------------------
+FOUND 0 ERRORS AND 3 WARNINGS AFFECTING 3 LINES
+--------------------------------------------------------------------------------
+ 43 | WARNING | wp_remote_get() is highly discouraged. Please use
+    |         | vip_safe_wp_remote_get() instead which is designed to more
+    |         | gracefully handle failure than wp_remote_get() does.
+    |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get)
+ 71 | WARNING | Processing form data without nonce verification.
+    |         | (WordPress.Security.NonceVerification.Recommended)
+ 82 | WARNING | wp_remote_get() is highly discouraged. Please use
+    |         | vip_safe_wp_remote_get() instead which is designed to more
+    |         | gracefully handle failure than wp_remote_get() does.
+    |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\chat\chat-widget.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 7 | ERROR | Functions declared in the global namespace by a theme/plugin
+   |       | should start with the theme/plugin prefix. Found:
+   |       | "render_chat_widget_html".
+   |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\email-templates\contact-reply.php
+--------------------------------------------------------------------------------
+FOUND 7 ERRORS AFFECTING 4 LINES
+--------------------------------------------------------------------------------
+ 14 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | 'get_bloginfo'.
+    |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 39 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | 'get_bloginfo'.
+    |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 56 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | 'date'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 56 | ERROR | date() is affected by runtime timezone changes which can cause
+    |       | date/time to be incorrectly displayed. Use gmdate() instead.
+    |       | (WordPress.DateTime.RestrictedFunctions.date_date)
+ 56 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | 'get_bloginfo'.
+    |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 57 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | 'home_url'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 57 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | 'home_url'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\functions\ajax-comments.php
+--------------------------------------------------------------------------------
+FOUND 3 ERRORS AND 8 WARNINGS AFFECTING 11 LINES
+--------------------------------------------------------------------------------
+ 10 | WARNING | Detected usage of a non-sanitized input variable:
+    |         | $_POST['_wpnonce']
+    |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 16 | WARNING | Detected usage of a non-sanitized input variable:
+    |         | $_POST['author']
+    |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 17 | WARNING | Detected usage of a non-sanitized input variable:
+    |         | $_POST['email']
+    |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 18 | WARNING | Detected usage of a non-sanitized input variable: $_POST['url']
+    |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 19 | WARNING | Detected usage of a non-sanitized input variable:
+    |         | $_POST['comment']
+    |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 31 | WARNING | Detected usage of a non-sanitized input variable:
+    |         | $_POST['author']
+    |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 32 | WARNING | Detected usage of a non-sanitized input variable:
+    |         | $_POST['email']
+    |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 33 | WARNING | Detected usage of a non-sanitized input variable:
+    |         | $_POST['comment_post_ID']
+    |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 44 | ERROR   | Hook names invoked by a theme/plugin should start with the
+    |         | theme/plugin prefix. Found: "set_comment_cookies".
+    |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound)
+ 48 | ERROR   | Overriding WordPress globals is prohibited. Found assignment to
+    |         | $GLOBALS['comment']
+    |         | (WordPress.WP.GlobalVariablesOverride.Prohibited)
+ 78 | ERROR   | Hook names invoked by a theme/plugin should start with the
+    |         | theme/plugin prefix. Found: "comment_text".
+    |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\functions\audio-posts.php
+--------------------------------------------------------------------------------
+FOUND 2 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+  5 | ERROR | Functions declared in the global namespace by a theme/plugin
+    |       | should start with the theme/plugin prefix. Found:
+    |       | "rs_prepend_post_audio_player".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 76 | ERROR | Functions declared in the global namespace by a theme/plugin
+    |       | should start with the theme/plugin prefix. Found:
+    |       | "rs_audio_inline_assets".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\functions\form-post-types-tiket.php
+--------------------------------------------------------------------------------
+FOUND 28 ERRORS AND 37 WARNINGS AFFECTING 52 LINES
+--------------------------------------------------------------------------------
+  62 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'get_post_meta'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  65 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'get_post_meta'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  69 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'wp_trim_words'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 109 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 114 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 120 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_POST['nonce']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 121 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 128 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 143 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 148 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 153 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 170 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 187 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_SERVER['REMOTE_ADDR']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 187 | ERROR   | Header "REMOTE_ADDR" is user-controlled and should be properly
+     |         | validated before use.
+     |         | (WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders)
+ 187 | ERROR   | Detected usage of a possibly undefined superglobal array
+     |         | index: $_SERVER['REMOTE_ADDR']. Check that the array index
+     |         | exists before using it.
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 187 | WARNING | Due to server-side caching, server-side based client related
+     |         | logic might not work. We recommend implementing client side
+     |         | logic in JavaScript instead.
+     |         | (WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__REMOTE_ADDR__)
+ 190 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_SERVER['REMOTE_ADDR']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 190 | ERROR   | Header "REMOTE_ADDR" is user-controlled and should be properly
+     |         | validated before use.
+     |         | (WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders)
+ 190 | ERROR   | Detected usage of a possibly undefined superglobal array
+     |         | index: $_SERVER['REMOTE_ADDR']. Check that the array index
+     |         | exists before using it.
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 190 | WARNING | Due to server-side caching, server-side based client related
+     |         | logic might not work. We recommend implementing client side
+     |         | logic in JavaScript instead.
+     |         | (WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__REMOTE_ADDR__)
+ 197 | WARNING | wp_remote_get() is highly discouraged. Please use
+     |         | vip_safe_wp_remote_get() instead which is designed to more
+     |         | gracefully handle failure than wp_remote_get() does.
+     |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get)
+ 209 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 233 | WARNING | `wp_mail` should be used sparingly. For any bulk emailing
+     |         | should be handled by a 3rd party service, in order to prevent
+     |         | domain or IP addresses being flagged as spam.
+     |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.wp_mail_wp_mail)
+ 239 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 241 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 428 | WARNING | Processing form data without nonce verification.
+     |         | (WordPress.Security.NonceVerification.Recommended)
+ 429 | WARNING | Processing form data without nonce verification.
+     |         | (WordPress.Security.NonceVerification.Recommended)
+ 429 | WARNING | Detected usage of a non-sanitized input variable: $_GET['m']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 431 | WARNING | Processing form data without nonce verification.
+     |         | (WordPress.Security.NonceVerification.Recommended)
+ 432 | WARNING | Processing form data without nonce verification.
+     |         | (WordPress.Security.NonceVerification.Recommended)
+ 432 | WARNING | Detected usage of a non-sanitized input variable: $_GET['s']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 448 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_GET['nonce']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 480 | ERROR   | date() is affected by runtime timezone changes which can cause
+     |         | date/time to be incorrectly displayed. Use gmdate() instead.
+     |         | (WordPress.DateTime.RestrictedFunctions.date_date)
+ 490 | WARNING | File system operations only work on the `/tmp/` and
+     |         | `wp-content/uploads/` directories. To avoid unexpected
+     |         | results, please use helper functions like `get_temp_dir()`  or
+     |         | `wp_get_upload_dir()` to get the proper directory path when
+     |         | using functions such as fputcsv(). For more details, please
+     |         | see:
+     |         | https://docs.wpvip.com/technical-references/vip-go-files-system/local-file-operations/
+     |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fputcsv)
+ 502 | WARNING | File system operations only work on the `/tmp/` and
+     |         | `wp-content/uploads/` directories. To avoid unexpected
+     |         | results, please use helper functions like `get_temp_dir()`  or
+     |         | `wp_get_upload_dir()` to get the proper directory path when
+     |         | using functions such as fputcsv(). For more details, please
+     |         | see:
+     |         | https://docs.wpvip.com/technical-references/vip-go-files-system/local-file-operations/
+     |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fputcsv)
+ 531 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'admin_url'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 539 | WARNING | This comment is 75% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 559 | WARNING | Processing form data without nonce verification.
+     |         | (WordPress.Security.NonceVerification.Recommended)
+ 593 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '$updated_count'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 595 | WARNING | Processing form data without nonce verification.
+     |         | (WordPress.Security.NonceVerification.Recommended)
+ 597 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 597 | WARNING | Direct database call without caching detected. Consider using
+     |         | wp_cache_get() / wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 606 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 606 | WARNING | Direct database call without caching detected. Consider using
+     |         | wp_cache_get() / wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 619 | ERROR   | date() is affected by runtime timezone changes which can cause
+     |         | date/time to be incorrectly displayed. Use gmdate() instead.
+     |         | (WordPress.DateTime.RestrictedFunctions.date_date)
+ 620 | ERROR   | date() is affected by runtime timezone changes which can cause
+     |         | date/time to be incorrectly displayed. Use gmdate() instead.
+     |         | (WordPress.DateTime.RestrictedFunctions.date_date)
+ 630 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 630 | WARNING | Direct database call without caching detected. Consider using
+     |         | wp_cache_get() / wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 643 | ERROR   | date() is affected by runtime timezone changes which can cause
+     |         | date/time to be incorrectly displayed. Use gmdate() instead.
+     |         | (WordPress.DateTime.RestrictedFunctions.date_date)
+ 647 | ERROR   | date() is affected by runtime timezone changes which can cause
+     |         | date/time to be incorrectly displayed. Use gmdate() instead.
+     |         | (WordPress.DateTime.RestrictedFunctions.date_date)
+ 658 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 658 | WARNING | Direct database call without caching detected. Consider using
+     |         | wp_cache_get() / wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 670 | ERROR   | date() is affected by runtime timezone changes which can cause
+     |         | date/time to be incorrectly displayed. Use gmdate() instead.
+     |         | (WordPress.DateTime.RestrictedFunctions.date_date)
+ 680 | WARNING | Detected usage of meta_query, possible slow query.
+     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_query)
+ 699 | WARNING | wp_remote_get() is highly discouraged. Please use
+     |         | vip_safe_wp_remote_get() instead which is designed to more
+     |         | gracefully handle failure than wp_remote_get() does.
+     |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get)
+ 716 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 716 | WARNING | Direct database call without caching detected. Consider using
+     |         | wp_cache_get() / wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 770 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'add_query_arg'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 775 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'add_query_arg'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 813 | WARNING | json_encode() is discouraged. Use wp_json_encode() instead.
+     |         | (WordPress.WP.AlternativeFunctions.json_encode_json_encode)
+ 814 | WARNING | json_encode() is discouraged. Use wp_json_encode() instead.
+     |         | (WordPress.WP.AlternativeFunctions.json_encode_json_encode)
+ 818 | WARNING | json_encode() is discouraged. Use wp_json_encode() instead.
+     |         | (WordPress.WP.AlternativeFunctions.json_encode_json_encode)
+ 819 | WARNING | json_encode() is discouraged. Use wp_json_encode() instead.
+     |         | (WordPress.WP.AlternativeFunctions.json_encode_json_encode)
+ 824 | WARNING | json_encode() is discouraged. Use wp_json_encode() instead.
+     |         | (WordPress.WP.AlternativeFunctions.json_encode_json_encode)
+ 882 | WARNING | json_encode() is discouraged. Use wp_json_encode() instead.
+     |         | (WordPress.WP.AlternativeFunctions.json_encode_json_encode)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\functions\landing-functions.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AND 2 WARNINGS AFFECTING 3 LINES
+--------------------------------------------------------------------------------
+  4 | ERROR   | Functions declared in the global namespace by a theme/plugin
+    |         | should start with the theme/plugin prefix. Found:
+    |         | "add_landing_page_body_class".
+    |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 39 | WARNING | This comment is 50% valid code; is this commented out code?
+    |         | (Squiz.PHP.CommentedOutCode.Found)
+ 55 | WARNING | This comment is 50% valid code; is this commented out code?
+    |         | (Squiz.PHP.CommentedOutCode.Found)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\functions\modal-portfolio.php
+--------------------------------------------------------------------------------
+FOUND 2 ERRORS AND 4 WARNINGS AFFECTING 6 LINES
+--------------------------------------------------------------------------------
+ 12 | ERROR   | Functions declared in the global namespace by a theme/plugin
+    |         | should start with the theme/plugin prefix. Found:
+    |         | "proxy_site_func".
+    |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 13 | WARNING | Processing form data without nonce verification.
+    |         | (WordPress.Security.NonceVerification.Recommended)
+ 17 | WARNING | Processing form data without nonce verification.
+    |         | (WordPress.Security.NonceVerification.Recommended)
+ 18 | WARNING | parse_url() is discouraged because of inconsistency in the
+    |         | output across PHP versions; use wp_parse_url() instead.
+    |         | (WordPress.WP.AlternativeFunctions.parse_url_parse_url)
+ 35 | WARNING | wp_remote_get() is highly discouraged. Please use
+    |         | vip_safe_wp_remote_get() instead which is designed to more
+    |         | gracefully handle failure than wp_remote_get() does.
+    |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get)
+ 45 | ERROR   | All output should be run through an escaping function (see the
+    |         | Security sections in the WordPress Developer Handbooks), found
+    |         | '$body'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\functions\post-likes.php
+--------------------------------------------------------------------------------
+FOUND 0 ERRORS AND 2 WARNINGS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+  8 | WARNING | Detected usage of a non-sanitized input variable:
+    |         | $_POST['nonce']
+    |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 13 | WARNING | Detected usage of a non-sanitized input variable:
+    |         | $_POST['like_action']
+    |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\functions\subscribe-handler.php
+--------------------------------------------------------------------------------
+FOUND 14 ERRORS AND 4 WARNINGS AFFECTING 12 LINES
+--------------------------------------------------------------------------------
+   7 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+  15 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_POST['nonce']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+  44 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+  54 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_SERVER['REMOTE_ADDR']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+  54 | ERROR   | Header "REMOTE_ADDR" is user-controlled and should be properly
+     |         | validated before use.
+     |         | (WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders)
+  54 | ERROR   | Detected usage of a possibly undefined superglobal array
+     |         | index: $_SERVER['REMOTE_ADDR']. Check that the array index
+     |         | exists before using it.
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+  54 | WARNING | Due to server-side caching, server-side based client related
+     |         | logic might not work. We recommend implementing client side
+     |         | logic in JavaScript instead.
+     |         | (WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__REMOTE_ADDR__)
+  57 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+  83 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'get_bloginfo'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 108 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'get_bloginfo'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 114 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'date'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 114 | ERROR   | date() is affected by runtime timezone changes which can cause
+     |         | date/time to be incorrectly displayed. Use gmdate() instead.
+     |         | (WordPress.DateTime.RestrictedFunctions.date_date)
+ 114 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'get_bloginfo'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 115 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'home_url'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 115 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'home_url'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 138 | WARNING | `wp_mail` should be used sparingly. For any bulk emailing
+     |         | should be handled by a 3rd party service, in order to prevent
+     |         | domain or IP addresses being flagged as spam.
+     |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.wp_mail_wp_mail)
+ 144 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 146 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\functions\telegram-bot-form.php
+--------------------------------------------------------------------------------
+FOUND 3 ERRORS AFFECTING 3 LINES
+--------------------------------------------------------------------------------
+ 26 | ERROR | Detected high remote request timeout. `timeout` is set to `10`.
+    |       | (WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout)
+ 31 | ERROR | error_log() found. Debug code should not normally be used in
+    |       | production.
+    |       | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 33 | ERROR | error_log() found. Debug code should not normally be used in
+    |       | production.
+    |       | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\graphql\chat-graphql.php
+--------------------------------------------------------------------------------
+FOUND 2 ERRORS AND 8 WARNINGS AFFECTING 9 LINES
+--------------------------------------------------------------------------------
+   8 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "register_chat_graphql_logic".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  79 | WARNING | Detected usage of meta_value, possible slow query.
+     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_value)
+  91 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_SERVER['HTTP_X_FORWARDED_HOST']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+  91 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_SERVER['HTTP_HOST']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+  96 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_SERVER['HTTP_X_FORWARDED_PROTO']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+  99 | WARNING | parse_url() is discouraged because of inconsistency in the
+     |         | output across PHP versions; use wp_parse_url() instead.
+     |         | (WordPress.WP.AlternativeFunctions.parse_url_parse_url)
+ 103 | ERROR   | Type of `$raw_history` must be checked before calling
+     |         | `foreach()` using that variable.
+     |         | (WordPressVIPMinimum.Functions.CheckReturnValue.NonCheckedVariable)
+ 224 | WARNING | Detected usage of meta_value, possible slow query.
+     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_value)
+ 292 | WARNING | json_encode() is discouraged. Use wp_json_encode() instead.
+     |         | (WordPress.WP.AlternativeFunctions.json_encode_json_encode)
+ 347 | WARNING | `wp_mail` should be used sparingly. For any bulk emailing
+     |         | should be handled by a 3rd party service, in order to prevent
+     |         | domain or IP addresses being flagged as spam.
+     |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.wp_mail_wp_mail)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\graphql\landing-graphql.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AND 2 WARNINGS AFFECTING 3 LINES
+--------------------------------------------------------------------------------
+  10 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "register_landing_page_graphql_fields".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 131 | WARNING | This comment is 40% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 163 | WARNING | json_encode() is discouraged. Use wp_json_encode() instead.
+     |         | (WordPress.WP.AlternativeFunctions.json_encode_json_encode)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\graphql\quiz-graphql.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 8 | ERROR | Functions declared in the global namespace by a theme/plugin
+   |       | should start with the theme/plugin prefix. Found:
+   |       | "register_quiz_graphql_logic".
+   |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\graphql-register.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 619 | ERROR | Hook names invoked by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "comment_text".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\quiz\quiz-init.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 8 | ERROR | Global variables defined by a theme/plugin should start with the
+   |       | theme/plugin prefix. Found: "$quiz_dir".
+   |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\quiz\quiz-modal.php
+--------------------------------------------------------------------------------
+FOUND 16 ERRORS AFFECTING 16 LINES
+--------------------------------------------------------------------------------
+  10 | ERROR | Functions declared in the global namespace by a theme/plugin
+     |       | should start with the theme/plugin prefix. Found:
+     |       | "get_quiz_structure".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  47 | ERROR | Functions declared in the global namespace by a theme/plugin
+     |       | should start with the theme/plugin prefix. Found:
+     |       | "render_quiz_modal_html".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 189 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$i'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 190 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$i'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 206 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$step_count'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 268 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$field['_type']'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 275 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 288 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 342 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 373 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 395 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 414 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 449 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 454 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'wpautop'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 463 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$total_steps'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 484 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$total_steps'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\quiz\quiz-settings.php
+--------------------------------------------------------------------------------
+FOUND 2 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+  8 | ERROR | Functions declared in the global namespace by a theme/plugin
+    |       | should start with the theme/plugin prefix. Found:
+    |       | "rockstars_get_quiz_icons".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 59 | ERROR | Functions declared in the global namespace by a theme/plugin
+    |       | should start with the theme/plugin prefix. Found:
+    |       | "crb_register_quiz_settings".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+--------------------------------------------------------------------------------
+
+
+FILE: inc\quiz\quiz-submissions.php
+--------------------------------------------------------------------------------
+FOUND 23 ERRORS AND 19 WARNINGS AFFECTING 38 LINES
+--------------------------------------------------------------------------------
+   7 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_register_post_type".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  43 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_get_structure_helper".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  54 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_custom_columns".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  68 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_column_content".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  76 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '$post_id'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  82 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_meta_box".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  94 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_meta_box_callback".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  95 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'quiz_get_submission_html'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  99 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_get_submission_html".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 208 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '$step_content'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 231 | WARNING | print_r() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_print_r)
+ 235 | WARNING | This comment is 70% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 249 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_ajax_get_details".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 251 | ERROR   | Processing form data without nonce verification.
+     |         | (WordPress.Security.NonceVerification.Missing)
+ 251 | ERROR   | Detected usage of a possibly undefined superglobal array
+     |         | index: $_POST['id']. Check that the array index exists before
+     |         | using it.
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 262 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_admin_footer_scripts".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 310 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_process_submission".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 371 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_SERVER['REMOTE_ADDR']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 371 | ERROR   | Header "REMOTE_ADDR" is user-controlled and should be properly
+     |         | validated before use.
+     |         | (WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders)
+ 371 | WARNING | Due to server-side caching, server-side based client related
+     |         | logic might not work. We recommend implementing client side
+     |         | logic in JavaScript instead.
+     |         | (WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__REMOTE_ADDR__)
+ 375 | WARNING | This comment is 60% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 384 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 403 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 409 | WARNING | File system operations only work on the `/tmp/` and
+     |         | `wp-content/uploads/` directories. To avoid unexpected
+     |         | results, please use helper functions like `get_temp_dir()`  or
+     |         | `wp_get_upload_dir()` to get the proper directory path when
+     |         | using functions such as file_put_contents(). For more details,
+     |         | please see:
+     |         | https://docs.wpvip.com/technical-references/vip-go-files-system/local-file-operations/
+     |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents)
+ 430 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 432 | WARNING | File system operations only work on the `/tmp/` and
+     |         | `wp-content/uploads/` directories. To avoid unexpected
+     |         | results, please use helper functions like `get_temp_dir()`  or
+     |         | `wp_get_upload_dir()` to get the proper directory path when
+     |         | using functions such as unlink(). For more details, please
+     |         | see:
+     |         | https://docs.wpvip.com/technical-references/vip-go-files-system/local-file-operations/
+     |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_unlink)
+ 434 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 438 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 498 | WARNING | `wp_mail` should be used sparingly. For any bulk emailing
+     |         | should be handled by a 3rd party service, in order to prevent
+     |         | domain or IP addresses being flagged as spam.
+     |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.wp_mail_wp_mail)
+ 534 | WARNING | `strip_tags()` does not strip CSS and JS in between the script
+     |         | and style tags. Use `wp_strip_all_tags()` to strip all tags.
+     |         | (WordPressVIPMinimum.Functions.StripTags.StripTagsOneParameter)
+ 568 | WARNING | `strip_tags()` does not strip CSS and JS in between the script
+     |         | and style tags. Use `wp_strip_all_tags()` to strip all tags.
+     |         | (WordPressVIPMinimum.Functions.StripTags.StripTagsOneParameter)
+ 568 | WARNING | print_r() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_print_r)
+ 574 | WARNING | `strip_tags()` does not strip CSS and JS in between the script
+     |         | and style tags. Use `wp_strip_all_tags()` to strip all tags.
+     |         | (WordPressVIPMinimum.Functions.StripTags.StripTagsOneParameter)
+ 603 | WARNING | Using cURL functions is highly discouraged within VIP context.
+     |         | Please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_init)
+ 604 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 605 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 609 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 610 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_exec)
+ 611 | WARNING | Using cURL functions is highly discouraged within VIP context.
+     |         | Please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_close)
+ 622 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_handle_submission".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 624 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_POST['nonce']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 640 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_enqueue_scripts".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+--------------------------------------------------------------------------------
+
+
+FILE: landings-template.php
+--------------------------------------------------------------------------------
+FOUND 77 ERRORS AFFECTING 66 LINES
+--------------------------------------------------------------------------------
+  21 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$hero_title".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  23 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$words".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  25 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$last_word".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  44 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$btn1_text".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  51 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$btn2_text".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  65 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$i".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  93 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$i".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 121 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$hero_img_url".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 160 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$sec2_title".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 176 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$content_blocks".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 178 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$block".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 228 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$item".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 242 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$tags".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 246 | ERROR | Overriding WordPress globals is prohibited. Found assignment to
+     |       | $tag (WordPress.WP.GlobalVariablesOverride.Prohibited)
+ 261 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$sec3_header".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 282 | ERROR | Overriding WordPress globals is prohibited. Found assignment to
+     |       | $tabs (WordPress.WP.GlobalVariablesOverride.Prohibited)
+ 284 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$index".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 284 | ERROR | Overriding WordPress globals is prohibited. Found assignment to
+     |       | $tab (WordPress.WP.GlobalVariablesOverride.Prohibited)
+ 285 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$tab_id".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 286 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$is_active".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 287 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$active_class".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 288 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$aria_selected".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 290 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$active_class'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 290 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$tab_id'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 290 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$aria_selected'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 290 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$tab_id'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 290 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$tab_id'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 293 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$tab['tab_icon']'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 313 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$index".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 313 | ERROR | Overriding WordPress globals is prohibited. Found assignment to
+     |       | $tab (WordPress.WP.GlobalVariablesOverride.Prohibited)
+ 314 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$tab_id".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 315 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$hidden_class".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 317 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$tab_id'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 317 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$hidden_class'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 317 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$tab_id'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 350 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$sec4_header".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 363 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$cards".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 365 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$index".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 365 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$card".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 366 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$delay".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 373 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$card['card_icon']'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 394 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$sec5_title".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 403 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$faqs".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 405 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$faq".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 410 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$faq['faq_icon']'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 464 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$pricing_cards".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 466 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$index".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 466 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$card".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 467 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$delay".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 468 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$is_popular".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 469 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$border_class".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 470 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$dark_border_class".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 473 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$btn_classes".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 478 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$border_class'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 478 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$dark_border_class'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 488 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$price".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 500 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$feature".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 511 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$btn_classes'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 525 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$sec7_title".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 526 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$sec7_desc".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 527 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$sec7_read_more_text".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 528 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$sec7_read_more_url".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 529 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$sec7_cat_data".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 533 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$sec7_cat_data".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 537 | ERROR | Overriding WordPress globals is prohibited. Found assignment to
+     |       | $cat_id (WordPress.WP.GlobalVariablesOverride.Prohibited)
+ 539 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$first_term".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 541 | ERROR | Overriding WordPress globals is prohibited. Found assignment to
+     |       | $cat_id (WordPress.WP.GlobalVariablesOverride.Prohibited)
+ 547 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$blog_query".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 570 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$delay_counter".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 572 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$delay".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 579 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'get_the_post_thumbnail_url'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 590 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'wp_trim_words'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 594 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'get_avatar_url'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 623 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$sec8_title".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 624 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$sec8_placeholder".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 625 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$sec8_btn_text".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 718 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'wp_create_nonce'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+--------------------------------------------------------------------------------
+
+
+FILE: page-faqs.php
+--------------------------------------------------------------------------------
+FOUND 12 ERRORS AFFECTING 10 LINES
+--------------------------------------------------------------------------------
+ 22 | ERROR | Global variables defined by a theme/plugin should start with the
+    |       | theme/plugin prefix. Found: "$faq_items".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 24 | ERROR | Global variables defined by a theme/plugin should start with the
+    |       | theme/plugin prefix. Found: "$index".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 24 | ERROR | Global variables defined by a theme/plugin should start with the
+    |       | theme/plugin prefix. Found: "$item".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 25 | ERROR | Global variables defined by a theme/plugin should start with the
+    |       | theme/plugin prefix. Found: "$question".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 26 | ERROR | Global variables defined by a theme/plugin should start with the
+    |       | theme/plugin prefix. Found: "$raw_answer".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 26 | ERROR | Hook names invoked by a theme/plugin should start with the
+    |       | theme/plugin prefix. Found: "the_content".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound)
+ 27 | ERROR | Global variables defined by a theme/plugin should start with the
+    |       | theme/plugin prefix. Found: "$answer".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 30 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | '$index'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 32 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | '$question'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 34 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | '$index'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 38 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | '$index'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 40 | ERROR | All output should be run through an escaping function (see the
+    |       | Security sections in the WordPress Developer Handbooks), found
+    |       | '$answer'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+--------------------------------------------------------------------------------
+
+
+FILE: page-template-custom.php
+--------------------------------------------------------------------------------
+FOUND 94 ERRORS AFFECTING 89 LINES
+--------------------------------------------------------------------------------
+   22 | ERROR | [ ] Overriding WordPress globals is prohibited. Found
+      |       |     assignment to $title
+      |       |     (WordPress.WP.GlobalVariablesOverride.Prohibited)
+   23 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$description".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+   25 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$btn1_text".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+   26 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$btn1_url".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+   28 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$btn2_text".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+   29 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$btn2_url".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  182 | ERROR | [ ] Overriding WordPress globals is prohibited. Found
+      |       |     assignment to $title
+      |       |     (WordPress.WP.GlobalVariablesOverride.Prohibited)
+  183 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$desc".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  184 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$features".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  211 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$i".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  211 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$feature".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  213 | ERROR | [ ] All output should be run through an escaping function (see
+      |       |     the Security sections in the WordPress Developer
+      |       |     Handbooks), found '$i'.
+      |       |     (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  215 | ERROR | [ ] All output should be run through an escaping function (see
+      |       |     the Security sections in the WordPress Developer
+      |       |     Handbooks), found '$feature['feature_icon_svg']'.
+      |       |     (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  238 | ERROR | [ ] Overriding WordPress globals is prohibited. Found
+      |       |     assignment to $title
+      |       |     (WordPress.WP.GlobalVariablesOverride.Prohibited)
+  239 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$description".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  240 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$video_url".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  241 | ERROR | [ ] Overriding WordPress globals is prohibited. Found
+      |       |     assignment to $preview
+      |       |     (WordPress.WP.GlobalVariablesOverride.Prohibited)
+  242 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$bg_shape".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  300 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$logos".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  309 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$item".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  336 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$page_id".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  337 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$slides".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  344 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$slide".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  345 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$img_id".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  346 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$url".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  347 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$alt".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  348 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$img_html".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  350 | ERROR | [ ] All output should be run through an escaping function (see
+      |       |     the Security sections in the WordPress Developer
+      |       |     Handbooks), found '$url'.
+      |       |     (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  351 | ERROR | [ ] All output should be run through an escaping function (see
+      |       |     the Security sections in the WordPress Developer
+      |       |     Handbooks), found '$img_html'.
+      |       |     (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  372 | ERROR | [ ] Overriding WordPress globals is prohibited. Found
+      |       |     assignment to $title
+      |       |     (WordPress.WP.GlobalVariablesOverride.Prohibited)
+  373 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$subtitle".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  374 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$image".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  375 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$features".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  399 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$columns".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  400 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$col".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  403 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$item".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  437 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$image".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  438 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$benefits".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  455 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$benefit".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  486 | ERROR | [ ] All output should be run through an escaping function (see
+      |       |     the Security sections in the WordPress Developer
+      |       |     Handbooks), found 'carbon_get_theme_option'.
+      |       |     (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  489 | ERROR | [ ] All output should be run through an escaping function (see
+      |       |     the Security sections in the WordPress Developer
+      |       |     Handbooks), found 'carbon_get_theme_option'.
+      |       |     (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  497 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$testimonials".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  499 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$index".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  499 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$item".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  500 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$delay".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  501 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$stars".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  505 | ERROR | [ ] All output should be run through an escaping function (see
+      |       |     the Security sections in the WordPress Developer
+      |       |     Handbooks), found '$delay'.
+      |       |     (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  507 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$i".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  524 | ERROR | [ ] All output should be run through an escaping function (see
+      |       |     the Security sections in the WordPress Developer
+      |       |     Handbooks), found 'wp_get_attachment_image_url'.
+      |       |     (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  558 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$section_title".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  559 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found:
+      |       |     "$section_description".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  560 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$monthly_label".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  561 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$yearly_label".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  562 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$pricing_plans".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  612 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$delay".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  613 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$index".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  613 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$plan".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  614 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$plan_name".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  615 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$monthly_price".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  616 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$yearly_price".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  617 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$description".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  618 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$button_text".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  619 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$button_url".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  620 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$features".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  621 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$is_popular".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  630 | ERROR | [ ] Mismatched text domain. Expected 'rock-star' or
+      |       |     'your-theme-textdomain' but got 'textdomain'.
+      |       |     (WordPress.WP.I18n.TextDomainMismatch)
+  659 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$feature_index".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  659 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$feature".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  660 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$feature_text".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  661 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$feature_status".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  662 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$is_last".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  704 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$delay".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  767 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$args_category".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  779 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$category_posts".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  785 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$args_latest".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  795 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$posts_query".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  797 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$posts_query".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  808 | ERROR | [ ] Mismatched text domain. Expected 'rock-star' or
+      |       |     'your-theme-textdomain' but got 'textdomain'.
+      |       |     (WordPress.WP.I18n.TextDomainMismatch)
+  811 | ERROR | [ ] Mismatched text domain. Expected 'rock-star' or
+      |       |     'your-theme-textdomain' but got 'textdomain'.
+      |       |     (WordPress.WP.I18n.TextDomainMismatch)
+  819 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$delay".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  820 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$post_count".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  824 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$categories".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  825 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$first_category".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  829 | ERROR | [ ] All output should be run through an escaping function (see
+      |       |     the Security sections in the WordPress Developer
+      |       |     Handbooks), found '$delay'.
+      |       |     (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  837 | ERROR | [ ] All output should be run through an escaping function (see
+      |       |     the Security sections in the WordPress Developer
+      |       |     Handbooks), found 'get_template_directory_uri'.
+      |       |     (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  848 | ERROR | [ ] All output should be run through an escaping function (see
+      |       |     the Security sections in the WordPress Developer
+      |       |     Handbooks), found 'wp_trim_words'.
+      |       |     (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  857 | ERROR | [ ] Mismatched text domain. Expected 'rock-star' or
+      |       |     'your-theme-textdomain' but got 'textdomain'.
+      |       |     (WordPress.WP.I18n.TextDomainMismatch)
+  858 | ERROR | [ ] All output should be run through an escaping function (see
+      |       |     the Security sections in the WordPress Developer
+      |       |     Handbooks), found 'get_author_posts_url'.
+      |       |     (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  865 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$author_description".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  866 | ERROR | [ ] All output should be run through an escaping function (see
+      |       |     the Security sections in the WordPress Developer
+      |       |     Handbooks), found '__'.
+      |       |     (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  866 | ERROR | [ ] Mismatched text domain. Expected 'rock-star' or
+      |       |     'your-theme-textdomain' but got 'textdomain'.
+      |       |     (WordPress.WP.I18n.TextDomainMismatch)
+  872 | ERROR | [ ] Mismatched text domain. Expected 'rock-star' or
+      |       |     'your-theme-textdomain' but got 'textdomain'.
+      |       |     (WordPress.WP.I18n.TextDomainMismatch)
+  880 | ERROR | [ ] Global variables defined by a theme/plugin should start
+      |       |     with the theme/plugin prefix. Found: "$delay".
+      |       |     (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 1096 | ERROR | [x] Additional whitespace found at end of file
+      |       |     (Squiz.WhiteSpace.SuperfluousWhitespace.EndFile)
+--------------------------------------------------------------------------------
+PHPCBF CAN FIX THE 1 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+--------------------------------------------------------------------------------
+
+
+FILE: quiz-plugin\includes\quiz-modal.php
+--------------------------------------------------------------------------------
+FOUND 15 ERRORS AFFECTING 15 LINES
+--------------------------------------------------------------------------------
+   7 | ERROR | Functions declared in the global namespace by a theme/plugin
+     |       | should start with the theme/plugin prefix. Found:
+     |       | "quiz_p_render_modal_html".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 149 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$i'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 150 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$i'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 166 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$step_count'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 228 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$field['_type']'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 235 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 248 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 302 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 333 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 355 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 374 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 409 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$is_required'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 414 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'wpautop'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 423 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$total_steps'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 444 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$total_steps'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+--------------------------------------------------------------------------------
+
+
+FILE: quiz-plugin\includes\quiz-settings.php
+--------------------------------------------------------------------------------
+FOUND 2 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+  8 | ERROR | Functions declared in the global namespace by a theme/plugin
+    |       | should start with the theme/plugin prefix. Found:
+    |       | "quiz_p_get_icons".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 59 | ERROR | Functions declared in the global namespace by a theme/plugin
+    |       | should start with the theme/plugin prefix. Found:
+    |       | "quiz_p_register_settings".
+    |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+--------------------------------------------------------------------------------
+
+
+FILE: quiz-plugin\includes\quiz-submissions.php
+--------------------------------------------------------------------------------
+FOUND 23 ERRORS AND 17 WARNINGS AFFECTING 34 LINES
+--------------------------------------------------------------------------------
+   7 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_p_register_post_type".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  43 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_p_get_structure".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  81 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_p_custom_columns".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  95 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_p_column_content".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 103 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '$post_id'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 109 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_p_meta_box".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 121 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_p_meta_box_callback".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 122 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'quiz_p_get_submission_html'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 126 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_p_get_submission_html".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 235 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '$step_content'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 258 | WARNING | print_r() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_print_r)
+ 264 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '$orphan_content'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 274 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_p_ajax_get_details".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 276 | ERROR   | Processing form data without nonce verification.
+     |         | (WordPress.Security.NonceVerification.Missing)
+ 276 | ERROR   | Detected usage of a possibly undefined superglobal array
+     |         | index: $_POST['id']. Check that the array index exists before
+     |         | using it.
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 287 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_p_admin_footer_scripts".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 335 | ERROR   | Functions declared in the global namespace by a theme/plugin
+     |         | should start with the theme/plugin prefix. Found:
+     |         | "quiz_p_handle_submission".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 338 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_POST['nonce']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 403 | WARNING | Detected usage of a non-sanitized input variable:
+     |         | $_SERVER['REMOTE_ADDR']
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 403 | ERROR   | Header "REMOTE_ADDR" is user-controlled and should be properly
+     |         | validated before use.
+     |         | (WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders)
+ 403 | ERROR   | Detected usage of a possibly undefined superglobal array
+     |         | index: $_SERVER['REMOTE_ADDR']. Check that the array index
+     |         | exists before using it.
+     |         | (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 403 | WARNING | Due to server-side caching, server-side based client related
+     |         | logic might not work. We recommend implementing client side
+     |         | logic in JavaScript instead.
+     |         | (WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__REMOTE_ADDR__)
+ 450 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 456 | WARNING | print_r() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_print_r)
+ 473 | WARNING | `wp_mail` should be used sparingly. For any bulk emailing
+     |         | should be handled by a 3rd party service, in order to prevent
+     |         | domain or IP addresses being flagged as spam.
+     |         | (WordPressVIPMinimum.Functions.RestrictedFunctions.wp_mail_wp_mail)
+ 507 | WARNING | `strip_tags()` does not strip CSS and JS in between the script
+     |         | and style tags. Use `wp_strip_all_tags()` to strip all tags.
+     |         | (WordPressVIPMinimum.Functions.StripTags.StripTagsOneParameter)
+ 540 | WARNING | `strip_tags()` does not strip CSS and JS in between the script
+     |         | and style tags. Use `wp_strip_all_tags()` to strip all tags.
+     |         | (WordPressVIPMinimum.Functions.StripTags.StripTagsOneParameter)
+ 540 | WARNING | print_r() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_print_r)
+ 546 | WARNING | `strip_tags()` does not strip CSS and JS in between the script
+     |         | and style tags. Use `wp_strip_all_tags()` to strip all tags.
+     |         | (WordPressVIPMinimum.Functions.StripTags.StripTagsOneParameter)
+ 566 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 570 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 584 | WARNING | Using cURL functions is highly discouraged within VIP context.
+     |         | Please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_init)
+ 585 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 586 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 590 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+ 591 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_exec)
+ 593 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 593 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_error)
+ 597 | ERROR   | error_log() found. Debug code should not normally be used in
+     |         | production.
+     |         | (WordPress.PHP.DevelopmentFunctions.error_log_error_log)
+ 600 | WARNING | Using cURL functions is highly discouraged within VIP context.
+     |         | Please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_close)
+--------------------------------------------------------------------------------
+
+
+FILE: quiz-plugin\quiz-plugin.php
+--------------------------------------------------------------------------------
+FOUND 9 ERRORS AFFECTING 9 LINES
+--------------------------------------------------------------------------------
+  17 | ERROR | Global constants defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "QUIZ_P_VERSION".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound)
+  18 | ERROR | Global constants defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "QUIZ_P_DIR".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound)
+  19 | ERROR | Global constants defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "QUIZ_P_URL".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound)
+  25 | ERROR | Functions declared in the global namespace by a theme/plugin
+     |       | should start with the theme/plugin prefix. Found:
+     |       | "quiz_p_check_dependencies".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  29 | ERROR | Mismatched text domain. Expected 'rock-star' or
+     |       | 'your-theme-textdomain' but got 'rock-stars-quiz'.
+     |       | (WordPress.WP.I18n.TextDomainMismatch)
+  38 | ERROR | Functions declared in the global namespace by a theme/plugin
+     |       | should start with the theme/plugin prefix. Found: "quiz_p_init".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  53 | ERROR | Functions declared in the global namespace by a theme/plugin
+     |       | should start with the theme/plugin prefix. Found:
+     |       | "quiz_p_enqueue_assets".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+  92 | ERROR | Functions declared in the global namespace by a theme/plugin
+     |       | should start with the theme/plugin prefix. Found:
+     |       | "quiz_p_admin_assets".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+ 101 | ERROR | Functions declared in the global namespace by a theme/plugin
+     |       | should start with the theme/plugin prefix. Found:
+     |       | "quiz_p_render_modal".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound)
+--------------------------------------------------------------------------------
+
+
+FILE: single.php
+--------------------------------------------------------------------------------
+FOUND 13 ERRORS AFFECTING 12 LINES
+--------------------------------------------------------------------------------
+  30 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'get_author_posts_url'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  57 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'date'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  57 | ERROR | date() is affected by runtime timezone changes which can cause
+     |       | date/time to be incorrectly displayed. Use gmdate() instead.
+     |       | (WordPress.DateTime.RestrictedFunctions.date_date)
+  69 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'get_comments_number'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  73 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'get_the_ID'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  82 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$likes".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 100 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$views".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 101 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$views'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 113 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$categories".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 115 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$category".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 147 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$tags".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 149 | ERROR | Overriding WordPress globals is prohibited. Found assignment to
+     |       | $tag (WordPress.WP.GlobalVariablesOverride.Prohibited)
+ 150 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'get_tag_link'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+--------------------------------------------------------------------------------
+
+
+FILE: template-posts-filter.php
+--------------------------------------------------------------------------------
+FOUND 17 ERRORS AFFECTING 17 LINES
+--------------------------------------------------------------------------------
+  72 | ERROR | Overriding WordPress globals is prohibited. Found assignment to
+     |       | $paged (WordPress.WP.GlobalVariablesOverride.Prohibited)
+  76 | ERROR | Overriding WordPress globals is prohibited. Found assignment to
+     |       | $paged (WordPress.WP.GlobalVariablesOverride.Prohibited)
+  79 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$query".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  88 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$categories".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  89 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$category_name".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  90 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$author_id".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  97 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$category_name'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 111 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'get_the_excerpt'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 121 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'get_author_posts_url'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 125 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | 'get_the_author_meta'.
+     |       | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 140 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$big".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 142 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$links".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 158 | ERROR | Overriding WordPress globals is prohibited. Found assignment to
+     |       | $link (WordPress.WP.GlobalVariablesOverride.Prohibited)
+ 159 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$is_active".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 160 | ERROR | Global variables defined by a theme/plugin should start with the
+     |       | theme/plugin prefix. Found: "$is_disabled".
+     |       | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 169 | ERROR | Overriding WordPress globals is prohibited. Found assignment to
+     |       | $link (WordPress.WP.GlobalVariablesOverride.Prohibited)
+ 174 | ERROR | All output should be run through an escaping function (see the
+     |       | Security sections in the WordPress Developer Handbooks), found
+     |       | '$link'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+--------------------------------------------------------------------------------
+
+
+FILE: test-telegram.php
+--------------------------------------------------------------------------------
+FOUND 30 ERRORS AND 14 WARNINGS AFFECTING 35 LINES
+--------------------------------------------------------------------------------
+  10 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$token".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  11 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$chat_id".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  14 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$test_message".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  15 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$test_message".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  15 | ERROR   | date() is affected by runtime timezone changes which can cause
+     |         | date/time to be incorrectly displayed. Use gmdate() instead.
+     |         | (WordPress.DateTime.RestrictedFunctions.date_date)
+  16 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$test_message".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  17 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$test_message".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  41 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'substr'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  42 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '"            Chat ID: $chat_id<br>\n"'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  43 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'date'. (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  43 | ERROR   | date() is affected by runtime timezone changes which can cause
+     |         | date/time to be incorrectly displayed. Use gmdate() instead.
+     |         | (WordPress.DateTime.RestrictedFunctions.date_date)
+  49 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$url".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  51 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$data".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  58 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$ch".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  58 | WARNING | Using cURL functions is highly discouraged within VIP context.
+     |         | Please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_init)
+  59 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+  60 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+  61 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+  62 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+  63 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+  64 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_setopt)
+  66 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$response".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  66 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_exec)
+  67 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$http_code".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  67 | WARNING | Using cURL functions is highly discouraged within VIP context.
+     |         | Please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_getinfo)
+  68 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$curl_error".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  68 | WARNING | Using cURL functions is highly discouraged. Use
+     |         | wp_remote_get() instead.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_error)
+  69 | WARNING | Using cURL functions is highly discouraged within VIP context.
+     |         | Please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.
+     |         | (WordPress.WP.AlternativeFunctions.curl_curl_close)
+  72 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$response_data".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+  79 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '$response_data['result']['message_id']'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  89 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '"            cURL Error: $curl_error<br>\n"'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  92 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '"            HTTP Code: $http_code<br>\n"'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+  95 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '$response_data['description']'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 103 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'htmlspecialchars'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 103 | WARNING | json_encode() is discouraged. Use wp_json_encode() instead.
+     |         | (WordPress.WP.AlternativeFunctions.json_encode_json_encode)
+ 108 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$bot_info_url".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 109 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$bot_info".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 109 | WARNING | file_get_contents() is uncached. If the function is being used
+     |         | to fetch a remote file (e.g. a URL starting with https://),
+     |         | please use wpcom_vip_file_get_contents() to ensure the results
+     |         | are cached. For more details, please see:
+     |         | https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/
+     |         | (WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown)
+ 110 | ERROR   | Global variables defined by a theme/plugin should start with
+     |         | the theme/plugin prefix. Found: "$bot_data".
+     |         | (WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound)
+ 115 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '$bot_data['result']['username']'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 116 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '$bot_data['result']['id']'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 117 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | '$bot_data['result']['first_name']'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 126 | ERROR   | All output should be run through an escaping function (see the
+     |         | Security sections in the WordPress Developer Handbooks), found
+     |         | 'htmlspecialchars'.
+     |         | (WordPress.Security.EscapeOutput.OutputNotEscaped)
+ 126 | WARNING | json_encode() is discouraged. Use wp_json_encode() instead.
+     |         | (WordPress.WP.AlternativeFunctions.json_encode_json_encode)
+--------------------------------------------------------------------------------
+
+

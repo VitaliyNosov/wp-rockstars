@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<ruleset name="RockStarsVIP">
+    <!-- Description of the ruleset -->
+    <description>Custom ruleset for Rock Stars theme VIP optimization.</description>
+
+    <!-- Exclude directories -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/assets/*</exclude-pattern>
+    <exclude-pattern>*/images/*</exclude-pattern>
+    <exclude-pattern>*/common/js/*</exclude-pattern>
+    <exclude-pattern>*/common/css/*</exclude-pattern>
+
+    <!-- PHP Version Support -->
+    <config name="testVersion" value="8.2"/>
+
+    <!-- Use WordPress VIP Go Standard -->
+    <rule ref="WordPress-VIP-Go"/>
+
+    <!-- Additional Rules -->
+    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+        <properties>
+            <property name="prefixes" type="array">
+                <element value="rock_stars"/>
+                <element value="rs"/>
+                <element value="wp_custom"/>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- Configure text domain -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="rock-star"/>
+                <element value="your-theme-textdomain"/>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- Allow short open tags if needed, but VIP prefers full ones -->
+    <arg value="ps"/>
+    <arg name="colors"/>
+    <arg name="extensions" value="php"/>
+
+    <!-- Set the base path for relative file paths in reports -->
+    <arg name="basepath" value="."/>
+</ruleset>

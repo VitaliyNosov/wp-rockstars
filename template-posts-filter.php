@@ -11,10 +11,9 @@ get_header();
         <div class="flex flex-wrap items-center mx-[-16px]">
             <div class="w-full md:w-8/12 lg:w-7/12 px-4">
                 <div class="max-w-[570px] mb-12 md:mb-0">
-                    <h1 class="font-bold text-black dark:text-white text-2xl sm:text-3xl mb-5">Blog Grids</h1>
+                    <h1 class="font-bold text-black dark:text-white text-2xl sm:text-3xl mb-5"><?php esc_html_e( 'Blog Grids', 'rock-stars' ); ?></h1>
                     <p class="font-medium text-base text-body-color leading-relaxed">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius eros eget sapien consectetur ultrices.
-                        Ut quis dapibus libero.
+                        <?php esc_html_e( 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius eros eget sapien consectetur ultrices. Ut quis dapibus libero.', 'rock-stars' ); ?>
                     </p>
                 </div>
             </div>
@@ -22,10 +21,10 @@ get_header();
                 <div class="text-end">
                     <ul class="flex items-center md:justify-end">
                         <li class="flex items-center">
-                            <a href="index.html" class="font-medium text-base text-body-color pr-1 hover:text-primary">Home</a>
+                            <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="font-medium text-base text-body-color pr-1 hover:text-primary"><?php esc_html_e( 'Home', 'rock-stars' ); ?></a>
                             <span class="block w-2 h-2 border-t-2 border-r-2 border-body-color rotate-45 mr-3"></span>
                         </li>
-                        <li class="font-medium text-base text-primary">Blog Grids</li>
+                        <li class="font-medium text-base text-primary"><?php esc_html_e( 'Blog Grids', 'rock-stars' ); ?></li>
                     </ul>
                 </div>
             </div>
@@ -69,65 +68,65 @@ get_header();
         <div class="flex flex-wrap mx-[-16px] justify-center">
             <?php
             // Принудительно устанавливаем paged = 1 для главной страницы
-            $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+            $rock_stars_paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
             
             // Если это первая страница без параметра paged, устанавливаем явно
             if (!get_query_var('paged') && !is_paged()) {
-                $paged = 1;
+                $rock_stars_paged = 1;
             }
 
-            $query = new WP_Query([
+            $rock_stars_query = new WP_Query([
                 'post_type' => 'post',
                 'posts_per_page' => 9,
-                'paged' => $paged,
+                'paged' => $rock_stars_paged,
                 'ignore_sticky_posts' => true,
             ]);
 
-            if ($query->have_posts()) :
-                while ($query->have_posts()) : $query->the_post();
-                    $categories = get_the_category();
-                    $category_name = !empty($categories) ? esc_html($categories[0]->name) : '';
-                    $author_id = get_the_author_meta('ID');
+            if ($rock_stars_query->have_posts()) :
+                while ($rock_stars_query->have_posts()) : $rock_stars_query->the_post();
+                    $rock_stars_categories = get_the_category();
+                    $rock_stars_category_name = !empty($rock_stars_categories) ? $rock_stars_categories[0]->name : '';
+                    $rock_stars_author_id = get_the_author_meta('ID');
             ?>
                     <div class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 px-4">
-                        <div class="relative bg-white dark:bg-dark shadow-one rounded-md overflow-hidden mb-10 wow fadeInUp" data-wow-delay=".1s">
-                            <a href="<?php the_permalink(); ?>" class="w-full block relative">
-                                <?php if ($category_name) : ?>
+                        <div class="relative bg-white dark:bg-dark shadow-one rounded-md overflow-hidden mb-10 wow fadeInUp" data-wow-delay="<?php echo esc_attr( '.1s' ); ?>">
+                            <a href="<?php echo esc_url( get_permalink() ); ?>" class="w-full block relative">
+                                <?php if ($rock_stars_category_name) : ?>
                                     <span class="absolute top-6 right-6 bg-primary rounded-full inline-flex items-center justify-center py-2 px-4 font-semibold text-sm text-white">
-                                        <?php echo $category_name; ?>
+                                        <?php echo esc_html( $rock_stars_category_name ); ?>
                                     </span>
                                 <?php endif; ?>
                                 <?php if (has_post_thumbnail()) : ?>
-                                    <img src="<?php the_post_thumbnail_url('large'); ?>" alt="<?php the_title_attribute(); ?>" class="w-full" />
+                                    <img src="<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'large' ) ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>" class="w-full" />
                                 <?php endif; ?>
                             </a>
                             <div class="p-6 sm:p-8 md:py-8 md:px-6 lg:p-8 xl:py-8 xl:px-5 2xl:p-8">
                                 <h3>
-                                    <a href="<?php the_permalink(); ?>" class="font-bold text-black dark:text-white text-xl sm:text-2xl block mb-4 hover:text-primary dark:hover:text-primary">
-                                        <?php the_title(); ?>
+                                    <a href="<?php echo esc_url( get_permalink() ); ?>" class="font-bold text-black dark:text-white text-xl sm:text-2xl block mb-4 hover:text-primary dark:hover:text-primary">
+                                        <?php echo esc_html( get_the_title() ); ?>
                                     </a>
                                 </h3>
                                 <p class="text-base text-body-color font-medium pb-6 mb-6 border-b border-body-color border-opacity-10 dark:border-white dark:border-opacity-10">
-                                    <?php echo get_the_excerpt(); ?>
+                                    <?php echo esc_html( get_the_excerpt() ); ?>
                                 </p>
                                 <div class="flex items-center">
                                     <div class="flex items-center pr-5 mr-5 xl:pr-3 2xl:pr-5 xl:mr-3 2xl:mr-5 border-r border-body-color border-opacity-10 dark:border-white dark:border-opacity-10">
                                         <div class="max-w-[40px] w-full h-[40px] rounded-full overflow-hidden mr-4">
-                                            <?php echo get_avatar($author_id, 40); ?>
+                                            <?php echo get_avatar($rock_stars_author_id, 40); ?>
                                         </div>
                                         <div class="w-full">
                                             <h4 class="text-sm font-medium text-dark dark:text-white mb-1">
-                                                By
-                                                <a href="<?php echo get_author_posts_url($author_id); ?>" class="text-dark dark:text-white hover:text-primary dark:hover:text-primary">
-                                                    <?php the_author(); ?>
+                                                <?php esc_html_e( 'By', 'rock-stars' ); ?>
+                                                <a href="<?php echo esc_url( get_author_posts_url($rock_stars_author_id) ); ?>" class="text-dark dark:text-white hover:text-primary dark:hover:text-primary">
+                                                    <?php echo esc_html( get_the_author() ); ?>
                                                 </a>
                                             </h4>
-                                            <p class="text-xs text-body-color"><?php echo get_the_author_meta('description'); ?></p>
+                                            <p class="text-xs text-body-color"><?php echo esc_html( get_the_author_meta('description') ); ?></p>
                                         </div>
                                     </div>
                                     <div class="inline-block">
-                                        <h4 class="text-sm font-medium text-dark dark:text-white mb-1">Date</h4>
-                                        <p class="text-xs text-body-color"><?php echo get_the_date(); ?></p>
+                                        <h4 class="text-sm font-medium text-dark dark:text-white mb-1"><?php esc_html_e( 'Date', 'rock-stars' ); ?></h4>
+                                        <p class="text-xs text-body-color"><?php echo esc_html( get_the_date() ); ?></p>
                                     </div>
                                 </div>
                             </div>
@@ -137,41 +136,41 @@ get_header();
                 endwhile;
 
                 // Navigation section
-                $big = 999999999; // уникальное число для замены
+                $rock_stars_big = 999999999; // уникальное число для замены
 
-                $links = paginate_links([
-                    'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+                $rock_stars_links = paginate_links([
+                    'base' => str_replace($rock_stars_big, '%#%', esc_url(get_pagenum_link($rock_stars_big))),
                     'format' => '?paged=%#%',
-                    'current' => max(1, $paged),
-                    'total' => $query->max_num_pages,
+                    'current' => max(1, $rock_stars_paged),
+                    'total' => $rock_stars_query->max_num_pages,
                     'mid_size' => 2,
-                    'prev_text' => 'Prev',
-                    'next_text' => 'Next',
+                    'prev_text' => esc_html__( 'Prev', 'rock-stars' ),
+                    'next_text' => esc_html__( 'Next', 'rock-stars' ),
                     'type' => 'array',
                     'show_all' => false,
                     'end_size' => 1,
                 ]);
 
-                if (is_array($links)) : ?>
+                if (is_array($rock_stars_links)) : ?>
                     <div class="w-full">
                         <ul class="flex items-center pt-8 justify-center">
-                            <?php foreach ($links as $link) :
-                                $is_active = strpos($link, 'current') !== false;
-                                $is_disabled = strpos($link, 'dots') !== false;
+                            <?php foreach ($rock_stars_links as $rock_stars_link) :
+                                $rock_stars_is_active = strpos($rock_stars_link, 'current') !== false;
+                                $rock_stars_is_disabled = strpos($rock_stars_link, 'dots') !== false;
 
-                                if ($is_disabled) : ?>
+                                if ($rock_stars_is_disabled) : ?>
                                     <li class="mx-1">
                                         <span class="flex items-center justify-center rounded-md bg-body-color bg-opacity-[15%] text-body-color px-4 text-sm min-w-[36px] h-9 cursor-not-allowed">...</span>
                                     </li>
                                 <?php else : ?>
                                     <li class="mx-1">
                                         <?php
-                                        $link = str_replace(
+                                        $rock_stars_link = str_replace(
                                             'page-numbers',
-                                            'flex items-center justify-center rounded-md bg-body-color bg-opacity-[15%] hover:bg-primary hover:bg-opacity-100 transition hover:text-white text-body-color px-4 text-sm min-w-[36px] h-9' . ($is_active ? ' bg-primary text-white' : ''),
-                                            $link
+                                            'flex items-center justify-center rounded-md bg-body-color bg-opacity-[15%] hover:bg-primary hover:bg-opacity-100 transition hover:text-white text-body-color px-4 text-sm min-w-[36px] h-9' . ($rock_stars_is_active ? ' bg-primary text-white' : ''),
+                                            $rock_stars_link
                                         );
-                                        echo $link;
+                                        echo wp_kses_post( $rock_stars_link );
                                         ?>
                                     </li>
                                 <?php endif;

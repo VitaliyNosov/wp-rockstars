@@ -429,7 +429,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const targetUrl = this.href;
       const encodedUrl = encodeURIComponent(targetUrl);
-      iframe.src = `/wp-admin/admin-ajax.php?action=proxy_site&url=${encodedUrl}`;
+      const ajaxUrl = rock_stars_portfolio_proxy.ajax_url;
+      const nonce = rock_stars_portfolio_proxy.nonce;
+      iframe.src = `${ajaxUrl}?action=rock_stars_proxy_site&nonce=${nonce}&url=${encodedUrl}`;
     });
   });
 

@@ -1,22 +1,32 @@
 <?php
+/**
+ * Audio play posts functionality.
+ *
+ * @package Rock_Star
+ */
 
-// audio play posts 
-
-function rs_prepend_post_audio_player( $content ) {
+/**
+ * Prepend audio player to post content.
+ *
+ * @param string $content Post content.
+ * @return string
+ */
+function rock_stars_prepend_post_audio_player( $content ) {
 	if ( is_singular( 'post' ) && in_the_loop() && is_main_query() ) {
 
 		$audio_url = carbon_get_post_meta( get_the_ID(), 'post_audio_file' );
 		if ( $audio_url ) {
 
 			$post_id      = get_the_ID();
-			$uid          = 'rs-' . $post_id; // стабильный префикс
+			$uid          = 'rock-stars-' . $post_id; // VIP: Consistent prefix.
 			$btn_id       = $uid . '-btn';
 			$wrap_id      = $uid . '-wrap';
 			$icon_id      = $uid . '-icon';
 			$wave_id      = $uid . '-wave';
 			$audio_dom_id = $uid . '-audio';
 
-			ob_start(); ?>
+			ob_start();
+			?>
 			<div class="rs-listen-toggle-container" style="margin-top:50px;max-width:100%;width:100%;">
 				<button
 					id="<?php echo esc_attr( $btn_id ); ?>"
@@ -37,7 +47,7 @@ function rs_prepend_post_audio_player( $content ) {
 
 				<div
 					id="<?php echo esc_attr( $wrap_id ); ?>"
-					class="rs-post-audio-player-container 123"
+					class="rs-post-audio-player-container"
 				>
 					<!-- Waveform -->
 					<div id="<?php echo esc_attr( $wave_id ); ?>" class="rs-audio-wave"></div>
@@ -58,22 +68,23 @@ function rs_prepend_post_audio_player( $content ) {
 			$player_html = ob_get_clean();
 			$content    .= $player_html;
 
-			// Подключаем общий inline JS/CSS в футере только 1 раз.
-			static $rs_audio_inline_done = false;
-			if ( ! $rs_audio_inline_done ) {
-				$rs_audio_inline_done = true;
-				add_action( 'wp_footer', 'rs_audio_inline_assets', 99 );
+			// Hook inline logic once in footer.
+			static $rock_stars_audio_inline_done = false;
+			if ( ! $rock_stars_audio_inline_done ) {
+				$rock_stars_audio_inline_done = true;
+				add_action( 'wp_footer', 'rock_stars_audio_inline_assets', 99 );
 			}
 		}
 	}
 	return $content;
 }
-add_filter( 'the_content', 'rs_prepend_post_audio_player' );
+add_filter( 'the_content', 'rock_stars_prepend_post_audio_player' );
 
 /**
- * Inline JS/CSS (один раз в футере).
+ * Inline JS/CSS (one-time in the footer).
  */
-function rs_audio_inline_assets() { ?>
+function rock_stars_audio_inline_assets() {
+	?>
 	<script>
 	document.addEventListener('DOMContentLoaded', () => {
 		const playIconSVG = `
@@ -88,19 +99,24 @@ function rs_audio_inline_assets() { ?>
 			</svg>
 		`;
 
-		// Для каждого плеера на странице
+		// For each player on the page.
 		document.querySelectorAll('.rs-post-audio-player-container').forEach((wrap) => {
 			const waveEl  = wrap.querySelector('.rs-audio-wave');
 			const audioEl = wrap.querySelector('audio.js-player');
-			const btn     = wrap.parentElement.querySelector('button[id$="-btn"]');
-			const icon    = wrap.parentElement.querySelector('span[id$="-icon"]');
+			// Match logic for various buttons.
+			const btn     = wrap.parentElement.querySelector('button[id*="-btn"]');
+			const icon    = wrap.parentElement.querySelector('span[id*="-icon"]');
 
-			// Plyr: убираем прогресс (используем волну)
+			if ( ! btn || ! icon || ! window.Plyr || ! window.WaveSurfer ) {
+				return;
+			}
+
+			// Plyr: Hide progress (managed via WaveSurfer).
 			const plyrInstance = new Plyr(audioEl, {
 				controls: ['play', 'current-time', 'mute', 'volume'],
 			});
 
-			// WaveSurfer: грузим звук из уже существующего <audio>
+			// WaveSurfer: Load from existing <audio> element.
 			const wavesurfer = WaveSurfer.create({
 				container: waveEl,
 				waveColor: '#2E3038',
@@ -113,30 +129,27 @@ function rs_audio_inline_assets() { ?>
 				interact: true,
 				dragToSeek: true,
 				backend: 'MediaElement',
-				media: audioEl, // используем тот же media элемент
+				media: audioEl,
 			});
-			// В backend: 'MediaElement' режим, WaveSurfer работает поверх audioEl, НЕ создавая второй звук.
 
-			// Перемотка по волне (дублируем на всякий случай, хотя MediaElement сам синхронен)
+			// Seek handling.
 			wavesurfer.on('seek', (progress) => {
 				if (audioEl.duration) {
 					audioEl.currentTime = progress * audioEl.duration;
 				}
 			});
 
-			// Кнопка раскрытия/сворачивания
+			// Toggle expand/collapse.
 			btn.addEventListener('click', () => {
 				const expanded = btn.getAttribute('aria-expanded') === 'true';
 
 				if (expanded) {
-					// СВЕРНУТЬ: пауза, позиция остаётся
-					plyrInstance.pause(); // останавливает audioEl; волна тоже остановится (общий media)
+					plyrInstance.pause();
 					wrap.classList.remove('is-open');
 					btn.setAttribute('aria-expanded', 'false');
 					icon.innerHTML = playIconSVG;
-					btn.style.border = ''; // вернуть border-transparent
+					btn.style.border = '';
 				} else {
-					// РАЗВЕРНУТЬ
 					wrap.classList.add('is-open');
 					btn.setAttribute('aria-expanded', 'true');
 					icon.innerHTML = closeIconSVG;
@@ -148,19 +161,16 @@ function rs_audio_inline_assets() { ?>
 	</script>
 
 	<style>
-	/* Скрываем стандартный прогресс Plyr */
 	.rs-post-audio-player-container .plyr__progress,
 	.rs-post-audio-player-container .plyr__progress__container {
 		display:none !important;
 	}
 
-	/* Обёртка плеера (анимация открытия) */
 	.rs-post-audio-player-container {
 		max-height:0;
 		opacity:0;
 		overflow:hidden;
 		transition:opacity .4s ease,max-height .5s ease;
-		/* background-color:#000; */
 		border:1px solid #2E3038;
 		border-radius:6px;
 		--plyr-color-main:#4A6CF7;
@@ -172,17 +182,15 @@ function rs_audio_inline_assets() { ?>
 		padding:8px 12px 16px;
 	}
 	.rs-post-audio-player-container.is-open {
-		max-height:300px; /* запас под волну + контролы */
+		max-height:300px;
 		opacity:1;
 	}
 
-	/* Волна */
 	.rs-post-audio-player-container .rs-audio-wave {
 		width:100%;
 		height:80px;
 	}
 
-	/* Plyr */
 	.rs-post-audio-player-container .plyr {
 		width:100% !important;
 		height:60px !important;
@@ -194,4 +202,5 @@ function rs_audio_inline_assets() { ?>
 		background: rgba(0, 0, 0, 0) !important;
 	}
 	</style>
-<?php }
+	<?php
+}

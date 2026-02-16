@@ -1,42 +1,59 @@
 <?php
+/**
+ * Telegram bot form notifications
+ *
+ * @package Rock_Star
+ */
 
-// Telegram bot form
+/**
+ * Function to send Telegram notification
+ */
+function rock_stars_send_telegram_notification( $mid, $pid, $key, $val ) {
+	// Support both old and new keys during transition.
+	$is_new_key = ( '_rock_stars_message' === $key );
+	$is_old_key = ( '_wp_custom_message' === $key );
 
+	if ( ! $is_new_key && ! $is_old_key ) {
+		return;
+	}
 
-// Function to send Telegram notification
-function wp_custom_send_telegram_notification( $mid, $pid, $key, $val ) {
-    if ( '_wp_custom_message' !== $key ) return;
-    if ( 'ticket' !== get_post_type( $pid ) ) return;
-    if ( get_post_meta( $pid, '_wp_custom_telegram_sent', true ) ) return;
+	$post_type = get_post_type( $pid );
 
-    $token   = '8100915185:AAGLXVCO8DjTm_cB2nx9BoayQzyUvqhZOR0';
-    $chat_id = '422713968';
+	if ( 'ticket' !== $post_type ) {
+		return;
+	}
 
-    $name    = get_post_meta( $pid, '_wp_custom_sender_name', true );
-    $email   = get_post_meta( $pid, '_wp_custom_sender_email', true );
-    $message = get_post_meta( $pid, '_wp_custom_message', true );
+	$prefix = $is_new_key ? '_rock_stars_' : '_wp_custom_';
 
-    $text = "Новый тикет\nИмя: $name\nEmail: $email\n\n$message";
+	if ( get_post_meta( $pid, $prefix . 'telegram_sent', true ) ) {
+		return;
+	}
 
-    $response = wp_remote_post( "https://api.telegram.org/bot{$token}/sendMessage", array(
-        'body' => array(
-            'chat_id' => $chat_id,
-            'text'    => $text,
-        ),
-        'timeout' => 10,
-    ) );
+	$token   = '8100915185:AAGLXVCO8DjTm_cB2nx9BoayQzyUvqhZOR0';
+	$chat_id = '422713968';
 
-    // Log response for debugging
-    if ( is_wp_error( $response ) ) {
-        error_log( 'Telegram Bot Error: ' . $response->get_error_message() );
-    } else {
-        error_log( 'Telegram notification sent successfully for ticket #' . $pid );
-    }
+	$name    = get_post_meta( $pid, $prefix . 'sender_name', true );
+	$email   = get_post_meta( $pid, $prefix . 'sender_email', true );
+	$message = get_post_meta( $pid, $prefix . 'message', true );
 
-    update_post_meta( $pid, '_wp_custom_telegram_sent', 1 );
+	$text = sprintf(
+		"New Ticket\nName: %s\nEmail: %s\n\n%s",
+		esc_html( $name ),
+		esc_html( $email ),
+		esc_html( $message )
+	);
+
+	$response = wp_remote_post( "https://api.telegram.org/bot{$token}/sendMessage", array(
+		'body' => array(
+			'chat_id' => $chat_id,
+			'text'    => $text,
+		),
+		'timeout' => 2,
+	) );
+
+	update_post_meta( $pid, $prefix . 'telegram_sent', 1 );
 }
 
 // Hook for both added and updated meta to ensure it works in all cases
-add_action( 'added_post_meta', 'wp_custom_send_telegram_notification', 10, 4 );
-add_action( 'updated_post_meta', 'wp_custom_send_telegram_notification', 10, 4 );
-
+add_action( 'added_post_meta', 'rock_stars_send_telegram_notification', 10, 4 );
+add_action( 'updated_post_meta', 'rock_stars_send_telegram_notification', 10, 4 );

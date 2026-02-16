@@ -1,0 +1,21 @@
+File: inc/functions/ajax-comments.php
+Status: COMPLIED (WordPress VIP Go)
+
+Summary of Changes:
+1. Refactored `rock_stars_ajax_comment_handler` to follow VIP standards.
+2. Implemented output buffering (`ob_start()`, `ob_clean()`, `ob_get_clean()`) to ensure no accidental output before JSON response.
+3. Enhanced security:
+   - Renamed nonce from `comment_nonce` to `rock_stars_comment_nonce` for theme-specific consistency.
+   - Updated nonce verification logic.
+   - Added strict sanitization using `sanitize_text_field`, `sanitize_email`, `esc_url_raw`, and `sanitize_textarea_field` for all input data.
+4. Fixed VIP PHPCS error: Removed `$GLOBALS['comment']` override. 
+5. Refactored Dependency:
+   - `functions.php`: Updated `rock_stars_comment_callback` to take the comment object directly and avoid reliance on WordPress globals. This makes the template part safer and VIP-compliant.
+6. Synchronized GraphQL:
+   - Updated `commentNonce` field in `inc/graphql-register.php` to use the new prefixed nonce.
+7. Documentation: All comments in `ajax-comments.php` and its callback are now in English.
+
+Verification:
+- PHP_CodeSniffer ran with WordPress-VIP-Go standard.
+- Result: 0 ERRORS, 0 WARNINGS ✅
+- Manual check: Comment submission via AJAX remains functional with updated security tokens.

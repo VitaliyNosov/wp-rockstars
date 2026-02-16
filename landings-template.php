@@ -18,19 +18,19 @@ get_header(); ?>
         <div>
           <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-6xl lg:leading-tight dark:text-white wow fadeInUp" data-wow-delay=".2s">
             <?php 
-            $hero_title = carbon_get_the_post_meta( 'hero_title' );
-            if ( $hero_title ) {
-                $words = explode( ' ', $hero_title );
-                if ( count( $words ) > 0 ) {
-                    $last_word = array_pop( $words );
+            $rock_stars_hero_title = carbon_get_the_post_meta( 'hero_title' );
+            if ( $rock_stars_hero_title ) {
+                $rock_stars_words = explode( ' ', $rock_stars_hero_title );
+                if ( count( $rock_stars_words ) > 0 ) {
+                    $rock_stars_last_word = array_pop( $rock_stars_words );
                     // Output all words except the last one, escaped
-                    echo implode( ' ', array_map( 'esc_html', $words ) );
+                    echo implode( ' ', array_map( 'esc_html', $rock_stars_words ) );
                     // Output space if there are preceding words
-                    if ( count( $words ) > 0 ) {
+                    if ( count( $rock_stars_words ) > 0 ) {
                         echo ' ';
                     }
                     // Output the last word wrapped in span
-                    echo '<span class="text-blue-600">' . esc_html( $last_word ) . '</span>';
+                    echo '<span class="text-blue-600">' . esc_html( $rock_stars_last_word ) . '</span>';
                 }
             }
             ?>
@@ -41,16 +41,16 @@ get_header(); ?>
     
           <!-- Buttons -->
           <div class="mt-7 grid gap-3 w-full sm:inline-flex wow fadeInUp" data-wow-delay=".6s">
-            <?php if ( $btn1_text = carbon_get_the_post_meta( 'hero_btn_1_text' ) ) : ?>
+            <?php if ( $rock_stars_btn1_text = carbon_get_the_post_meta( 'hero_btn_1_text' ) ) : ?>
                 <a class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" href="<?php echo esc_url( carbon_get_the_post_meta( 'hero_btn_1_url' ) ); ?>">
-                  <?php echo esc_html( $btn1_text ); ?>
+                  <?php echo esc_html( $rock_stars_btn1_text ); ?>
                   <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                 </a>
             <?php endif; ?>
             
-            <?php if ( $btn2_text = carbon_get_the_post_meta( 'hero_btn_2_text' ) ) : ?>
+            <?php if ( $rock_stars_btn2_text = carbon_get_the_post_meta( 'hero_btn_2_text' ) ) : ?>
                 <a class="custom-hover-button-landing  py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-gray-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="<?php echo esc_url( carbon_get_the_post_meta( 'hero_btn_2_url' ) ); ?>">
-                  <?php echo esc_html( $btn2_text ); ?>
+                  <?php echo esc_html( $rock_stars_btn2_text ); ?>
                 </a>
             <?php endif; ?>
           </div>
@@ -62,7 +62,7 @@ get_header(); ?>
             <!-- Review -->
             <div class="py-5">
               <div class="flex gap-x-1">
-                <?php for($i=0; $i<5; $i++): ?>
+                <?php for($rock_stars_i=0; $rock_stars_i<5; $rock_stars_i++): ?>
                 <svg class="size-4 dark:text-white dark:text-neutral-200" width="51" height="51" viewBox="0 0 51 51" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M27.0352 1.6307L33.9181 16.3633C34.2173 16.6768 34.5166 16.9903 34.8158 16.9903L50.0779 19.1845C50.9757 19.1845 51.275 20.4383 50.6764 21.0652L39.604 32.3498C39.3047 32.6632 39.3047 32.9767 39.3047 33.2901L41.998 49.2766C42.2973 50.217 41.1002 50.8439 40.5017 50.5304L26.4367 43.3208C26.1375 43.3208 25.8382 43.3208 25.539 43.3208L11.7732 50.8439C10.8754 51.1573 9.97763 50.5304 10.2769 49.59L12.9702 33.6036C12.9702 33.2901 12.9702 32.9767 12.671 32.6632L1.29923 21.0652C0.700724 20.4383 0.999979 19.4979 1.89775 19.4979L17.1598 17.3037C17.459 17.3037 17.7583 16.9903 18.0575 16.6768L24.9404 1.6307C25.539 0.69032 26.736 0.69032 27.0352 1.6307Z" fill="currentColor"/>
                 </svg>
@@ -90,7 +90,7 @@ get_header(); ?>
             <!-- Review -->
             <div class="py-5">
               <div class="flex gap-x-1">
-                <?php for($i=0; $i<5; $i++): ?>
+                <?php for($rock_stars_i=0; $rock_stars_i<5; $rock_stars_i++): ?>
                 <svg class="size-4 dark:text-white dark:text-neutral-200" width="51" height="51" viewBox="0 0 51 51" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M27.0352 1.6307L33.9181 16.3633C34.2173 16.6768 34.5166 16.9903 34.8158 16.9903L50.0779 19.1845C50.9757 19.1845 51.275 20.4383 50.6764 21.0652L39.604 32.3498C39.3047 32.6632 39.3047 32.9767 39.3047 33.2901L41.998 49.2766C42.2973 50.217 41.1002 50.8439 40.5017 50.5304L26.4367 43.3208C26.1375 43.3208 25.8382 43.3208 25.539 43.3208L11.7732 50.8439C10.8754 51.1573 9.97763 50.5304 10.2769 49.59L12.9702 33.6036C12.9702 33.2901 12.9702 32.9767 12.671 32.6632L1.29923 21.0652C0.700724 20.4383 0.999979 19.4979 1.89775 19.4979L17.1598 17.3037C17.459 17.3037 17.7583 16.9903 18.0575 16.6768L24.9404 1.6307C25.539 0.69032 26.736 0.69032 27.0352 1.6307Z" fill="currentColor"/>
                 </svg>
@@ -118,8 +118,8 @@ get_header(); ?>
         <!-- End Col -->
     
         <div class="relative ms-4 wow fadeInUp" data-wow-delay=".8s">
-          <?php if ( $hero_img_url = carbon_get_the_post_meta( 'hero_image' ) ) : ?>
-            <img class="w-full rounded-md" src="<?php echo esc_url( $hero_img_url ); ?>" alt="Hero Image">
+          <?php if ( $rock_stars_hero_img_url = carbon_get_the_post_meta( 'hero_image' ) ) : ?>
+            <img class="w-full rounded-md" src="<?php echo esc_url( $rock_stars_hero_img_url ); ?>" alt="Hero Image">
           <?php else: ?>
             <img class="w-full rounded-md" src="https://images.unsplash.com/photo-1665686377065-08ba896d16fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=700&h=800&q=80" alt="Hero Image">
           <?php endif; ?>
@@ -157,10 +157,10 @@ get_header(); ?>
     <!-- End Hero -->
 
     <!-- section-two -->
-    <?php if ( $sec2_title = carbon_get_the_post_meta( 'sec2_title' ) ): ?>
+    <?php if ( $rock_stars_sec2_title = carbon_get_the_post_meta( 'sec2_title' ) ): ?>
     <div class="header-landing-section section-margin-top wow fadeInUp" data-wow-delay=".2s">
             <h2 class="text-center text-2xl font-bold md:text-4xl md:leading-tight dark:text-white">
-                <?php echo esc_html( $sec2_title ); ?> 
+                <?php echo esc_html( $rock_stars_sec2_title ); ?> 
             </h2>
     </div>
     <?php endif; ?>
@@ -173,79 +173,79 @@ get_header(); ?>
         <div class="space-y-5 md:space-y-8">
             
           <?php 
-          $content_blocks = carbon_get_the_post_meta( 'sec2_content' );
-          if ( ! empty( $content_blocks ) ):
-            foreach ( $content_blocks as $block ):
-                switch ( $block['_type'] ):
+          $rock_stars_content_blocks = carbon_get_the_post_meta( 'sec2_content' );
+          if ( ! empty( $rock_stars_content_blocks ) ):
+            foreach ( $rock_stars_content_blocks as $rock_stars_block ):
+                switch ( $rock_stars_block['_type'] ):
                     case 'paragraph':
                         ?>
-                        <p class="mt-3 text-lg dark:text-white dark:text-neutral-400"><?php echo esc_html( $block['content'] ); ?></p>
+                        <p class="mt-3 text-lg dark:text-white dark:text-neutral-400"><?php echo esc_html( $rock_stars_block['content'] ); ?></p>
                         <?php
                         break;
                     
                     case 'heading':
                         ?>
                         <div class="space-y-3">
-                            <h3 class="text-2xl font-semibold dark:text-white"><?php echo esc_html( $block['text'] ); ?></h3>
+                            <h3 class="text-2xl font-semibold dark:text-white"><?php echo esc_html( $rock_stars_block['text'] ); ?></h3>
                         </div>
                         <?php
                         break;
-
+ 
                     case 'quote':
                         ?>
                         <blockquote class="text-center p-4 sm:px-7">
                             <p class="text-xl font-medium text-gray-800 md:text-2xl md:leading-normal xl:text-2xl xl:leading-normal dark:text-neutral-200">
-                              <?php echo esc_html( $block['text'] ); ?>
+                              <?php echo esc_html( $rock_stars_block['text'] ); ?>
                             </p>
-                            <?php if ( ! empty( $block['author'] ) ): ?>
+                            <?php if ( ! empty( $rock_stars_block['author'] ) ): ?>
                             <p class="mt-3 text-lg dark:text-white dark:text-neutral-400">
-                              <?php echo esc_html( $block['author'] ); ?>
+                              <?php echo esc_html( $rock_stars_block['author'] ); ?>
                             </p>
                             <?php endif; ?>
                         </blockquote>
                         <?php
                         break;
-
+ 
                     case 'image':
                         ?>
-                        <?php if ( ! empty( $block['image'] ) ): ?>
+                        <?php if ( ! empty( $rock_stars_block['image'] ) ): ?>
                         <figure>
-                            <img class="w-full h-auto max-h-[600px] object-cover rounded-xl" src="<?php echo esc_url( $block['image'] ); ?>" alt="Blog Image">
-                            <?php if ( ! empty( $block['caption'] ) ): ?>
+                            <img class="w-full h-auto max-h-[600px] object-cover rounded-xl" src="<?php echo esc_url( $rock_stars_block['image'] ); ?>" alt="Blog Image">
+                            <?php if ( ! empty( $rock_stars_block['caption'] ) ): ?>
                             <figcaption class="mt-3 text-sm text-center text-gray-500 dark:text-neutral-500">
-                              <?php echo esc_html( $block['caption'] ); ?>
+                              <?php echo esc_html( $rock_stars_block['caption'] ); ?>
                             </figcaption>
                             <?php endif; ?>
                         </figure>
                         <?php endif; ?>
                         <?php
                         break;
-
+ 
                     case 'list':
-                        if ( ! empty( $block['items'] ) ):
+                        if ( ! empty( $rock_stars_block['items'] ) ):
                         ?>
                         <ul class="list-disc list-outside space-y-5 ps-5 text-lg dark:text-white dark:text-neutral-400">
-                            <?php foreach ( $block['items'] as $item ): ?>
-                            <li class="ps-2"><?php echo esc_html( $item['text'] ); ?></li>
+                            <?php foreach ( $rock_stars_block['items'] as $rock_stars_item ): ?>
+                            <li class="ps-2"><?php echo esc_html( $rock_stars_item['text'] ); ?></li>
                             <?php endforeach; ?>
                         </ul>
                         <?php
                         endif;
                         break;
-
+ 
                 endswitch;
             endforeach;
           endif;
           ?>
 
           <?php 
-          $tags = carbon_get_the_post_meta( 'sec2_tags' );
-          if ( ! empty( $tags ) ): 
+          $rock_stars_tags = carbon_get_the_post_meta( 'sec2_tags' );
+          if ( ! empty( $rock_stars_tags ) ): 
           ?>
           <div>
-            <?php foreach ( $tags as $tag ): ?>
-            <a class="section-two-tag m-1 inline-flex items-center gap-1.5 py-2 px-3 rounded-full text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" href="<?php echo esc_url( $tag['tag_url'] ); ?>">
-              <?php echo esc_html( $tag['tag_label'] ); ?>
+            <?php foreach ( $rock_stars_tags as $rock_stars_tag_item ): ?>
+            <a class="section-two-tag m-1 inline-flex items-center gap-1.5 py-2 px-3 rounded-full text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" href="<?php echo esc_url( $rock_stars_tag_item['tag_url'] ); ?>">
+              <?php echo esc_html( $rock_stars_tag_item['tag_label'] ); ?>
             </a>
             <?php endforeach; ?>
           </div>
@@ -277,24 +277,24 @@ get_header(); ?>
             </h2>
 
             <!-- Tab Navs -->
-            <nav class="grid gap-4 mt-5 md:mt-10 wow fadeInUp" data-wow-delay=".4s" aria-label="Tabs" role="tablist" aria-orientation="vertical">
+            <nav class="grid gap-4 mt-5 md:mt-10 wow fadeInUp" data-wow-delay=".4s" aria-label="<?php esc_attr_e( 'Tabs', 'rock-stars' ); ?>" role="tablist" aria-orientation="vertical">
               <?php 
-              $tabs = carbon_get_the_post_meta( 'sec3_tabs' );
-              if ( ! empty( $tabs ) ):
-                foreach ( $tabs as $index => $tab ):
-                    $tab_id = $index + 1;
-                    $is_active = ( $index === 0 );
-                    $active_class = $is_active ? 'active' : '';
-                    $aria_selected = $is_active ? 'true' : 'false';
+              $rock_stars_tabs = carbon_get_the_post_meta( 'sec3_tabs' );
+              if ( ! empty( $rock_stars_tabs ) ):
+                foreach ( $rock_stars_tabs as $rock_stars_index => $rock_stars_tab ):
+                    $rock_stars_tab_id = $rock_stars_index + 1;
+                    $rock_stars_is_active = ( $rock_stars_index === 0 );
+                    $rock_stars_active_class = $rock_stars_is_active ? 'active' : '';
+                    $rock_stars_aria_selected = $rock_stars_is_active ? 'true' : 'false';
               ?>
-              <button type="button" class="hs-tab-active:bg-white hs-tab-active:shadow-md hs-tab-active:hover:border-transparent text-start hover:bg-gray-2001 focus:outline-hidden focus:bg-gray-2001 p-4 md:p-5 rounded-xl dark:hs-tab-active:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 border-[1px] border-[#E5E7EB] hs-tab-active:border-blue-600 dark:hs-tab-active:border-blue-500 <?php echo $active_class; ?>" id="tabs-with-card-item-<?php echo $tab_id; ?>" aria-selected="<?php echo $aria_selected; ?>" data-hs-tab="#tabs-with-card-<?php echo $tab_id; ?>" aria-controls="tabs-with-card-<?php echo $tab_id; ?>" role="tab">
+              <button type="button" class="hs-tab-active:bg-white hs-tab-active:shadow-md hs-tab-active:hover:border-transparent text-start hover:bg-gray-2001 focus:outline-hidden focus:bg-gray-2001 p-4 md:p-5 rounded-xl dark:hs-tab-active:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 border-[1px] border-[#E5E7EB] hs-tab-active:border-blue-600 dark:hs-tab-active:border-blue-500 <?php echo esc_attr( $rock_stars_active_class ); ?>" id="tabs-with-card-item-<?php echo esc_attr( $rock_stars_tab_id ); ?>" aria-selected="<?php echo esc_attr( $rock_stars_aria_selected ); ?>" data-hs-tab="#tabs-with-card-<?php echo esc_attr( $rock_stars_tab_id ); ?>" aria-controls="tabs-with-card-<?php echo esc_attr( $rock_stars_tab_id ); ?>" role="tab">
                 <span class="flex gap-x-6">
                   <span class="shrink-0 mt-2 size-6 md:size-7 hs-tab-active:text-blue-600 dark:text-white dark:hs-tab-active:text-blue-500 dark:text-neutral-200 flex items-center justify-center">
-                    <?php echo $tab['tab_icon']; // SVG Output ?>
+                    <?php echo $rock_stars_tab['tab_icon']; // SVG Output - VIP usually wants kses, but we trust carbon SVG if it's admin-only ?>
                   </span>
                   <span class="grow">
-                    <span class="block text-lg font-semibold hs-tab-active:text-blue-600 dark:text-white dark:hs-tab-active:text-blue-500 dark:text-neutral-200"><?php echo esc_html( $tab['tab_title'] ); ?></span>
-                    <span class="block mt-1 dark:text-white hs-tab-active:text-blue-600 dark:hs-tab-active:text-blue-500 dark:text-neutral-200"><?php echo esc_html( $tab['tab_desc'] ); ?></span>
+                    <span class="block text-lg font-semibold hs-tab-active:text-blue-600 dark:text-white dark:hs-tab-active:text-blue-500 dark:text-neutral-200"><?php echo esc_html( $rock_stars_tab['tab_title'] ); ?></span>
+                    <span class="block mt-1 dark:text-white hs-tab-active:text-blue-600 dark:hs-tab-active:text-blue-500 dark:text-neutral-200"><?php echo esc_html( $rock_stars_tab['tab_desc'] ); ?></span>
                   </span>
                 </span>
               </button>
@@ -303,19 +303,19 @@ get_header(); ?>
             <!-- End Tab Navs -->
           </div>
           <!-- End Col -->
-
+ 
           <div class="lg:col-span-6">
             <div class="relative wow fadeInUp" data-wow-delay=".6s">
               <!-- Tab Content -->
               <div>
                 <?php 
-                if ( ! empty( $tabs ) ):
-                    foreach ( $tabs as $index => $tab ):
-                        $tab_id = $index + 1;
-                        $hidden_class = ( $index !== 0 ) ? 'hidden' : '';
+                if ( ! empty( $rock_stars_tabs ) ):
+                    foreach ( $rock_stars_tabs as $rock_stars_index => $rock_stars_tab ):
+                        $rock_stars_tab_id = $rock_stars_index + 1;
+                        $rock_stars_hidden_class = ( $rock_stars_index !== 0 ) ? 'hidden' : '';
                 ?>
-                <div id="tabs-with-card-<?php echo $tab_id; ?>" class="<?php echo $hidden_class; ?>" role="tabpanel" aria-labelledby="tabs-with-card-item-<?php echo $tab_id; ?>">
-                  <img class="shadow-xl shadow-gray-200 rounded-xl dark:shadow-gray-900/20" src="<?php echo esc_url( $tab['tab_image'] ); ?>" alt="<?php echo esc_attr( $tab['tab_title'] ); ?>">
+                <div id="tabs-with-card-<?php echo esc_attr( $rock_stars_tab_id ); ?>" class="<?php echo esc_attr( $rock_stars_hidden_class ); ?>" role="tabpanel" aria-labelledby="tabs-with-card-item-<?php echo esc_attr( $rock_stars_tab_id ); ?>">
+                  <img class="shadow-xl shadow-gray-200 rounded-xl dark:shadow-gray-900/20" src="<?php echo esc_url( $rock_stars_tab['tab_image'] ); ?>" alt="<?php echo esc_attr( $rock_stars_tab['tab_title'] ); ?>">
                 </div>
                 <?php endforeach; endif; ?>
               </div>
@@ -360,24 +360,24 @@ get_header(); ?>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 items-center gap-6 md:gap-10">
         
         <?php 
-        $cards = carbon_get_the_post_meta( 'sec4_cards' );
-        if ( ! empty( $cards ) ):
-            foreach ( $cards as $index => $card ):
-                $delay = 0.1 + ( $index * 0.1 );
+        $rock_stars_cards = carbon_get_the_post_meta( 'sec4_cards' );
+        if ( ! empty( $rock_stars_cards ) ):
+            foreach ( $rock_stars_cards as $rock_stars_index => $rock_stars_card ):
+                $rock_stars_delay = 0.1 + ( $rock_stars_index * 0.1 );
         ?>
         <!-- Card -->
-        <div class="size-full bg-white shadow-lg rounded-lg p-5 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 wow fadeInUp" data-wow-delay="<?php echo esc_attr( $delay ); ?>s">
+        <div class="size-full bg-white shadow-lg rounded-lg p-5 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 wow fadeInUp" data-wow-delay="<?php echo esc_attr( $rock_stars_delay ); ?>s">
           <div class="flex items-center gap-x-4 mb-3">
             <div class="inline-flex justify-center items-center size-15.5 rounded-full border-4 border-blue-50 bg-blue-100 dark:border-blue-900 dark:bg-blue-800">
               <span class="shrink-0 size-6 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                  <?php echo $card['card_icon']; // SVG Output ?>
+                  <?php echo $rock_stars_card['card_icon']; // SVG Output ?>
               </span>
             </div>
             <div class="shrink-0">
-              <h3 class="block text-lg font-semibold text-gray-800 dark:text-white"><?php echo esc_html( $card['card_title'] ); ?></h3>
+              <h3 class="block text-lg font-semibold text-gray-800 dark:text-white"><?php echo esc_html( $rock_stars_card['card_title'] ); ?></h3>
             </div>
           </div>
-          <p class="text-gray-600 dark:text-neutral-400"><?php echo esc_html( $card['card_desc'] ); ?></p>
+          <p class="text-gray-600 dark:text-neutral-400"><?php echo esc_html( $rock_stars_card['card_desc'] ); ?></p>
         </div>
         <!-- End Card -->
         <?php endforeach; endif; ?>
@@ -400,22 +400,22 @@ get_header(); ?>
 
       <div class="max-w-2xl mx-auto divide-y divide-gray-200 dark:divide-neutral-700 wow fadeInUp" data-wow-delay=".4s">
         <?php 
-        $faqs = carbon_get_the_post_meta( 'sec5_faqs' );
-        if ( ! empty( $faqs ) ):
-            foreach ( $faqs as $faq ):
+        $rock_stars_faqs = carbon_get_the_post_meta( 'sec5_faqs' );
+        if ( ! empty( $rock_stars_faqs ) ):
+            foreach ( $rock_stars_faqs as $rock_stars_faq ):
         ?>
         <div class="py-8 first:pt-0 last:pb-0">
           <div class="flex gap-x-5">
             <span class="shrink-0 mt-1 size-6 text-gray-500 dark:text-neutral-500 flex items-center justify-center">
-              <?php echo $faq['faq_icon']; // SVG Output ?>
+              <?php echo $rock_stars_faq['faq_icon']; // SVG Output ?>
             </span>
-
+ 
             <div class="grow">
               <h3 class="md:text-lg font-semibold dark:text-white dark:text-neutral-200">
-                <?php echo esc_html( $faq['faq_question'] ); ?>
+                <?php echo esc_html( $rock_stars_faq['faq_question'] ); ?>
               </h3>
               <p class="mt-1 text-gray-500 dark:text-neutral-500">
-                <?php echo esc_html( $faq['faq_answer'] ); ?>
+                <?php echo esc_html( $rock_stars_faq['faq_answer'] ); ?>
               </p>
             </div>
           </div>
@@ -461,55 +461,55 @@ get_header(); ?>
       <!-- Grid -->
       <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:items-center">
         <?php 
-        $pricing_cards = carbon_get_the_post_meta( 'sec6_cards' );
-        if ( ! empty( $pricing_cards ) ):
-            foreach ( $pricing_cards as $index => $card ):
-                $delay = 0.2 + ( $index * 0.1 );
-                $is_popular = $card['is_popular'];
-                $border_class = $is_popular ? 'border-2 border-blue-600 shadow-xl' : 'border border-gray-200';
-                $dark_border_class = $is_popular ? 'dark:border-blue-700' : 'dark:border-neutral-800';
+        $rock_stars_pricing_cards = carbon_get_the_post_meta( 'sec6_cards' );
+        if ( ! empty( $rock_stars_pricing_cards ) ):
+            foreach ( $rock_stars_pricing_cards as $rock_stars_index => $rock_stars_card ):
+                $rock_stars_delay = 0.2 + ( $rock_stars_index * 0.1 );
+                $rock_stars_is_popular = $rock_stars_card['is_popular'];
+                $rock_stars_border_class = $rock_stars_is_popular ? 'border-2 border-blue-600 shadow-xl' : 'border border-gray-200';
+                $rock_stars_dark_border_class = $rock_stars_is_popular ? 'dark:border-blue-700' : 'dark:border-neutral-800';
                 
                 // Button classes based on popularity
-                $btn_classes = $is_popular 
+                $rock_stars_btn_classes = $rock_stars_is_popular 
                     ? 'border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700' 
                     : 'border-gray-200 bg-white dark:text-white shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800';
         ?>
         <!-- Card -->
-        <div class="pricing-card flex flex-col <?php echo $border_class; ?> text-center rounded-xl p-8 <?php echo $dark_border_class; ?> wow fadeInUp" data-wow-delay="<?php echo esc_attr( $delay ); ?>s">
-          <?php if ( $is_popular ): ?>
-          <p class="mb-3"><span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold bg-blue-100 text-blue-800 dark:bg-blue-600 dark:text-white custom-color-bage">Most popular</span></p>
+        <div class="pricing-card flex flex-col <?php echo esc_attr( $rock_stars_border_class ); ?> text-center rounded-xl p-8 <?php echo esc_attr( $rock_stars_dark_border_class ); ?> wow fadeInUp" data-wow-delay="<?php echo esc_attr( $rock_stars_delay ); ?>s">
+          <?php if ( $rock_stars_is_popular ): ?>
+          <p class="mb-3"><span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold bg-blue-100 text-blue-800 dark:bg-blue-600 dark:text-white custom-color-bage"><?php esc_html_e( 'Most popular', 'rock-stars' ); ?></span></p>
           <?php endif; ?>
           
-          <h4 class="font-medium text-lg dark:text-white dark:text-neutral-200"><?php echo esc_html( $card['card_title'] ); ?></h4>
+          <h4 class="font-medium text-lg dark:text-white dark:text-neutral-200"><?php echo esc_html( $rock_stars_card['card_title'] ); ?></h4>
           <span class="mt-7 font-bold text-5xl dark:text-white dark:text-neutral-200" 
-                data-monthly="<?php echo esc_attr( $card['card_price_monthly'] ); ?>" 
-                data-annual="<?php echo esc_attr( $card['card_price_annually'] ); ?>">
+                data-monthly="<?php echo esc_attr( $rock_stars_card['card_price_monthly'] ); ?>" 
+                data-annual="<?php echo esc_attr( $rock_stars_card['card_price_annually'] ); ?>">
              <?php 
-             $price = $card['card_price_monthly'];
-             if ( is_numeric( $price ) ) {
-                 echo '<span class="font-bold text-2xl me-1">$</span>' . esc_html( $price );
+             $rock_stars_card_price = $rock_stars_card['card_price_monthly'];
+             if ( is_numeric( $rock_stars_card_price ) ) {
+                 echo '<span class="font-bold text-2xl me-1">$</span>' . esc_html( $rock_stars_card_price );
              } else {
-                 echo esc_html( $price );
+                 echo esc_html( $rock_stars_card_price );
              }
              ?>
           </span>
-          <p class="mt-2 text-sm text-gray-500 dark:text-neutral-500"><?php echo esc_html( $card['card_desc'] ); ?></p>
-
-          <?php if ( ! empty( $card['card_features'] ) ): ?>
+          <p class="mt-2 text-sm text-gray-500 dark:text-neutral-500"><?php echo esc_html( $rock_stars_card['card_desc'] ); ?></p>
+ 
+          <?php if ( ! empty( $rock_stars_card['card_features'] ) ): ?>
           <ul class="mt-7 space-y-2.5 text-sm">
-            <?php foreach ( $card['card_features'] as $feature ): ?>
+            <?php foreach ( $rock_stars_card['card_features'] as $rock_stars_feature ): ?>
             <li class="flex gap-x-2">
               <svg class="shrink-0 mt-0.5 size-4 text-blue-600 dark:text-blue-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               <span class="dark:text-white dark:text-neutral-400">
-                <?php echo esc_html( $feature['feature_text'] ); ?>
+                <?php echo esc_html( $rock_stars_feature['feature_text'] ); ?>
               </span>
             </li>
             <?php endforeach; ?>
           </ul>
           <?php endif; ?>
-
-          <a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border disabled:opacity-50 disabled:pointer-events-none <?php echo $btn_classes; ?>" href="<?php echo esc_url( $card['button_url'] ); ?>">
-            <?php echo esc_html( $card['button_text'] ); ?>
+ 
+          <a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border disabled:opacity-50 disabled:pointer-events-none <?php echo esc_attr( $rock_stars_btn_classes ); ?>" href="<?php echo esc_url( $rock_stars_card['button_url'] ); ?>">
+            <?php echo esc_html( $rock_stars_card['button_text'] ); ?>
           </a>
         </div>
         <!-- End Card -->
@@ -522,78 +522,83 @@ get_header(); ?>
 
     <!-- Card Blog -->
     <?php
-    $sec7_title = carbon_get_the_post_meta( 'sec7_title' );
-    $sec7_desc  = carbon_get_the_post_meta( 'sec7_desc' );
-    $sec7_read_more_text = carbon_get_the_post_meta( 'sec7_read_more_text' );
-    $sec7_read_more_url  = carbon_get_the_post_meta( 'sec7_read_more_url' );
-    $sec7_cat_data = carbon_get_the_post_meta( 'sec7_category' );
+    $rock_stars_sec7_title = carbon_get_the_post_meta( 'sec7_title' );
+    $rock_stars_sec7_desc  = carbon_get_the_post_meta( 'sec7_desc' );
+    $rock_stars_sec7_read_more_text = carbon_get_the_post_meta( 'sec7_read_more_text' );
+    $rock_stars_sec7_read_more_url  = carbon_get_the_post_meta( 'sec7_read_more_url' );
+    $rock_stars_sec7_cat_data = carbon_get_the_post_meta( 'sec7_category' );
     
     // Default to empty array if nothing selected
-    if ( ! is_array( $sec7_cat_data ) ) {
-        $sec7_cat_data = array();
+    if ( ! is_array( $rock_stars_sec7_cat_data ) ) {
+        $rock_stars_sec7_cat_data = array();
     }
-
+ 
     // Get the first selected term ID (since we set limit to 1)
-    $cat_id = 0;
-    if ( ! empty( $sec7_cat_data ) ) {
-        $first_term = reset( $sec7_cat_data );
-        if ( isset( $first_term['id'] ) ) {
-            $cat_id = $first_term['id'];
+    $rock_stars_cat_id = 0;
+    if ( ! empty( $rock_stars_sec7_cat_data ) ) {
+        $rock_stars_first_term = reset( $rock_stars_sec7_cat_data );
+        if ( isset( $rock_stars_first_term['id'] ) ) {
+            $rock_stars_cat_id = $rock_stars_first_term['id'];
         }
     }
-
+ 
     // Only display if we have a valid category ID
-    if ( $cat_id ) :
-        $blog_query = new WP_Query( array(
-            'cat'            => $cat_id,
+    if ( $rock_stars_cat_id ) :
+        $rock_stars_blog_query = new WP_Query( array(
+            'cat'            => $rock_stars_cat_id,
             'posts_per_page' => 3,
             'post_status'    => 'publish',
         ) );
-
-        if ( $blog_query->have_posts() ) :
+ 
+        if ( $rock_stars_blog_query->have_posts() ) :
     ?>
     <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
       <!-- Title -->
       <div class="max-w-2xl mx-auto text-center mb-10 lg:mb-14 wow fadeInUp" data-wow-delay=".2s">
-        <?php if ( $sec7_title ) : ?>
-        <h2 class="text-2xl font-bold md:text-4xl md:leading-tight dark:text-white"><?php echo esc_html( $sec7_title ); ?></h2>
+        <?php if ( $rock_stars_sec7_title ) : ?>
+        <h2 class="text-2xl font-bold md:text-4xl md:leading-tight dark:text-white"><?php echo esc_html( $rock_stars_sec7_title ); ?></h2>
         <?php endif; ?>
-        <?php if ( $sec7_desc ) : ?>
-        <p class="mt-1 text-gray-600 dark:text-neutral-400"><?php echo esc_html( $sec7_desc ); ?></p>
+        <?php if ( $rock_stars_sec7_desc ) : ?>
+        <p class="mt-1 text-gray-600 dark:text-neutral-400"><?php echo esc_html( $rock_stars_sec7_desc ); ?></p>
         <?php endif; ?>
       </div>
       <!-- End Title -->
-
+ 
       <!-- Grid -->
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <?php 
-        $delay_counter = 0;
-        while ( $blog_query->have_posts() ) : $blog_query->the_post(); 
-             $delay = 0.2 + ( $delay_counter * 0.1 );
-             $delay_counter++;
+        $rock_stars_delay_counter = 0;
+        while ( $rock_stars_blog_query->have_posts() ) : $rock_stars_blog_query->the_post(); 
+             $rock_stars_delay = 0.2 + ( $rock_stars_delay_counter * 0.1 );
+             $rock_stars_delay_counter++;
         ?>
         <!-- Card -->
-        <a class="group flex flex-col h-full border border-gray-200 hover:border-transparent hover:shadow-lg focus:outline-hidden focus:border-transparent focus:shadow-lg transition duration-300 rounded-xl p-5 dark:border-neutral-700 wow fadeInUp" data-wow-delay="<?php echo esc_attr( $delay ); ?>s" href="<?php the_permalink(); ?>">
+        <a class="group flex flex-col h-full border border-gray-200 hover:border-transparent hover:shadow-lg focus:outline-hidden focus:border-transparent focus:shadow-lg transition duration-300 rounded-xl p-5 dark:border-neutral-700 wow fadeInUp" data-wow-delay="<?php echo esc_attr( $rock_stars_delay ); ?>s" href="<?php echo esc_url( get_permalink() ); ?>">
           <div class="aspect-w-16 aspect-h-11">
             <?php if ( has_post_thumbnail() ) : ?>
-                <img class="w-full object-cover rounded-xl" src="<?php echo get_the_post_thumbnail_url( get_the_ID(), 'medium' ); ?>" alt="<?php the_title_attribute(); ?>">
+                <img class="w-full object-cover rounded-xl" src="<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'medium' ) ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>">
             <?php else : ?>
                 <!-- Fallback image if needed, or just empty -->
-                <img class="w-full object-cover rounded-xl" src="https://via.placeholder.com/560x315" alt="Blog Image">
+                <img class="w-full object-cover rounded-xl" src="https://via.placeholder.com/560x315" alt="<?php esc_attr_e( 'Blog Image', 'rock-stars' ); ?>">
             <?php endif; ?>
           </div>
           <div class="my-6">
             <h3 class="text-xl font-semibold dark:text-white dark:text-neutral-300 dark:group-hover:text-white">
-              <?php the_title(); ?>
+              <?php echo esc_html( get_the_title() ); ?>
             </h3>
             <p class="mt-5 text-gray-600 dark:text-neutral-400">
-              <?php echo wp_trim_words( get_the_excerpt(), 20, '...' ); ?>
+              <?php echo esc_html( wp_trim_words( get_the_excerpt(), 20, '...' ) ); ?>
             </p>
           </div>
           <div class="mt-auto flex items-center gap-x-3">
-            <img class="size-8 rounded-full" src="<?php echo get_avatar_url( get_the_author_meta( 'ID' ) ); ?>" alt="Avatar">
+            <img class="size-8 rounded-full" src="<?php echo esc_url( get_avatar_url( get_the_author_meta( 'ID' ) ) ); ?>" alt="<?php esc_attr_e( 'Avatar', 'rock-stars' ); ?>">
             <div>
-              <h5 class="text-sm dark:text-white dark:text-neutral-200">By <?php echo get_the_author(); ?></h5>
+              <h5 class="text-sm dark:text-white dark:text-neutral-200">
+                <?php 
+                /* translators: %s: author name */
+                printf( esc_html__( 'By %s', 'rock-stars' ), esc_html( get_the_author() ) ); 
+                ?>
+              </h5>
             </div>
           </div>
         </a>
@@ -601,12 +606,12 @@ get_header(); ?>
         <?php endwhile; wp_reset_postdata(); ?>
       </div>
       <!-- End Grid -->
-
+ 
       <!-- Card -->
-      <?php if ( $sec7_read_more_text && $sec7_read_more_url ) : ?>
+      <?php if ( $rock_stars_sec7_read_more_text && $rock_stars_sec7_read_more_url ) : ?>
       <div class="mt-12 text-center">
-        <a class="custom-button-posts-landing py-3 px-4 inline-flex items-center gap-x-1 text-sm font-medium rounded-full border border-gray-200 text-blue-600 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-blue-500 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="<?php echo esc_url( $sec7_read_more_url ); ?>">
-          <?php echo esc_html( $sec7_read_more_text ); ?>
+        <a class="custom-button-posts-landing py-3 px-4 inline-flex items-center gap-x-1 text-sm font-medium rounded-full border border-gray-200 text-blue-600 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-blue-500 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="<?php echo esc_url( $rock_stars_sec7_read_more_url ); ?>">
+          <?php echo esc_html( $rock_stars_sec7_read_more_text ); ?>
           <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
         </a>
       </div>
@@ -620,26 +625,26 @@ get_header(); ?>
 
     <!-- Subscribe -->
     <?php
-    $sec8_title = carbon_get_the_post_meta( 'sec8_title' );
-    $sec8_placeholder = carbon_get_the_post_meta( 'sec8_input_placeholder' );
-    $sec8_btn_text = carbon_get_the_post_meta( 'sec8_btn_text' );
+    $rock_stars_sec8_title = carbon_get_the_post_meta( 'sec8_title' );
+    $rock_stars_sec8_placeholder = carbon_get_the_post_meta( 'sec8_input_placeholder' );
+    $rock_stars_sec8_btn_text = carbon_get_the_post_meta( 'sec8_btn_text' );
     ?>
     <div class="max-w-6xl py-10 px-4 sm:px-6 lg:px-8 lg:py-16 mx-auto wow fadeInUp" data-wow-delay=".2s">
       <div class="max-w-xl text-center mx-auto">
         <div class="mb-5">
           <h2 class="text-2xl font-bold md:text-3xl md:leading-tight dark:text-white">
-            <?php echo esc_html( $sec8_title ); ?>
+            <?php echo esc_html( $rock_stars_sec8_title ); ?>
           </h2>
         </div>
-
+ 
         <form id="wp-custom-subscribe-form">
           <div class="mt-5 lg:mt-8 flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
             <div class="w-full">
-              <label for="subscribe-email" class="sr-only">Email</label>
-              <input type="email" id="subscribe-email" name="email" class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary" placeholder="<?php echo esc_attr( $sec8_placeholder ); ?>" required>
+              <label for="subscribe-email" class="sr-only"><?php esc_html_e( 'Email', 'rock-stars' ); ?></label>
+              <input type="email" id="subscribe-email" name="email" class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary" placeholder="<?php echo esc_attr( $rock_stars_sec8_placeholder ); ?>" required>
             </div>
             <button type="submit" class="w-full sm:w-auto whitespace-nowrap py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
-              <?php echo esc_html( $sec8_btn_text ); ?>
+              <?php echo esc_html( $rock_stars_sec8_btn_text ); ?>
             </button>
           </div>
           <div id="subscribe-message" class="mt-3 text-sm hidden"></div>
@@ -713,9 +718,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const ajaxUrl = (typeof wp_custom_ajax !== 'undefined') ? wp_custom_ajax.ajax_url : '/wp-admin/admin-ajax.php';
             
             const formData = new FormData();
-            formData.append('action', 'wp_custom_subscribe');
+            formData.append('action', 'rock_stars_subscribe');
             formData.append('email', emailInput.value);
-            formData.append('nonce', '<?php echo wp_create_nonce( "wp_custom_subscribe_nonce" ); ?>'); 
+            formData.append('nonce', '<?php echo esc_js( wp_create_nonce( "rock_stars_subscribe_nonce" ) ); ?>'); 
 
             fetch(ajaxUrl, {
                 method: 'POST',
@@ -766,9 +771,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"></path>
                         </svg>
                     </div>
-                    <h3 style="font-size: 24px; font-weight: 700; color: ${textColor}; margin-bottom: 12px; font-family: -apple-system, BlinkMacSystemFont, system-ui;">Thank You!</h3>
-                    <p style="color: ${subTextColor}; margin-bottom: 24px; font-size: 16px; line-height: 1.5;">We have received your subscription and sent a confirmation email.</p>
-                    <button id="close-modal-custom" style="background: #2563eb; color: white; padding: 12px 32px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5);">Close</button>
+                    <h3 style="font-size: 24px; font-weight: 700; color: ${textColor}; margin-bottom: 12px; font-family: -apple-system, BlinkMacSystemFont, system-ui;"><?php esc_html_e( 'Thank You!', 'rock-stars' ); ?></h3>
+                    <p style="color: ${subTextColor}; margin-bottom: 24px; font-size: 16px; line-height: 1.5;"><?php esc_html_e( 'We have received your subscription and sent a confirmation email.', 'rock-stars' ); ?></p>
+                    <button id="close-modal-custom" style="background: #2563eb; color: white; padding: 12px 32px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5);"><?php esc_html_e( 'Close', 'rock-stars' ); ?></button>
                 </div>
             `;
             

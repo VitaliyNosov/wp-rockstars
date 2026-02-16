@@ -6,84 +6,86 @@
  */
 
 function rock_stars_ajax_comment_handler() {
-    // Check nonce
-    if (!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], 'comment_nonce')) {
-        wp_send_json_error('Security check failed.');
-    }
+	ob_start(); // Start buffering to catch any stray output (VIP requirement).
 
-    $comment_data = array(
-        'comment_post_ID' => isset($_POST['comment_post_ID']) ? (int) $_POST['comment_post_ID'] : 0,
-        'author'          => isset($_POST['author']) ? trim($_POST['author']) : '',
-        'email'           => isset($_POST['email']) ? trim($_POST['email']) : '',
-        'url'             => isset($_POST['url']) ? trim($_POST['url']) : '',
-        'comment'         => isset($_POST['comment']) ? trim($_POST['comment']) : '',
-        'comment_type'    => '',
-        'comment_parent'  => isset($_POST['comment_parent']) ? (int) $_POST['comment_parent'] : 0,
-        'user_id'         => get_current_user_id(),
-    );
+	// Check nonce for security.
+	$nonce = isset( $_POST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ) : '';
+	if ( ! wp_verify_nonce( $nonce, 'rock_stars_comment_nonce' ) ) {
+		ob_end_clean();
+		wp_send_json_error( 'Security check failed.' );
+	}
 
-    // Validate standard WordPress comment data
-    $comment = wp_handle_comment_submission($comment_data);
+	$comment_post_id = isset( $_POST['comment_post_ID'] ) ? (int) $_POST['comment_post_ID'] : 0;
+	$author          = isset( $_POST['author'] ) ? sanitize_text_field( wp_unslash( $_POST['author'] ) ) : '';
+	$email           = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+	$url             = isset( $_POST['url'] ) ? esc_url_raw( wp_unslash( $_POST['url'] ) ) : '';
+	$comment_content = isset( $_POST['comment'] ) ? sanitize_textarea_field( wp_unslash( $_POST['comment'] ) ) : '';
+	$comment_parent  = isset( $_POST['comment_parent'] ) ? (int) $_POST['comment_parent'] : 0;
 
-    if (is_wp_error($comment)) {
-        // Prepare Debug Info
-        $debug_info = " [Recv: ";
-        $debug_info .= "Name='" . (isset($_POST['author']) ? substr($_POST['author'], 0, 10) : 'NULL') . "', ";
-        $debug_info .= "Email='" . (isset($_POST['email']) ? substr($_POST['email'], 0, 10) : 'NULL') . "', ";
-        $debug_info .= "ID='" . (isset($_POST['comment_post_ID']) ? $_POST['comment_post_ID'] : 'NULL') . "']";
+	$comment_data = array(
+		'comment_post_ID' => $comment_post_id,
+		'author'          => $author,
+		'email'           => $email,
+		'url'             => $url,
+		'comment'         => $comment_content,
+		'comment_type'    => '',
+		'comment_parent'  => $comment_parent,
+		'user_id'         => get_current_user_id(),
+	);
 
-        wp_send_json_error($comment->get_error_message() . $debug_info);
-    }
+	// Validate standard WordPress comment data
+	$comment = wp_handle_comment_submission( $comment_data );
 
-    /*
-     * If successful, render the comment markup to return to the frontend.
-     * We use a dummy dummy WP_Comment_Query loop or just calling the callback directly?
-     * Standard way involves getting the comment and rendering it.
-     */
-    $user = wp_get_current_user();
-    do_action('set_comment_cookies', $comment, $user);
+	if ( is_wp_error( $comment ) ) {
+		// Prepare Sanitized Debug Info.
+		$debug_info = sprintf(
+			' [Recv: Name=%s, ID=%d]',
+			esc_html( substr( $author, 0, 10 ) ),
+			intval( $comment_post_id )
+		);
 
-    // Render the new comment
-    ob_start();
-    $GLOBALS['comment'] = $comment;
-    
-    // We reuse the callback logic from comments.php. 
-    // Ideally this callback should have been a named function, 
-    // but since it was an anonymous function in comments.php, we'll replicate the structure here 
-    // or refactor comments.php to use a named function.
-    // For now, let's replicate the structure to generate the same HTML.
-    
-    $args = array(
-        'max_depth' => get_option('thread_comments_depth'),
-        'style' => 'div'
-    );
-    $depth = 1; // New comments at top level usually, or check parent
-    if ($comment->comment_parent > 0) {
-        // Logic for depth calculation is complex without walking the tree, 
-        // but for AJAX appending usually we just append.
-    }
-    
-    // Render
-    // Use the shared callback to ensure identical HTML structure
-    rock_stars_comment_callback($comment, $args, $depth);
-    echo '</div>'; // Manually close the div since the callback leaves it open for Walker_Comment compatibility
-    $comment_html = ob_get_clean();
+		ob_end_clean();
+		wp_send_json_error( $comment->get_error_message() . $debug_info );
+	}
 
-    // Prepare structured data for frontend
-    $comment_data_for_frontend = array(
-        'id' => $comment->comment_ID,
-        'authorName' => $comment->comment_author,
-        'authorAvatar' => get_avatar_url($comment, array('size' => 50)),
-        'date' => get_comment_date(get_option('date_format'), $comment),
-        'content' => apply_filters('comment_text', $comment->comment_content, $comment),
-        'parentId' => $comment->comment_parent
-    );
+	$user = wp_get_current_user();
+	do_action( 'set_comment_cookies', $comment, $user );
 
-    wp_send_json_success(array(
-        'html' => $comment_html,
-        'data' => $comment_data_for_frontend,
-        'message' => 'Comment submitted successfully'
-    ));
+	// Render the new comment using output buffering.
+	if ( ob_get_length() ) {
+		ob_clean();
+	}
+	ob_start();
+
+	$args = array(
+		'max_depth' => get_option( 'thread_comments_depth' ),
+		'style'     => 'div',
+	);
+	$depth = 1;
+
+	// Use the shared callback to ensure identical HTML structure
+	rock_stars_comment_callback( $comment, $args, $depth );
+	echo '</div>'; // Manually close the div since the callback leaves it open for Walker_Comment compatibility
+
+	$comment_html = ob_get_clean();
+
+	// Prepare structured data for frontend
+	$comment_data_for_frontend = array(
+		'id'           => $comment->comment_ID,
+		'authorName'   => $comment->comment_author,
+		'authorAvatar' => get_avatar_url( $comment, array( 'size' => 50 ) ),
+		'date'         => get_comment_date( get_option( 'date_format' ), $comment ),
+		'content'      => apply_filters( 'comment_text', $comment->comment_content, $comment ),
+		'parentId'     => $comment->comment_parent,
+	);
+
+	wp_send_json_success(
+		array(
+			'html'    => $comment_html,
+			'data'    => $comment_data_for_frontend,
+			'message' => 'Comment submitted successfully',
+		)
+	);
 }
 
 add_action('wp_ajax_rock_stars_submit_comment', 'rock_stars_ajax_comment_handler');

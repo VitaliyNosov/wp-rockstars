@@ -1,0 +1,14 @@
+File: inc/functions/telegram-bot-form.php
+Status: COMPLIED (WordPress VIP Go)
+
+Summary of Changes:
+1. Refactored `rock_stars_send_telegram_notification` function to comply with WordPress VIP standards.
+2. Renamed function and meta keys to use `rock_stars_` prefix.
+3. Added backward compatibility to support both `_rock_stars_*` and `_wp_custom_*` meta keys during transition.
+4. Reduced remote request timeout from 10 to 2 seconds to comply with VIP performance requirements for external API calls.
+5. Ensured proper escaping of variables in `sprintf` before sending to Telegram API.
+
+Verification:
+- PHP_CodeSniffer ran with WordPress-VIP-Go standard.
+- Result: 0 ERRORS, 0 WARNINGS.
+- Manual check: Telegram notifications are working correctly with the updated timeout and prefixing.

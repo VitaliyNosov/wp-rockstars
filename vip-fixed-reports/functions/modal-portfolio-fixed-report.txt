@@ -1,0 +1,22 @@
+File: inc/functions/modal-portfolio.php
+Status: COMPLIED (WordPress VIP Go)
+
+Summary of Changes:
+1. Refactored `proxy_site_func` to comply with WordPress VIP standards.
+2. Renamed functions and AJAX actions to `rock_stars_proxy_site` with consistent prefixing.
+3. Implemented local parameter passing via `wp_localize_script`:
+   - Passes `ajax_url` and `rock_stars_proxy_nonce` to the frontend.
+4. Added strict security measures:
+   - Nonce verification (`rock_stars_proxy_nonce`) for the proxy request.
+   - Strict URL sanitization using `esc_url_raw` and `wp_unslash`.
+   - Used `wp_parse_url` instead of `parse_url` for consistency.
+5. Optimized performance and stability:
+   - Added `ob_start()` and `ob_clean()` to ensure clean output buffering.
+   - Reduced remote request timeout from 5 seconds to 2 seconds.
+6. Frontend updates:
+   - `common/js/portfolio-modal.js`: Updated to use the new prefixed action and include the security nonce in the proxy request.
+
+Verification:
+- PHP_CodeSniffer ran with WordPress-VIP-Go standard.
+- Result: 0 ERRORS, 1 WARNING (Regarding wp_remote_get recommendation for VIP-specific wrapper).
+- Manual check: Portfolio modal functionality remains intact with improved security.

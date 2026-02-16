@@ -43,18 +43,19 @@ if ( post_password_required() ) {
 
 	<?php
     // Logic to determine button text
-    $comment_count = get_comments_number();
-    $button_text = 'Leave a Comment';
-    if ( $comment_count > 0 ) {
-        $button_text = sprintf( 'View Comments (%s)', number_format_i18n( $comment_count ) );
+    $rock_stars_comment_count = get_comments_number();
+    $rock_stars_button_text = __( 'Leave a Comment', 'rock-stars' );
+    if ( $rock_stars_comment_count > 0 ) {
+        /* translators: %s: comment count */
+        $rock_stars_button_text = sprintf( __( 'View Comments (%s)', 'rock-stars' ), number_format_i18n( $rock_stars_comment_count ) );
     }
     ?>
-
+ 
     <!-- Toggle Button (Always visible if comments are allowed or there are comments) -->
     <?php if ( comments_open() || have_comments() ) : ?>
         <div class="flex flex-wrap gap-4 mb-8">
             <button id="toggle-view-comments" class="text-base font-medium text-white bg-primary py-4 px-9 hover:bg-opacity-80 hover:shadow-signUp rounded-md transition duration-300 ease-in-out">
-                <?php echo esc_html( $button_text ); ?>
+                <?php echo esc_html( $rock_stars_button_text ); ?>
             </button>
         </div>
     <?php endif; ?>
@@ -63,8 +64,8 @@ if ( post_password_required() ) {
     <div id="comments-toggle-section" class="smooth-reveal relative" style="display: none;">
         
         <!-- Close Button -->
-        <button id="close-comments-section" type="button" class="absolute top-4 right-0 z-50 flex items-center space-x-1 text-xs font-bold uppercase tracking-wider bg-gray-200 dark:bg-gray-700 text-body-color hover:bg-red-500 hover:text-white px-3 py-1.5 rounded-full transition-all shadow-sm" aria-label="Hide Comments">
-            <span>Hide</span>
+        <button id="close-comments-section" type="button" class="absolute top-4 right-0 z-50 flex items-center space-x-1 text-xs font-bold uppercase tracking-wider bg-gray-200 dark:bg-gray-700 text-body-color hover:bg-red-500 hover:text-white px-3 py-1.5 rounded-full transition-all shadow-sm" aria-label="<?php esc_attr_e( 'Hide Comments', 'rock-stars' ); ?>">
+            <span><?php esc_html_e( 'Hide', 'rock-stars' ); ?></span>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -73,13 +74,15 @@ if ( post_password_required() ) {
         <?php if ( have_comments() ) : ?>
             <h2 class="comments-title font-bold text-black dark:text-white text-2xl mb-8">
                 <?php
-                if ( '1' === $comment_count ) {
-                    printf( esc_html__( 'One comment', 'rock-star' ), '<span>' . get_the_title() . '</span>' );
+                if ( '1' === $rock_stars_comment_count ) {
+                    /* translators: %s: post title */
+                    printf( esc_html__( 'One comment on &ldquo;%s&rdquo;', 'rock-stars' ), '<span>' . esc_html( get_the_title() ) . '</span>' );
                 } else {
                     printf( 
-                        esc_html( _nx( '%1$s comment', '%1$s comments', $comment_count, 'comments title', 'rock-star' ) ),
-                        number_format_i18n( $comment_count ),
-                        '<span>' . get_the_title() . '</span>'
+                        /* translators: 1: comment count, 2: post title */
+                        esc_html( _nx( '%1$s comment on &ldquo;%2$s&rdquo;', '%1$s comments on &ldquo;%2$s&rdquo;', $rock_stars_comment_count, 'comments title', 'rock-stars' ) ),
+                        number_format_i18n( $rock_stars_comment_count ),
+                        '<span>' . esc_html( get_the_title() ) . '</span>'
                     );
                 }
                 ?>
@@ -102,7 +105,7 @@ if ( post_password_required() ) {
         </div>
         
         <?php if ( ! comments_open() && have_comments() ) : ?>
-            <p class="no-comments text-body-color"><?php esc_html_e( 'Comments are closed.', 'rock-star' ); ?></p>
+            <p class="no-comments text-body-color"><?php esc_html_e( 'Comments are closed.', 'rock-stars' ); ?></p>
         <?php endif; ?>
 
         <!-- Comment Form Section -->
@@ -111,28 +114,32 @@ if ( post_password_required() ) {
                 <!-- Manual Custom Form -->
                 <div id="respond" class="mt-8 bg-primary bg-opacity-[3%] dark:bg-dark rounded-md p-8 sm:p-11">
                     
-                    <form action="<?php echo site_url('/wp-comments-post.php'); ?>" method="post" id="commentform" class="comment-form" novalidate>
+                    <form action="<?php echo esc_url( site_url( '/wp-comments-post.php' ) ); ?>" method="post" id="commentform" class="comment-form" novalidate>
                         <div class="flex flex-wrap mx-[-16px]">
                             <?php if ( is_user_logged_in() ) : ?>
                                 <div class="w-full px-4 mb-8">
                                     <p class="text-base text-body-color">
-                                        Parsed as <a href="<?php echo get_edit_user_link(); ?>"><?php echo $user_identity; ?></a>. <a href="<?php echo wp_logout_url(get_permalink()); ?>" title="Log out of this account">Log out &raquo;</a>
+                                        <?php 
+                                        /* translators: 1: edit profile link, 2: user identity */
+                                        printf( esc_html__( 'Logged in as %1$s.', 'rock-stars' ), '<a href="' . esc_url( get_edit_user_link() ) . '">' . esc_html( $user_identity ) . '</a>' ); 
+                                        ?> 
+                                        <a href="<?php echo esc_url( wp_logout_url( get_permalink() ) ); ?>" title="<?php esc_attr_e( 'Log out of this account', 'rock-stars' ); ?>"><?php esc_html_e( 'Log out &raquo;', 'rock-stars' ); ?></a>
                                     </p>
                                 </div>
                             <?php else : ?>
                                 <!-- Name Field -->
                                 <div class="w-full md:w-1/2 px-4">
                                     <div class="mb-8">
-                                        <label for="author" class="block text-sm font-medium text-dark dark:text-white mb-3">Your Name</label>
-                                        <input id="author" name="author" type="text" placeholder="Enter your name" class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary" />
+                                        <label for="author" class="block text-sm font-medium text-dark dark:text-white mb-3"><?php esc_html_e( 'Your Name', 'rock-stars' ); ?></label>
+                                        <input id="author" name="author" type="text" placeholder="<?php esc_attr_e( 'Enter your name', 'rock-stars' ); ?>" class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary" />
                                     </div>
                                 </div>
                                 
                                 <!-- Email Field -->
                                 <div class="w-full md:w-1/2 px-4">
                                     <div class="mb-8">
-                                        <label for="email" class="block text-sm font-medium text-dark dark:text-white mb-3">Your Email</label>
-                                        <input id="email" name="email" type="email" placeholder="Enter your email" class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary" />
+                                        <label for="email" class="block text-sm font-medium text-dark dark:text-white mb-3"><?php esc_html_e( 'Your Email', 'rock-stars' ); ?></label>
+                                        <input id="email" name="email" type="email" placeholder="<?php esc_attr_e( 'Enter your email', 'rock-stars' ); ?>" class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary" />
                                     </div>
                                 </div>
                             <?php endif; ?>
@@ -153,8 +160,8 @@ if ( post_password_required() ) {
                                         </svg>
                                     </div>
                                     
-                                    <span class="text-sm font-medium text-body-color dark:text-gray-300 leading-relaxed">
-                                        Save my name and email in this browser for the next time I comment
+                                     <span class="text-sm font-medium text-body-color dark:text-gray-300 leading-relaxed">
+                                        <?php esc_html_e( 'Save my name and email in this browser for the next time I comment', 'rock-stars' ); ?>
                                     </span>
                                 </label>
                             </div>
@@ -163,8 +170,8 @@ if ( post_password_required() ) {
                             <!-- Message Field -->
                             <div class="w-full px-4">
                                 <div class="mb-8">
-                                    <label for="comment" class="block text-sm font-medium text-dark dark:text-white mb-3">Your Message</label>
-                                    <textarea id="comment" name="comment" rows="5" placeholder="Enter your Message" class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary resize-none"></textarea>
+                                    <label for="comment" class="block text-sm font-medium text-dark dark:text-white mb-3"><?php esc_html_e( 'Your Message', 'rock-stars' ); ?></label>
+                                    <textarea id="comment" name="comment" rows="5" placeholder="<?php esc_attr_e( 'Enter your Message', 'rock-stars' ); ?>" class="w-full border border-transparent dark:bg-[#242B51] rounded-md shadow-one dark:shadow-signUp py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary resize-none"></textarea>
                                 </div>
                             </div>
 
@@ -173,7 +180,7 @@ if ( post_password_required() ) {
                              <div class="w-full px-4 pb-4">
                                 <?php comment_id_fields(); ?>
                                 <button name="submit" type="submit" id="submit" class="inline-block rounded-md bg-primary py-4 px-9 text-center text-base font-medium text-white hover:bg-opacity-90 hover:shadow-signUp transition duration-300 ease-in-out cursor-pointer border-0 shadow-submit">
-                                    Post Comment
+                                    <?php esc_html_e( 'Post Comment', 'rock-stars' ); ?>
                                 </button>
                             </div>
                         </div>

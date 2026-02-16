@@ -27,7 +27,7 @@ const SectionEight = ({ data }) => {
 
         try {
             const formData = new FormData();
-            formData.append('action', 'wp_custom_subscribe');
+            formData.append('action', 'rock_stars_subscribe');
             formData.append('email', email);
             if (data?.subscribeNonce) {
                 formData.append('nonce', data.subscribeNonce);

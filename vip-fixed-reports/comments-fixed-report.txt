@@ -1,0 +1,23 @@
+WordPress VIP Compliance Report: comments.php
+Date: 2026-02-16
+Status: FIXED & COMPLIANT
+
+Summary of Changes:
+1. Text Domain fix: Replaced "rock-star" with "rock-stars" across the entire file for consistency.
+2. Prefixed all variables: Local variables now have the `rock_stars_` prefix (e.g., $rock_stars_comment_count, $rock_stars_button_text).
+3. Internationalization (i18n):
+    - Localized all static strings ("Leave a Comment", "View Comments", "Hide", "One comment on...", etc.).
+    - Unified placeholder localization for form fields (Name, Email, Message).
+    - Added translators comments for strings with placeholders.
+4. Security (Escaping):
+    - esc_html(): Used for titles and static text output.
+    - esc_url(): Used for site_url(), get_edit_user_link(), wp_logout_url(), and permalinks.
+    - esc_attr(): Used for HTML attributes (placeholder, aria-label, labels).
+    - wp_kses_post(): Used for outputs containing controlled HTML snippets if any (mostly handled via escaping functions).
+5. Code Quality:
+    - Standardized printf usage for dynamic strings.
+    - Simplified manual form handling to follow WordPress coding standards.
+
+Verification:
+- PHP Syntax Check: Passed.
+- PHP_CodeSniffer (WordPress-VIP-Go): 0 ERRORS, 0 WARNINGS.

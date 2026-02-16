@@ -1,0 +1,26 @@
+# WordPress VIP Compliance Report: page-faqs.php
+
+**File:** `page-faqs.php`
+**Status:** Completed
+**Date:** 2026-02-16
+
+## Changes Made:
+
+1.  **Variable Prefixing:**
+    *   Added `rock_stars_` prefix to all local variables: `$rock_stars_faq_items`, `$rock_stars_faq_index`, `$rock_stars_faq_item`, `$rock_stars_faq_question`, `$rock_stars_faq_raw_answer`, `$rock_stars_faq_answer`.
+
+2.  **Internationalization (i18n):**
+    *   Localized hardcoded title: "Frequently Asked Questions" -> `esc_html_e( 'Frequently Asked Questions', 'rock-stars' )`.
+
+3.  **Security (Escaping):**
+    *   **Questions**: Escaped using `esc_html()`.
+    *   **Answers**: Escaped using `wp_kses_post()` to allow safe HTML tags (like paragraphs, line breaks) while stripping dangerous ones.
+    *   **Attributes**: 
+        *   Escaped `$rock_stars_faq_index` in `onclick` attributes using `esc_attr()`.
+        *   Escaped `$rock_stars_faq_index` in `id` attributes (e.g., `wp-arrow-0`) using `esc_attr()`.
+
+## Verification:
+- [x] PHP Syntax Check passed.
+- [x] All dynamic content is properly escaped for VIP standards.
+- [x] Variables are isolated with the project prefix.
+- [x] Hardcoded strings are localized for translation.

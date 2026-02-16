@@ -1,0 +1,19 @@
+File: inc/functions/post-likes.php
+Status: COMPLIED (WordPress VIP Go)
+
+Summary of Changes:
+1. Refactored `rock_stars_like_post` function to comply with WordPress VIP standards.
+2. Added `ob_start()` and `ob_clean()` for secure output management in AJAX handler.
+3. Implemented strict sanitization for all input variables (`post_id`, `like_action`, `nonce`) using `intval`, `sanitize_text_field`, and `wp_unslash`.
+4. Improved nonce verification using theme-specific key `rock_stars_like_nonce`.
+5. Updated meta data handling:
+   - Migrated to new prefixed key: `_rock_stars_post_likes_count`.
+   - Added backward compatibility: The system reads from `_post_likes_count` if the new key doesn't exist yet, ensuring no like counts are lost during transition.
+6. Updated dependent files:
+   - `single.php`: Updated to use the new prefixed meta key with fallback logic.
+   - `inc/graphql-register.php`: Updated GraphQL resolver to use the new meta key with fallback logic.
+
+Verification:
+- PHP_CodeSniffer ran with WordPress-VIP-Go standard.
+- Result: 0 ERRORS, 0 WARNINGS.
+- Manual check: Dependency analysis confirms compatibility with both PHP template and GraphQL API.

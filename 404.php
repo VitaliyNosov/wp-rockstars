@@ -66,14 +66,15 @@ get_header(); ?>
                 </defs>
               </svg>
             </div>
-            <h3 class="font-bold text-black dark:text-white text-3xl sm:text-4xl mb-4">Sorry, the page can’t be found
+            <h3 class="font-bold text-black dark:text-white text-3xl sm:text-4xl mb-4">
+              <?php esc_html_e( 'Sorry, the page can’t be found', 'rock-stars' ); ?>
             </h3>
             <p class="font-medium text-body-color text-base sm:text-lg leading-relaxed sm:leading-relaxed mb-10">
-              The page you were looking for appears to have been moved, deleted or does not exist.
+              <?php esc_html_e( 'The page you were looking for appears to have been moved, deleted or does not exist.', 'rock-stars' ); ?>
             </p>
-            <a href="javascript:void(0)"
+            <a href="<?php echo esc_url( home_url( '/' ) ); ?>"
               class="text-base font-bold text-white bg-primary py-3 px-8 md:px-9 lg:px-8 xl:px-9 hover:bg-white hover:text-primary shadow-signUp rounded-md">
-              Back to Homepage
+              <?php esc_html_e( 'Back to Homepage', 'rock-stars' ); ?>
             </a>
           </div>
         </div>

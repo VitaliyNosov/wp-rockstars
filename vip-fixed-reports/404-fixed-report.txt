@@ -1,0 +1,24 @@
+# WordPress VIP Compliance Report: 404.php
+
+**File:** `404.php`
+**Status:** Completed
+**Date:** 2026-02-16
+
+## Changes Made:
+
+1.  **Internationalization (i18n):**
+    *   Localized hardcoded strings:
+        *   "Sorry, the page can’t be found" -> `esc_html_e( 'Sorry, the page can’t be found', 'rock-stars' )`
+        *   "The page you were looking for appears to have been moved, deleted or does not exist." -> `esc_html_e( 'The page you were looking for appears to have been moved, deleted or does not exist.', 'rock-stars' )`
+        *   "Back to Homepage" -> `esc_html_e( 'Back to Homepage', 'rock-stars' )`
+
+2.  **Security (Escaping & Links):**
+    *   Updated the homepage link from `javascript:void(0)` to `<?php echo esc_url( home_url( '/' ) ); ?>`. This ensures the link is functional and securely escaped per VIP standards.
+
+3.  **Variable Prefixing:**
+    *   Not required: No local variables are used in the logic of this template.
+
+## Verification:
+- [x] PHP Syntax Check passed.
+- [x] All dynamic outputs (home URL) are properly escaped.
+- [x] Hardcoded strings are localized for translation.

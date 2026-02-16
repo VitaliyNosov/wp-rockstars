@@ -555,7 +555,10 @@ add_action('graphql_register_types', function () {
         'type' => 'Int',
         'description' => 'Number of likes for the post',
         'resolve' => function ($post) {
-            $likes = get_post_meta($post->ID, '_post_likes_count', true);
+            $likes = get_post_meta($post->ID, '_rock_stars_post_likes_count', true);
+            if ( '' === $likes ) {
+                $likes = get_post_meta($post->ID, '_post_likes_count', true);
+            }
             return $likes ? intval($likes) : 0;
         }
     ]);
@@ -583,7 +586,7 @@ add_action('graphql_register_types', function () {
         'type' => 'String',
         'description' => 'Nonce for comment submission',
         'resolve' => function () {
-            return wp_create_nonce('comment_nonce');
+            return wp_create_nonce('rock_stars_comment_nonce');
         }
     ]);
 
@@ -628,7 +631,7 @@ add_action('graphql_register_types', function () {
         'type' => 'String',
         'description' => 'Nonce for ticket submission',
         'resolve' => function () {
-            return wp_create_nonce('wp_custom_ticket_nonce');
+            return wp_create_nonce('rock_stars_ticket_nonce');
         }
     ]);
 });

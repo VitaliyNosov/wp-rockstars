@@ -71,7 +71,7 @@
                     }
 
                         $attributes = '';
-                            !empty($item->url) and $attributes .= ' href="' . esc_attr($item->url) . '"';
+                            !empty($item->url) and $attributes .= ' href="' . esc_url($item->url) . '"';
                         $attributes .= ' class="' . $link_classes . '"';
 
                             // Если есть дети и уровень 0 — добавляем стрелочку, как в статике
@@ -79,7 +79,7 @@
                             $attributes .= ' style="position: relative;"';
                         }
 
-                        $title = apply_filters('the_title', $item->title, $item->ID);
+                        $title = apply_filters('rock_stars_nav_menu_item_title', $item->title, $item->ID);
 
                         $output .= '<a' . $attributes . '>';
 

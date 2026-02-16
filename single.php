@@ -11,10 +11,10 @@ get_header(); ?>
     <div class="container">
         <div class="flex flex-wrap justify-center mx-[-16px]">
             <div class="w-full lg:w-8/12 px-4">
-                <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+                <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
                 <div>
                     <h1 class="font-bold text-black dark:text-white text-3xl sm:text-4xl leading-tight sm:leading-tight mb-8">
-                        <?php the_title(); ?>
+                        <?php echo esc_html( get_the_title() ); ?>
                     </h1>
                     
                     <div class="flex flex-wrap items-center justify-between pb-4 mb-10 border-b border-body-color border-opacity-10 dark:border-white dark:border-opacity-10">
@@ -22,14 +22,14 @@ get_header(); ?>
                             <!-- Author Info -->
                             <div class="flex items-center mr-10 mb-5">
                                 <div class="max-w-[40px] w-full h-[40px] rounded-full overflow-hidden mr-4">
-                                    <?php echo get_avatar(get_the_author_meta('ID'), 40, '', '', array('class' => 'w-full')); ?>
+                                    <?php echo get_avatar( get_the_author_meta( 'ID' ), 40, '', '', array( 'class' => 'w-full' ) ); ?>
                                 </div>
                                 <div class="w-full">
                                     <h4 class="text-base font-medium text-body-color mb-1">
-                                        By
-                                        <a href="<?php echo get_author_posts_url(get_the_author_meta('ID')); ?>" 
+                                        <?php echo esc_html_x( 'By', 'post author prefix', 'rock-stars' ); ?>
+                                        <a href="<?php echo esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ); ?>" 
                                            class="text-body-color hover:text-primary">
-                                            <?php the_author(); ?>
+                                            <?php echo esc_html( get_the_author() ); ?>
                                         </a>
                                     </h4>
                                 </div>
@@ -54,7 +54,7 @@ get_header(); ?>
                                             <path d="M13.2637 3.3697H7.64754V2.58105C8.19721 2.43765 8.62738 1.91189 8.62738 1.31442C8.62738 0.597464 8.02992 0 7.28906 0C6.54821 0 5.95074 0.597464 5.95074 1.31442C5.95074 1.91189 6.35702 2.41376 6.93058 2.58105V3.3697H1.31442C0.597464 3.3697 0 3.96716 0 4.68412V13.2637C0 13.9807 0.597464 14.5781 1.31442 14.5781H13.2637C13.9807 14.5781 14.5781 13.9807 14.5781 13.2637V4.68412C14.5781 3.96716 13.9807 3.3697 13.2637 3.3697ZM6.6677 1.31442C6.6677 0.979841 6.93058 0.716957 7.28906 0.716957C7.62364 0.716957 7.91042 0.979841 7.91042 1.31442C7.91042 1.649 7.64754 1.91189 7.28906 1.91189C6.95448 1.91189 6.6677 1.6251 6.6677 1.31442ZM1.31442 4.08665H13.2637C13.5983 4.08665 13.8612 4.34954 13.8612 4.68412V6.45261H0.716957V4.68412C0.716957 4.34954 0.979841 4.08665 1.31442 4.08665ZM13.2637 13.8612H1.31442C0.979841 13.8612 0.716957 13.5983 0.716957 13.2637V7.16957H13.8612V13.2637C13.8612 13.5983 13.5983 13.8612 13.2637 13.8612Z" />
                                         </svg>
                                     </span>
-                                    <?php echo date('d M Y', get_post_time('U', true)); ?>
+                                    <?php echo esc_html( get_the_date( 'd M Y' ) ); ?>
                                 </p>
                                 
                                 <!-- Comments Count -->
@@ -66,11 +66,11 @@ get_header(); ?>
                                             <path d="M11.0529 6.55322H4.69668C4.41543 6.55322 4.19043 6.77822 4.19043 7.05947C4.19043 7.34072 4.41543 7.56572 4.69668 7.56572H11.0811C11.3623 7.56572 11.5873 7.34072 11.5873 7.05947C11.5873 6.77822 11.3342 6.55322 11.0529 6.55322Z" />
                                         </svg>
                                     </span>
-                                    <span id="post-comment-count"><?php echo get_comments_number(); ?></span>
+                                    <span id="post-comment-count"><?php echo esc_html( get_comments_number() ); ?></span>
                                 </p>
 
                                 <!-- Like Button -->
-                                <a href="#" id="post-like-btn" data-post-id="<?php echo get_the_ID(); ?>" class="flex items-center text-sm text-body-color font-medium mr-6 hover:text-red-500 transition-colors">
+                                <a href="#" id="post-like-btn" data-post-id="<?php echo esc_attr( get_the_ID() ); ?>" class="flex items-center text-sm text-body-color font-medium mr-6 hover:text-red-500 transition-colors">
                                     <span class="mr-4">
                                         <!-- Иконка: w-4 h-4 (16px), fill-transparent по умолчанию -->
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" class="w-4 h-4 transition-colors">
@@ -79,8 +79,11 @@ get_header(); ?>
                                     </span>
                                     <span class="like-count">
                                         <?php 
-                                        $likes = get_post_meta(get_the_ID(), '_post_likes_count', true);
-                                        echo $likes ? intval($likes) : 0;
+                                        $rock_stars_likes_count = get_post_meta( get_the_ID(), '_rock_stars_post_likes_count', true );
+                                        if ( '' === $rock_stars_likes_count ) {
+                                            $rock_stars_likes_count = get_post_meta( get_the_ID(), '_post_likes_count', true );
+                                        }
+                                        echo esc_html( $rock_stars_likes_count ? intval( $rock_stars_likes_count ) : 0 );
                                         ?>
                                     </span>
                                 </a>
@@ -95,10 +98,10 @@ get_header(); ?>
                                     </span>
                                     <?php
                                     // Display post views if you have a plugin like WP-PostViews
-                                    if (function_exists('the_views')) {
+                                    if ( function_exists( 'the_views' ) ) {
                                         // Attempt to get raw value if possible or just use output
-                                        $views = get_post_meta(get_the_ID(), 'views', true);
-                                        echo ($views ? $views : '0');
+                                        $rock_stars_views = get_post_meta( get_the_ID(), 'views', true );
+                                        echo esc_html( $rock_stars_views ? $rock_stars_views : '0' );
                                     } else {
                                         echo '0';
                                     }
@@ -108,13 +111,13 @@ get_header(); ?>
                         </div>
                         
                         <!-- Category -->
-                        <div class="mb-5">
+                         <div class="mb-5">
                             <?php 
-                            $categories = get_the_category();
-                            if (!empty($categories)) {
-                                foreach ($categories as $category) {
+                            $rock_stars_categories = get_the_category();
+                            if ( ! empty( $rock_stars_categories ) ) {
+                                foreach ( $rock_stars_categories as $rock_stars_category ) {
                                     echo '<span class="bg-primary rounded-full inline-flex items-center justify-center py-2 px-4 font-semibold text-sm text-white mr-2">';
-                                    echo esc_html($category->name);
+                                    echo esc_html( $rock_stars_category->name );
                                     echo '</span>';
                                 }
                             }
@@ -138,17 +141,17 @@ get_header(); ?>
                         
                         <!-- Tags and Share -->
                         <div class="sm:flex items-center justify-between">
-                            <!-- Tags -->
-                            <?php if (has_tag()) : ?>
+                         <!-- Tags -->
+                            <?php if ( has_tag() ) : ?>
                             <div class="mb-5">
-                                <h5 class="font-medium text-body-color text-sm mb-3">Popular Tags :</h5>
+                                <h5 class="font-medium text-body-color text-sm mb-3"><?php esc_html_e( 'Popular Tags:', 'rock-stars' ); ?></h5>
                                 <div class="flex items-center flex-wrap">
                                     <?php
-                                    $tags = get_the_tags();
-                                    if ($tags) {
-                                        foreach ($tags as $tag) {
-                                            echo '<a href="' . get_tag_link($tag->term_id) . '" class="inline-flex items-center justify-center py-2 px-4 mr-4 mb-2 rounded-md bg-primary bg-opacity-10 text-body-color hover:bg-opacity-100 hover:text-white">';
-                                            echo esc_html($tag->name);
+                                    $rock_stars_tags = get_the_tags();
+                                    if ( $rock_stars_tags ) {
+                                        foreach ( $rock_stars_tags as $rock_stars_tag ) {
+                                            echo '<a href="' . esc_url( get_tag_link( $rock_stars_tag->term_id ) ) . '" class="inline-flex items-center justify-center py-2 px-4 mr-4 mb-2 rounded-md bg-primary bg-opacity-10 text-body-color hover:bg-opacity-100 hover:text-white">';
+                                            echo esc_html( $rock_stars_tag->name );
                                             echo '</a>';
                                         }
                                     }
@@ -157,12 +160,12 @@ get_header(); ?>
                             </div>
                             <?php endif; ?>
                             
-                            <!-- Share -->
+                             <!-- Share -->
                             <div class="mb-5">
-                                <h5 class="font-medium text-body-color text-sm sm:text-right mb-3">Share this post :</h5>
+                                <h5 class="font-medium text-body-color text-sm sm:text-right mb-3"><?php esc_html_e( 'Share this post:', 'rock-stars' ); ?></h5>
                                 <div class="flex items-center sm:justify-end">
                                     <!-- LinkedIn -->
-                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo urlencode(get_permalink()); ?>" 
+                                    <a href="<?php echo esc_url( 'https://www.linkedin.com/sharing/share-offsite/?url=' . urlencode( get_permalink() ) ); ?>" 
                                        target="_blank" rel="noopener"
                                        class="inline-flex items-center justify-center w-9 h-9 sm:ml-3 rounded-md bg-primary bg-opacity-10 text-body-color hover:bg-opacity-100 hover:text-white">
                                         <svg width="16" height="16" viewBox="0 0 16 16" class="fill-current">
@@ -171,7 +174,7 @@ get_header(); ?>
                                     </a>
                                     
                                     <!-- Twitter -->
-                                    <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode(get_permalink()); ?>&text=<?php echo urlencode(get_the_title()); ?>" 
+                                    <a href="<?php echo esc_url( 'https://twitter.com/intent/tweet?url=' . urlencode( get_permalink() ) . '&text=' . urlencode( get_the_title() ) ); ?>" 
                                        target="_blank" rel="noopener"
                                        class="inline-flex items-center justify-center w-9 h-9 ml-3 rounded-md bg-primary bg-opacity-10 text-body-color hover:bg-opacity-100 hover:text-white">
                                         <svg width="18" height="14" viewBox="0 0 18 14" class="fill-current">
@@ -180,7 +183,7 @@ get_header(); ?>
                                     </a>
                                     
                                     <!-- Facebook -->
-                                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode(get_permalink()); ?>" 
+                                    <a href="<?php echo esc_url( 'https://www.facebook.com/sharer/sharer.php?u=' . urlencode( get_permalink() ) ); ?>" 
                                        target="_blank" rel="noopener"
                                        class="inline-flex items-center justify-center w-9 h-9 ml-3 rounded-md bg-primary bg-opacity-10 text-body-color hover:bg-opacity-100 hover:text-white">
                                         <svg width="9" height="18" viewBox="0 0 9 18" class="fill-current">

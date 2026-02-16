@@ -285,7 +285,7 @@ function register_landing_page_graphql_fields() {
                 'sec8Title' => $get('sec8_title'),
                 'sec8Placeholder' => $get('sec8_input_placeholder'),
                 'sec8BtnText' => $get('sec8_btn_text'),
-                'subscribeNonce' => wp_create_nonce('wp_custom_subscribe_nonce'),
+                'subscribeNonce' => wp_create_nonce('rock_stars_subscribe_nonce'),
             ];
         }
     ] );
