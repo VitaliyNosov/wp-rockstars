@@ -10,7 +10,7 @@
 function get_quiz_structure() {
     // Only try to get option if Carbon Fields is active
     if (function_exists('carbon_get_theme_option')) {
-        $structure = carbon_get_theme_option('quiz_structure');
+        $structure = carbon_get_theme_option('rock_stars_quiz_structure');
         if (!empty($structure)) {
             return $structure;
         }
@@ -49,16 +49,16 @@ function render_quiz_modal_html() {
     $total_steps = count($steps) + 1; // +1 for Summary step
     
     // Get custom accent color
-    $accent_color = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_accent_color') : '';
+    $accent_color = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('rock_stars_quiz_accent_color') : '';
     if (empty($accent_color)) $accent_color = '#4A6CF7';
 
     // Get Typography & Text
-    $font_family = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_font_family') : '';
+    $font_family = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('rock_stars_quiz_font_family') : '';
     
     // Handle Custom Font
     if ($font_family === 'custom') {
-        $custom_font_name = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_custom_font_name') : '';
-        $custom_font_url = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_custom_font_url') : '';
+        $custom_font_name = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('rock_stars_quiz_custom_font_name') : '';
+        $custom_font_url = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('rock_stars_quiz_custom_font_url') : '';
         
         if (!empty($custom_font_url)) {
             echo '<link rel="stylesheet" href="' . esc_url($custom_font_url) . '">';
@@ -74,13 +74,13 @@ function render_quiz_modal_html() {
         }
     }
     
-    $btn_prev = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_btn_prev') : 'Back';
+    $btn_prev = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('rock_stars_quiz_btn_prev') : 'Back';
     if (empty($btn_prev)) $btn_prev = 'Back';
 
-    $btn_next = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_btn_next') : 'Next';
+    $btn_next = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('rock_stars_quiz_btn_next') : 'Next';
     if (empty($btn_next)) $btn_next = 'Next';
 
-    $btn_submit = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('quiz_btn_submit') : 'Submit';
+    $btn_submit = function_exists('carbon_get_theme_option') ? carbon_get_theme_option('rock_stars_quiz_btn_submit') : 'Submit';
     if (empty($btn_submit)) $btn_submit = 'Submit';
     ?>
     

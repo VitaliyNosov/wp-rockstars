@@ -1,23 +1,25 @@
 <?php
 /**
  * Quiz Submissions - Custom Post Type and AJAX Handler
+ *
+ * @package Rockstars
  */
 
 // 1. Register Custom Post Type 'Quiz Submission'
-function quiz_register_post_type() {
+function rock_stars_quiz_register_post_type() {
     $args = array(
         'labels' => array(
-            'name' => 'Quiz Submissions',
-            'singular_name' => 'Quiz Submission',
-            'menu_name' => 'Quiz Submissions',
-            'add_new' => 'Add New',
-            'add_new_item' => 'Add New Submission',
-            'edit_item' => 'Edit Submission',
-            'new_item' => 'New Submission',
-            'view_item' => 'View Submission',
-            'search_items' => 'Search Submissions',
-            'not_found' => 'No submissions found',
-            'not_found_in_trash' => 'No submissions found in trash'
+            'name' => __( 'Quiz Submissions', 'rock-stars' ),
+            'singular_name' => __( 'Quiz Submission', 'rock-stars' ),
+            'menu_name' => __( 'Quiz Submissions', 'rock-stars' ),
+            'add_new' => __( 'Add New', 'rock-stars' ),
+            'add_new_item' => __( 'Add New Submission', 'rock-stars' ),
+            'edit_item' => __( 'Edit Submission', 'rock-stars' ),
+            'new_item' => __( 'New Submission', 'rock-stars' ),
+            'view_item' => __( 'View Submission', 'rock-stars' ),
+            'search_items' => __( 'Search Submissions', 'rock-stars' ),
+            'not_found' => __( 'No submissions found', 'rock-stars' ),
+            'not_found_in_trash' => __( 'No submissions found in trash', 'rock-stars' )
         ),
         'public' => false,
         'show_ui' => true,
@@ -37,35 +39,35 @@ function quiz_register_post_type() {
     );
     register_post_type('quiz_submission', $args);
 }
-add_action('init', 'quiz_register_post_type');
+add_action('init', 'rock_stars_quiz_register_post_type');
 
 // Helper to get structure
-function quiz_get_structure_helper() {
+function rock_stars_quiz_get_structure_helper() {
     $structure = [];
     if (function_exists('get_quiz_structure')) {
         $structure = get_quiz_structure();
     } elseif (function_exists('carbon_get_theme_option')) {
-         $structure = carbon_get_theme_option('quiz_structure');
+         $structure = carbon_get_theme_option('rock_stars_quiz_structure');
     }
     return $structure;
 }
 
 // 2. Add custom columns to admin list
-function quiz_custom_columns($columns) {
+function rock_stars_quiz_custom_columns($columns) {
     $new_columns = array(
         'cb' => $columns['cb'],
-        'title' => 'Submission',
-        'user_name' => 'Name',
-        'user_email' => 'Email',
-        'quiz_actions' => 'Actions', // New column for Quick View
-        'date' => 'Date'
+        'title' => __( 'Submission', 'rock-stars' ),
+        'user_name' => __( 'Name', 'rock-stars' ),
+        'user_email' => __( 'Email', 'rock-stars' ),
+        'quiz_actions' => __( 'Actions', 'rock-stars' ), // New column for Quick View
+        'date' => __( 'Date', 'rock-stars' )
     );
     return $new_columns;
 }
-add_filter('manage_quiz_submission_posts_columns', 'quiz_custom_columns');
+add_filter('manage_quiz_submission_posts_columns', 'rock_stars_quiz_custom_columns');
 
 // 3. Fill custom columns with data
-function quiz_column_content($column, $post_id) {
+function rock_stars_quiz_column_content($column, $post_id) {
     if ($column === 'user_name') {
         echo esc_html(get_post_meta($post_id, '_quiz_user_name', true));
     }
@@ -73,30 +75,30 @@ function quiz_column_content($column, $post_id) {
         echo esc_html(get_post_meta($post_id, '_quiz_user_email', true));
     }
     if ($column === 'quiz_actions') {
-        echo '<button type="button" class="button button-small open-quiz-modal" data-id="' . $post_id . '"><span class="dashicons dashicons-visibility" style="vertical-align: text-top; color: #444;"></span> View Details</button>';
+        echo '<button type="button" class="button button-small open-quiz-modal" data-id="' . esc_attr($post_id) . '"><span class="dashicons dashicons-visibility" style="vertical-align: text-top; color: #444;"></span> ' . esc_html__( 'View Details', 'rock-stars' ) . '</button>';
     }
 }
-add_action('manage_quiz_submission_posts_custom_column', 'quiz_column_content', 10, 2);
+add_action('manage_quiz_submission_posts_custom_column', 'rock_stars_quiz_column_content', 10, 2);
 
 // 4. Add meta box to show quiz details in admin
-function quiz_meta_box() {
+function rock_stars_quiz_meta_box() {
     add_meta_box(
         'quiz-details',
-        'Quiz Details',
-        'quiz_meta_box_callback',
+        __( 'Quiz Details', 'rock-stars' ),
+        'rock_stars_quiz_meta_box_callback',
         'quiz_submission',
         'normal',
         'high'
     );
 }
-add_action('add_meta_boxes', 'quiz_meta_box');
+add_action('add_meta_boxes', 'rock_stars_quiz_meta_box');
 
-function quiz_meta_box_callback($post) {
-    echo quiz_get_submission_html($post->ID);
+function rock_stars_quiz_meta_box_callback($post) {
+    echo rock_stars_quiz_get_submission_html($post->ID);
 }
 
 // SHARED RENDER LOGIC (Used by MetaBox and AJAX Modal)
-function quiz_get_submission_html($post_id) {
+function rock_stars_quiz_get_submission_html($post_id) {
     $user_name = get_post_meta($post_id, '_quiz_user_name', true);
     $user_email = get_post_meta($post_id, '_quiz_user_email', true);
     $submission_time = get_post_meta($post_id, '_quiz_submission_time', true);
@@ -107,24 +109,24 @@ function quiz_get_submission_html($post_id) {
     <div class="quiz-submission-view" style="background: #ffffff; color: #1e293b; padding: 25px; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
         
         <!-- Header -->
-        <h4 style="color: #3b82f6; border-bottom: 2px solid #3b82f6; padding-bottom: 8px; margin-bottom: 15px; margin-top: 0; font-size: 1.2em;">👤 User Information</h4>
+        <h4 style="color: #3b82f6; border-bottom: 2px solid #3b82f6; padding-bottom: 8px; margin-bottom: 15px; margin-top: 0; font-size: 1.2em;"><?php esc_html_e( '👤 User Information', 'rock-stars' ); ?></h4>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; background: #f8fafc; padding: 15px; border-radius: 6px;">
-            <p style="margin: 0; line-height: 1.6; color: #334155;"><strong style="color: #64748b;">Name:</strong> <span style="font-weight: 500; color: #0f172a;"><?php echo esc_html($user_name ?: 'Anonymous'); ?></span></p>
-            <p style="margin: 0; line-height: 1.6; color: #334155;"><strong style="color: #64748b;">Email:</strong> <span style="font-weight: 500; color: #0f172a;"><?php echo esc_html($user_email ?: 'N/A'); ?></span></p>
-            <p style="margin: 0; line-height: 1.6; color: #334155;"><strong style="color: #64748b;">Submitted:</strong> <?php echo esc_html($submission_time); ?></p>
-            <p style="margin: 0; line-height: 1.6; color: #334155;"><strong style="color: #64748b;">IP Address:</strong> <?php echo esc_html($ip_address); ?></p>
+            <p style="margin: 0; line-height: 1.6; color: #334155;"><strong style="color: #64748b;"><?php esc_html_e( 'Name:', 'rock-stars' ); ?></strong> <span style="font-weight: 500; color: #0f172a;"><?php echo esc_html($user_name ?: __( 'Anonymous', 'rock-stars' )); ?></span></p>
+            <p style="margin: 0; line-height: 1.6; color: #334155;"><strong style="color: #64748b;"><?php esc_html_e( 'Email:', 'rock-stars' ); ?></strong> <span style="font-weight: 500; color: #0f172a;"><?php echo esc_html($user_email ?: __( 'N/A', 'rock-stars' )); ?></span></p>
+            <p style="margin: 0; line-height: 1.6; color: #334155;"><strong style="color: #64748b;"><?php esc_html_e( 'Submitted:', 'rock-stars' ); ?></strong> <?php echo esc_html($submission_time); ?></p>
+            <p style="margin: 0; line-height: 1.6; color: #334155;"><strong style="color: #64748b;"><?php esc_html_e( 'IP Address:', 'rock-stars' ); ?></strong> <?php echo esc_html($ip_address); ?></p>
         </div>
 
-        <h4 style="color: #3b82f6; border-bottom: 2px solid #3b82f6; padding-bottom: 8px; margin-bottom: 15px; margin-top: 20px; font-size: 1.2em;">📋 Quiz Responses</h4>
+        <h4 style="color: #3b82f6; border-bottom: 2px solid #3b82f6; padding-bottom: 8px; margin-bottom: 15px; margin-top: 20px; font-size: 1.2em;"><?php esc_html_e( '📋 Quiz Responses', 'rock-stars' ); ?></h4>
         
         <?php
-        $structure = quiz_get_structure_helper();
+        $structure = rock_stars_quiz_get_structure_helper();
         $displayed_keys = [];
 
         // 1. PRIMARY LOOP
         if (!empty($structure)) {
             foreach ($structure as $step) {
-                $step_title = isset($step['step_title']) ? $step['step_title'] : 'Step';
+                $step_title = isset($step['step_title']) ? $step['step_title'] : __( 'Step', 'rock-stars' );
                 $has_data_in_step = false;
                 ob_start(); 
                 
@@ -183,7 +185,7 @@ function quiz_get_submission_html($post_id) {
                         // Check for error for this field
                         if ($field_error) {
                             echo '<div style="background: #fee2e2; color: #b91c1c; padding: 8px; border-radius: 4px; margin-bottom: 8px; font-size: 0.9em; border: 1px solid #fecaca;">';
-                            echo '<strong>Error:</strong> ' . esc_html($field_error);
+                            echo '<strong>' . esc_html__( 'Error:', 'rock-stars' ) . '</strong> ' . esc_html($field_error);
                             echo '</div>';
                         }
 
@@ -227,17 +229,10 @@ function quiz_get_submission_html($post_id) {
             if (empty($val)) continue;
             
             $orphan_content .= '<div style="background: #fef2f2; padding: 12px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #ef4444;">';
-            $orphan_content .= '<strong style="color: #ef4444; display:block; margin-bottom: 4px;">' . esc_html(ucfirst(str_replace('_', ' ', $clean_key))) . ' <span style="opacity:0.7; font-size:0.8em;">(Unmapped Field)</span></strong>';
-            $orphan_content .= '<div style="color: #7f1d1d; white-space: pre-wrap;">' . print_r($val, true) . '</div>';
+            $orphan_content .= '<strong style="color: #ef4444; display:block; margin-bottom: 4px;">' . esc_html(ucfirst(str_replace('_', ' ', $clean_key))) . ' <span style="opacity:0.7; font-size:0.8em;">' . esc_html__( '(Unmapped Field)', 'rock-stars' ) . '</span></strong>';
+            $orphan_content .= '<div style="color: #7f1d1d; white-space: pre-wrap;">' . esc_html(print_r($val, true)) . '</div>';
             $orphan_content .= '</div>';
         }
-        
-        /*
-        if (!empty($orphan_content)) {
-            echo '<h5 style="color: #ef4444; margin: 25px 0 10px 0; border-top: 1px dashed #fecaca; padding-top: 15px;">⚠️ Additional Data (Not in current Quiz Structure)</h5>';
-            echo $orphan_content;
-        }
-        */
         
         ?>
     </div>
@@ -246,20 +241,20 @@ function quiz_get_submission_html($post_id) {
 }
 
 // 7. AJAX Handler for Quick View
-function quiz_ajax_get_details() {
+function rock_stars_quiz_ajax_get_details() {
     // Basic formatting for AJAX response
     $id = intval($_POST['id']);
     if (!$id || get_post_type($id) !== 'quiz_submission') {
-        wp_send_json_error('Invalid ID');
+        wp_send_json_error( __( 'Invalid ID', 'rock-stars' ) );
     }
     
-    $html = quiz_get_submission_html($id);
+    $html = rock_stars_quiz_get_submission_html($id);
     wp_send_json_success($html);
 }
-add_action('wp_ajax_quiz_get_details', 'quiz_ajax_get_details');
+add_action('wp_ajax_quiz_get_details', 'rock_stars_quiz_ajax_get_details');
 
 // 8. Admin Footer Scripts
-function quiz_admin_footer_scripts() {
+function rock_stars_quiz_admin_footer_scripts() {
     $screen = get_current_screen();
     if ($screen->post_type !== 'quiz_submission') return;
     ?>
@@ -280,7 +275,7 @@ function quiz_admin_footer_scripts() {
             var modal = $('#quiz-admin-modal');
             var target = $('#quiz-modal-target');
             
-            target.html('<div style="padding: 50px; text-align: center; color: #666;">Loading...</div>');
+            target.html('<div style="padding: 50px; text-align: center; color: #666;"><?php echo esc_js( __( 'Loading...', 'rock-stars' ) ); ?></div>');
             modal.addClass('active');
             
             $.post(ajaxurl, {
@@ -290,7 +285,7 @@ function quiz_admin_footer_scripts() {
                 if (response.success) {
                     target.html(response.data);
                 } else {
-                    target.html('<div style="padding: 20px; color: red;">Error loading data</div>');
+                    target.html('<div style="padding: 20px; color: red;"><?php echo esc_js( __( 'Error loading data', 'rock-stars' ) ); ?></div>');
                 }
             });
         });
@@ -304,10 +299,10 @@ function quiz_admin_footer_scripts() {
     </script>
     <?php
 }
-add_action('admin_footer', 'quiz_admin_footer_scripts');
+add_action('admin_footer', 'rock_stars_quiz_admin_footer_scripts');
 
 // 5. Core logic for processing quiz submission
-function quiz_process_submission($data, $files = []) {
+function rock_stars_quiz_process_submission($data, $files = []) {
     // Get Basic Data (with smart fallback)
     $raw_user_name = isset($data['user_name']) ? sanitize_text_field($data['user_name']) : '';
     $user_name = ($raw_user_name && $raw_user_name !== 'Anonymous') ? $raw_user_name : '';
@@ -360,7 +355,7 @@ function quiz_process_submission($data, $files = []) {
     $post_id = wp_insert_post($post_data);
     
     if (is_wp_error($post_id)) {
-        return array('success' => false, 'message' => 'Failed to save submission');
+        return array('success' => false, 'message' => __( 'Failed to save submission', 'rock-stars' ));
     }
     
     // Save Standard Meta
@@ -368,7 +363,7 @@ function quiz_process_submission($data, $files = []) {
     update_post_meta($post_id, '_quiz_user_email', $user_email);
     $submission_time = current_time('mysql');
     update_post_meta($post_id, '_quiz_submission_time', $submission_time);
-    update_post_meta($post_id, '_quiz_ip_address', $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1');
+    update_post_meta($post_id, '_quiz_ip_address', sanitize_text_field($_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'));
     
     // Save All Dynamic Fields
     $exclude_keys = ['action', 'nonce', 'user_name', 'user_email'];
@@ -485,12 +480,12 @@ function quiz_process_submission($data, $files = []) {
     
     // Send Email Notification
     if (function_exists('carbon_get_theme_option')) {
-        $to = carbon_get_theme_option('quiz_notification_email');
-        $subject_template = carbon_get_theme_option('quiz_notification_subject');
+        $to = carbon_get_theme_option('rock_stars_quiz_notification_email');
+        $subject_template = carbon_get_theme_option('rock_stars_quiz_notification_subject');
         
         if (!empty($to)) {
             $subject = str_replace('{user_name}', $user_name, $subject_template);
-            $message = quiz_get_submission_html($post_id);
+            $message = rock_stars_quiz_get_submission_html($post_id);
             
             $headers = array('Content-Type: text/html; charset=UTF-8');
             
@@ -501,12 +496,12 @@ function quiz_process_submission($data, $files = []) {
 
     // TELEGRAM NOTIFICATION
     if (function_exists('carbon_get_theme_option')) {
-        $tg_active = carbon_get_theme_option('quiz_telegram_active');
-        $tg_token = carbon_get_theme_option('quiz_telegram_token');
-        $tg_chat_id = carbon_get_theme_option('quiz_telegram_chat_id');
+        $tg_active = carbon_get_theme_option('rock_stars_quiz_telegram_active');
+        $tg_token = carbon_get_theme_option('rock_stars_quiz_telegram_token');
+        $tg_chat_id = carbon_get_theme_option('rock_stars_quiz_telegram_chat_id');
         
         if ($tg_active && !empty($tg_token) && !empty($tg_chat_id)) {
-            $tg_header = carbon_get_theme_option('quiz_telegram_subject') ?: '🔥 New Quiz Submission';
+            $tg_header = carbon_get_theme_option('rock_stars_quiz_telegram_subject') ?: '🔥 New Quiz Submission';
             
             // 1. Build Text Message
             $tg_message = "<b>" . htmlspecialchars($tg_header) . "</b>\n\n";
@@ -515,7 +510,7 @@ function quiz_process_submission($data, $files = []) {
             $tg_message .= "⏱ <b>Time:</b> " . htmlspecialchars($submission_time) . "\n\n";
             
             // Add Answers
-            $structure = quiz_get_structure_helper();
+            $structure = rock_stars_quiz_get_structure_helper();
             if (!empty($structure)) {
                 foreach ($structure as $step) {
                    $step_has_data = false;
@@ -619,13 +614,13 @@ function quiz_process_submission($data, $files = []) {
 }
 
 // 6. AJAX handler for quiz submission
-function quiz_handle_submission() {
+function rock_stars_quiz_handle_submission() {
     // Check nonce
     if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'quiz_nonce')) {
-        wp_send_json_error('Security check failed');
+        wp_send_json_error(__( 'Security check failed', 'rock-stars' ));
     }
     
-    $result = quiz_process_submission($_POST, $_FILES);
+    $result = rock_stars_quiz_process_submission($_POST, $_FILES);
     
     if ($result['success']) {
         wp_send_json_success($result);
@@ -633,11 +628,11 @@ function quiz_handle_submission() {
         wp_send_json_error($result['message']);
     }
 }
-add_action('wp_ajax_submit_quiz', 'quiz_handle_submission');
-add_action('wp_ajax_nopriv_submit_quiz', 'quiz_handle_submission');
+add_action('wp_ajax_submit_quiz', 'rock_stars_quiz_handle_submission');
+add_action('wp_ajax_nopriv_submit_quiz', 'rock_stars_quiz_handle_submission');
 
 // 6. Enqueue scripts (Keep existing)
-function quiz_enqueue_scripts() {
+function rock_stars_quiz_enqueue_scripts() {
     if (!is_admin()) {
         // Localize script for AJAX
         wp_localize_script('jquery', 'quiz_ajax', array(
@@ -646,4 +641,4 @@ function quiz_enqueue_scripts() {
         ));
     }
 }
-add_action('wp_enqueue_scripts', 'quiz_enqueue_scripts');
+add_action('wp_enqueue_scripts', 'rock_stars_quiz_enqueue_scripts');

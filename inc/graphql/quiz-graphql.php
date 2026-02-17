@@ -72,7 +72,7 @@ function register_quiz_graphql_logic() {
         'resolve' => function() {
             if ( ! function_exists( 'carbon_get_theme_option' ) ) return null;
 
-            $steps_data = carbon_get_theme_option( 'quiz_structure' );
+            $steps_data = carbon_get_theme_option( 'rock_stars_quiz_structure' );
             $steps = [];
             
             if ( is_array( $steps_data ) ) {
@@ -128,11 +128,11 @@ function register_quiz_graphql_logic() {
             }
 
             return [
-                'accentColor' => carbon_get_theme_option( 'quiz_accent_color' ) ?: '#4A6CF7',
-                'btnPrev'     => carbon_get_theme_option( 'quiz_btn_prev' ) ?: 'Back',
-                'btnNext'     => carbon_get_theme_option( 'quiz_btn_next' ) ?: 'Next',
-                'btnSubmit'   => carbon_get_theme_option( 'quiz_btn_submit' ) ?: 'Submit',
-                'fontFamily'  => carbon_get_theme_option( 'quiz_font_family' ) ?: '',
+                'accentColor' => carbon_get_theme_option( 'rock_stars_quiz_accent_color' ) ?: '#4A6CF7',
+                'btnPrev'     => carbon_get_theme_option( 'rock_stars_quiz_btn_prev' ) ?: 'Back',
+                'btnNext'     => carbon_get_theme_option( 'rock_stars_quiz_btn_next' ) ?: 'Next',
+                'btnSubmit'   => carbon_get_theme_option( 'rock_stars_quiz_btn_submit' ) ?: 'Submit',
+                'fontFamily'  => carbon_get_theme_option( 'rock_stars_quiz_font_family' ) ?: '',
                 'steps'       => $steps,
                 'nonce'       => wp_create_nonce( 'quiz_nonce' ),
             ];
@@ -181,16 +181,16 @@ function register_quiz_graphql_logic() {
                     }
                 }
 
-                if ( function_exists( 'quiz_process_submission' ) ) {
-                    $res = quiz_process_submission( $data );
+                if ( function_exists( 'rock_stars_quiz_process_submission' ) ) {
+                    $res = rock_stars_quiz_process_submission( $data );
                     return [
                         'success' => $res['success'],
-                        'message' => $res['success'] ? 'Quiz submitted successfully' : ($res['message'] ?? 'Unknown error from submission handler'),
+                        'message' => $res['success'] ? __( 'Quiz submitted successfully', 'rock-stars' ) : ($res['message'] ?? __( 'Unknown error from submission handler', 'rock-stars' )),
                         'submissionId' => $res['submission_id'] ?? 0,
                     ];
                 }
 
-                return [ 'success' => false, 'message' => 'Internal error: quiz_process_submission function not found' ];
+                return [ 'success' => false, 'message' => __( 'Internal error: rock_stars_quiz_process_submission function not found', 'rock-stars' ) ];
 
             } catch ( \Throwable $e ) {
                 return [ 
