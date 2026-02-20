@@ -1,0 +1,4 @@
+Telegram Bot Credentials:
+
+Token: 8100915185:AAGLXVCO8DjTm_cB2nx9BoayQzyUvqhZOR0
+Chat ID: 422713968

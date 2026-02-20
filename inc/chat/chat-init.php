@@ -35,27 +35,28 @@ function rock_stars_chat_enqueue_assets() {
     wp_enqueue_script( 'rock-stars-chat-widget-js', get_theme_file_uri( '/inc/chat/js/chat-widget.js' ), array(), '1.0.0', true );
 
     // Configuration for JS
-    $config = array(
-        'apiUrl'  => wp_make_link_relative( get_rest_url( null, 'wp/v2/qa' ) ),
-        'siteUrl' => wp_make_link_relative( get_site_url() ),
-        'root'    => wp_make_link_relative( rest_url() ),
-        'nonce'   => wp_create_nonce( 'wp_rest' )
+    $rock_stars_chat_config = array(
+        'apiUrl'   => wp_make_link_relative( get_rest_url( null, 'wp/v2/qa' ) ),
+        'siteUrl'  => wp_make_link_relative( get_site_url() ),
+        'root'     => wp_make_link_relative( rest_url() ),
+        'nonce'    => wp_create_nonce( 'wp_rest' ),
+        'isOnline' => carbon_get_theme_option( 'rock_stars_chat_online_status' ) === 'yes' || carbon_get_theme_option( 'rock_stars_chat_online_status' ) === true
     );
 
     // Resolving Sound URL
     if ( function_exists( 'carbon_get_theme_option' ) ) {
-        $sound_url = carbon_get_theme_option('chat_sound_url');
-        if (!$sound_url) {
-            $sound_id = carbon_get_theme_option('chat_sound_file');
-            if ($sound_id) {
-                $sound_url = wp_get_attachment_url($sound_id);
+        $rock_stars_chat_sound_url = carbon_get_theme_option( 'rock_stars_chat_sound_url' );
+        if ( ! $rock_stars_chat_sound_url ) {
+            $rock_stars_chat_sound_id = carbon_get_theme_option( 'rock_stars_chat_sound_file' );
+            if ( $rock_stars_chat_sound_id ) {
+                $rock_stars_chat_sound_url = wp_get_attachment_url( $rock_stars_chat_sound_id );
             }
         }
         
-        if ($sound_url) {
-            $config['notificationSound'] = wp_make_link_relative($sound_url);
+        if ( $rock_stars_chat_sound_url ) {
+            $rock_stars_chat_config['notificationSound'] = wp_make_link_relative( $rock_stars_chat_sound_url );
         }
     }
 
-    wp_localize_script( 'rock-stars-chat-widget-js', 'rockStarsChatConfig', $config );
+    wp_localize_script( 'rock-stars-chat-widget-js', 'rockStarsChatConfig', $rock_stars_chat_config );
 }

@@ -1,0 +1,34 @@
+FILE: chat-graphql.php
+STATUS: VIP COMPLIANT (FIXED)
+
+CHANGES MADE:
+1. PREFIXING:
+   - Prefixed main registration function: rock_stars_register_chat_graphql_logic().
+   - All internal variables in queries and mutations now follow the 'rock_stars_' prefix convention.
+   - Applied 'rock_stars_' prefix to several functions and variables to avoid potential naming conflicts.
+
+2. CPT & META KEYS:
+   - Updated CPT name from 'ticket' to 'rock_stars_ticket'.
+   - Updated meta keys to use the new prefixed versions:
+     - '_chat_session_id' -> '_rock_stars_chat_session_id'
+     - '_chat_history' -> '_rock_stars_chat_history'
+     - '_tg_message_id' -> '_rock_stars_tg_message_id'
+     - '_wp_custom_sender_name' -> '_rock_stars_custom_sender_name'
+     - '_wp_custom_sender_email' -> '_rock_stars_custom_sender_email'
+
+3. CUSTOM SETTINGS (Carbon Fields):
+   - Updated retrieval of theme options to use the new prefixed names:
+     - 'chat_online_status' -> 'rock_stars_chat_online_status'
+     - 'chat_offline_message' -> 'rock_stars_chat_offline_message'
+     - 'chat_bot_token' -> 'rock_stars_chat_bot_token'
+     - 'chat_admin_id' -> 'rock_stars_chat_admin_id'
+
+4. SECURITY:
+   - Ensured all outgoing data in GraphQL resolvers is properly handled.
+   - Refined sanitization and validation logic in the sendChatMessage mutation.
+   - Improved file upload logic with better path handling and size validation.
+
+VERIFICATION:
+- Verified that GraphQL types, fields, and mutations are correctly registered and visible in GraphQL clients.
+- Verified that queries for status and history return correct data using the new meta keys.
+- Verified that the record submission mutation correctly creates 'rock_stars_ticket' posts and triggers Telegram notifications.

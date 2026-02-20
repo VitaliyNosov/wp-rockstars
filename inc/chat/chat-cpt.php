@@ -3,7 +3,8 @@
  * Register Custom Post Type for Q&A (Help Widget)
  */
 
-function register_qa_cpt() {
+
+function rock_stars_register_qa_cpt() {
     // ... (existing qa registration)
     $labels = array(
         'name'                  => _x( 'Вопросы и ответы', 'Post Type General Name', 'rock-stars' ),
@@ -49,27 +50,27 @@ function register_qa_cpt() {
         'rest_base'             => 'qa',
     );
 
-    register_post_type( 'qa', $args );
+    register_post_type( 'rock_stars_qa', $args );
 
     // Register Ticket Post Type for Chat Histories
-    register_post_type( 'ticket', array(
+    register_post_type( 'rock_stars_ticket', array(
         'labels' => array(
             'name'          => __( 'Tickets', 'rock-stars' ),
             'singular_name' => __( 'Ticket', 'rock-stars' ),
         ),
         'public'      => false,
         'show_ui'     => true,
-        'show_in_menu' => 'edit.php?post_type=qa', // Nest under Q&A
+        'show_in_menu' => 'edit.php?post_type=rock_stars_qa', // Nest under Q&A
         'supports'    => array( 'title', 'editor', 'custom-fields' ),
         'menu_icon'   => 'dashicons-email-alt',
     ) );
 }
-add_action( 'init', 'register_qa_cpt', 0 );
+add_action( 'init', 'rock_stars_register_qa_cpt', 0 );
 
 /**
  * Allow WebM/Opus Uploads for Chat
  */
-add_filter('upload_mimes', function($mimes) {
+add_filter( 'upload_mimes', function( $mimes ) {
     // Video formats
     $mimes['webm'] = 'video/webm';
     $mimes['mp4']  = 'video/mp4';
@@ -83,12 +84,12 @@ add_filter('upload_mimes', function($mimes) {
     $mimes['m4a']  = 'audio/mp4';
     
     // WebM can also be audio-only
-    if (!isset($mimes['weba'])) {
+    if ( ! isset( $mimes['weba'] ) ) {
         $mimes['weba'] = 'audio/webm';
     }
     
     return $mimes;
-});
+} );
 
 /**
  * Register Custom REST Routes for Chat & Webhook
@@ -96,18 +97,18 @@ add_filter('upload_mimes', function($mimes) {
 add_action( 'rest_api_init', function () {
     // Contact Form Submission
     register_rest_route( 'qa/v1', '/contact', array(
-        'methods' => 'POST',
-        'callback' => 'handle_qa_contact_submission',
+        'methods'             => 'POST',
+        'callback'            => 'rock_stars_handle_qa_contact_submission',
         'permission_callback' => '__return_true',
     ) );
 
     // Telegram Webhook
     register_rest_route( 'qa/v1', '/webhook', array(
-        'methods' => 'POST',
-        'callback' => function( $request ) {
-            $data = $request->get_json_params();
+        'methods'             => 'POST',
+        'callback'            => function( $request ) {
+            $rock_stars_data = $request->get_json_params();
 
-            rock_stars_handle_telegram_webhook( $data );
+            rock_stars_handle_telegram_webhook( $rock_stars_data );
             return array( 'success' => true );
         },
         'permission_callback' => '__return_true',
@@ -115,339 +116,341 @@ add_action( 'rest_api_init', function () {
 
     // Get Chat History (Polling)
     register_rest_route( 'qa/v1', '/history', array(
-        'methods' => 'GET',
-        'callback' => 'handle_get_chat_history',
+        'methods'             => 'GET',
+        'callback'            => 'rock_stars_handle_get_chat_history',
         'permission_callback' => '__return_true',
     ) );
 
     // Get Current Status
     register_rest_route( 'qa/v1', '/status', array(
-        'methods' => 'GET',
-        'callback' => function() {
+        'methods'             => 'GET',
+        'callback'            => function() {
             return array(
-                'is_online' => carbon_get_theme_option( 'chat_online_status' ) === 'yes' || carbon_get_theme_option( 'chat_online_status' ) === true,
-                'offline_msg' => carbon_get_theme_option( 'chat_offline_message' ),
+                'is_online'   => carbon_get_theme_option( 'rock_stars_chat_online_status' ) === 'yes' || carbon_get_theme_option( 'rock_stars_chat_online_status' ) === true,
+                'offline_msg' => carbon_get_theme_option( 'rock_stars_chat_offline_message' ),
             );
         },
         'permission_callback' => '__return_true',
     ) );
 } );
 
-function handle_get_chat_history( $request ) {
-    $session_id = $request->get_param( 'session_id' );
+function rock_stars_handle_get_chat_history( $request ) {
+    $rock_stars_session_id = $request->get_param( 'session_id' );
     
-    if ( ! $session_id ) return array();
-
-    $tickets = get_posts( array(
-        'post_type' => 'ticket',
-        'meta_key'  => '_chat_session_id',
-        'meta_value' => $session_id,
-        'posts_per_page' => 1,
-        'post_status' => 'any',
-        'orderby' => 'date',
-        'order' => 'DESC'
-    ) );
-    
-    if ( empty( $tickets ) ) {
+    if ( ! $rock_stars_session_id ) {
         return array();
     }
 
-    $history = get_post_meta( $tickets[0]->ID, '_chat_history', true ) ?: array();
+    $rock_stars_tickets = get_posts( array(
+        'post_type'      => 'rock_stars_ticket',
+        'meta_key'       => '_rock_stars_chat_session_id',
+        'meta_value'     => $rock_stars_session_id,
+        'posts_per_page' => 1,
+        'post_status'    => 'any',
+        'orderby'        => 'date',
+        'order'          => 'DESC'
+    ) );
+    
+    if ( empty( $rock_stars_tickets ) ) {
+        return array();
+    }
+
+    $rock_stars_history = get_post_meta( $rock_stars_tickets[0]->ID, '_rock_stars_chat_history', true ) ?: array();
     
     // Apply Ngrok/Proxy fix to history URLs
     // We prioritize X-Forwarded headers as they contain the public URL (like Ngrok)
-    $current_host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'] ?? '';
-    if (strpos($current_host, ',') !== false) {
-        $parts = explode(',', $current_host);
-        $current_host = trim($parts[0]);
+    $rock_stars_current_host = filter_input( INPUT_SERVER, 'HTTP_X_FORWARDED_HOST', FILTER_SANITIZE_URL ) ?: filter_input( INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_URL ) ?: '';
+    
+    if ( strpos( $rock_stars_current_host, ',' ) !== false ) {
+        $rock_stars_parts        = explode( ',', $rock_stars_current_host );
+        $rock_stars_current_host = trim( $rock_stars_parts[0] );
     }
 
-    $current_proto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ( (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http' );
+    $rock_stars_current_proto = filter_input( INPUT_SERVER, 'HTTP_X_FORWARDED_PROTO', FILTER_SANITIZE_URL ) ?: ( ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ) ? 'https' : 'http' );
 
-    if ($current_host) {
-        $site_url = get_site_url();
-        $url_parts = parse_url($site_url);
-        if (isset($url_parts['host'])) {
-            $old_authority = $url_parts['host'] . (isset($url_parts['port']) ? ':' . $url_parts['port'] : '');
-            $old_proto = $url_parts['scheme'] ?? 'http';
+    if ( $rock_stars_current_host ) {
+        $rock_stars_site_url = get_site_url();
+        $rock_stars_url_parts = parse_url( $rock_stars_site_url );
+        if ( isset( $rock_stars_url_parts['host'] ) ) {
+            $rock_stars_old_authority = $rock_stars_url_parts['host'] . ( isset( $rock_stars_url_parts['port'] ) ? ':' . $rock_stars_url_parts['port'] : '' );
+            $rock_stars_old_proto     = $rock_stars_url_parts['scheme'] ?? 'http';
 
-            foreach ($history as &$msg) {
-                if (isset($msg['text'])) {
+            foreach ( $rock_stars_history as &$rock_stars_msg ) {
+                if ( isset( $rock_stars_msg['text'] ) ) {
                     // 1. Replace the authority (host:port)
-                    $msg['text'] = str_replace($old_authority, $current_host, $msg['text']);
+                    $rock_stars_msg['text'] = str_replace( $rock_stars_old_authority, $rock_stars_current_host, $rock_stars_msg['text'] );
                     // 2. Replace the protocol if it doesn't match the current access method
-                    if ($old_proto !== $current_proto) {
-                        $msg['text'] = str_replace($old_proto . '://' . $current_host, $current_proto . '://' . $current_host, $msg['text']);
+                    if ( $rock_stars_old_proto !== $rock_stars_current_proto ) {
+                        $rock_stars_msg['text'] = str_replace( $rock_stars_old_proto . '://' . $rock_stars_current_host, $rock_stars_current_proto . '://' . $rock_stars_current_host, $rock_stars_msg['text'] );
                     }
                 }
-                if (isset($msg['attachment'])) {
-                    $msg['attachment'] = str_replace($old_authority, $current_host, $msg['attachment']);
-                    if ($old_proto !== $current_proto) {
-                        $msg['attachment'] = str_replace($old_proto . '://' . $current_host, $current_proto . '://' . $current_host, $msg['attachment']);
+                if ( isset( $rock_stars_msg['attachment'] ) ) {
+                    $rock_stars_msg['attachment'] = str_replace( $rock_stars_old_authority, $rock_stars_current_host, $rock_stars_msg['attachment'] );
+                    if ( $rock_stars_old_proto !== $rock_stars_current_proto ) {
+                        $rock_stars_msg['attachment'] = str_replace( $rock_stars_old_proto . '://' . $rock_stars_current_host, $rock_stars_current_proto . '://' . $rock_stars_current_host, $rock_stars_msg['attachment'] );
                     }
                     // Final safety for protocol
-                    if (function_exists('set_url_scheme')) {
-                        $msg['attachment'] = set_url_scheme($msg['attachment'], $current_proto);
+                    if ( function_exists( 'set_url_scheme' ) ) {
+                        $rock_stars_msg['attachment'] = set_url_scheme( $rock_stars_msg['attachment'], $rock_stars_current_proto );
                     }
                 }
             }
         }
     }
 
-    return $history;
+    return $rock_stars_history;
 }
 
-function handle_qa_contact_submission( $request ) {
+function rock_stars_handle_qa_contact_submission( $request ) {
     // For multipart/form-data, use get_params() and get_file_params()
-    $params = $request->get_params();
-    $files  = $request->get_file_params();
+    $rock_stars_params = $request->get_params();
+    $rock_stars_files  = $request->get_file_params();
     
     // 1. Anti-Bot: Honeypot Check
-    if ( !empty( $params['website_url'] ) ) {
+    if ( ! empty( $rock_stars_params['website_url'] ) ) {
         return new WP_REST_Response( array( 'success' => true, 'message' => 'Email sent' ), 200 );
     }
 
     // Check for post_max_size overflow (empty POST/FILES when content-length > 0)
-    if ( empty( $files ) && empty( $params ) && 
+    if ( empty( $rock_stars_files ) && empty( $rock_stars_params ) && 
          isset( $_SERVER['CONTENT_LENGTH'] ) && 
          (int) $_SERVER['CONTENT_LENGTH'] > 0 ) {
          
-         $max_size = ini_get( 'post_max_size' );
+         $rock_stars_max_size = ini_get( 'post_max_size' );
          return new WP_REST_Response( array( 
              'success' => false, 
-             'message' => 'File exceeds server limit (' . $max_size . ')',
-             'code' => 'post_max_size_exceeded'
+             'message' => 'File exceeds server limit (' . $rock_stars_max_size . ')',
+             'code'    => 'post_max_size_exceeded'
          ), 400 );
     }
 
     // 2. Validate Inputs
-    $session_id = sanitize_text_field( $params['session_id'] ?? '' );
-    $name    = sanitize_text_field( $params['name'] ?? '' ) ?: 'Visitor';
-    $email   = sanitize_email( $params['email'] ?? '' ) ?: 'no-email@provided.com';
-    $message_text = sanitize_textarea_field( $params['message'] ?? '' );
-    $is_voice = !empty( $params['is_voice'] );
-    $is_video = !empty( $params['is_video'] );
-    $duration = intval( $params['duration'] ?? 0 );
+    $rock_stars_session_id   = sanitize_text_field( $rock_stars_params['session_id'] ?? '' );
+    $rock_stars_name         = sanitize_text_field( $rock_stars_params['name'] ?? '' ) ?: 'Visitor';
+    $rock_stars_email        = sanitize_email( $rock_stars_params['email'] ?? '' ) ?: 'no-email@provided.com';
+    $rock_stars_message_text = sanitize_textarea_field( $rock_stars_params['message'] ?? '' );
+    $rock_stars_is_voice     = ! empty( $rock_stars_params['is_voice'] );
+    $rock_stars_is_video     = ! empty( $rock_stars_params['is_video'] );
+    $rock_stars_duration     = intval( $rock_stars_params['duration'] ?? 0 );
 
     // Handle File Upload
-    $chat_file = $files['chat_file'] ?? null;
-    $attachment_url = '';
-    $local_path = '';
+    $rock_stars_chat_file    = $rock_stars_files['chat_file'] ?? null;
+    $rock_stars_attachment_url = '';
+    $rock_stars_local_path     = '';
 
-    if ( $chat_file && !empty($chat_file['name']) && !empty($chat_file['tmp_name']) ) {
+    if ( $rock_stars_chat_file && ! empty( $rock_stars_chat_file['name'] ) && ! empty( $rock_stars_chat_file['tmp_name'] ) ) {
         if ( ! function_exists( 'wp_handle_upload' ) ) {
-            require_once( ABSPATH . 'wp-admin/includes/file.php' );
+            require_once ABSPATH . 'wp-admin/includes/file.php';
         }
         
         // Increased limit to 256MB
-        if ($chat_file['size'] > 256 * 1024 * 1024) {
+        if ( $rock_stars_chat_file['size'] > 256 * 1024 * 1024 ) {
              return new WP_REST_Response( array( 'success' => false, 'message' => 'File too large (Max 256MB)', 'status' => 400 ), 400 );
         }
 
         // Use wp_upload_bits for better reliability in REST/programmatic contexts
-        $upload = wp_upload_bits( $chat_file['name'], null, file_get_contents( $chat_file['tmp_name'] ) );
+        $rock_stars_upload = wp_upload_bits( $rock_stars_chat_file['name'], null, file_get_contents( $rock_stars_chat_file['tmp_name'] ) );
 
-        if ( $upload && ! $upload['error'] ) {
-            $attachment_url = $upload['url'];
-            $local_path = $upload['file'];
-            error_log('Chat Upload Success (wp_upload_bits): ' . $attachment_url);
+        if ( $rock_stars_upload && ! $rock_stars_upload['error'] ) {
+            $rock_stars_attachment_url = $rock_stars_upload['url'];
+            $rock_stars_local_path      = $rock_stars_upload['file'];
+            error_log( 'Chat Upload Success (wp_upload_bits): ' . $rock_stars_attachment_url );
         } else {
-             $debug_upload = $upload;
-             $upload_error_msg = $upload['error'] ?? 'Unknown upload error';
-             error_log('Chat Upload Error: ' . $upload_error_msg);
-             error_log('File Info: ' . print_r($chat_file, true));
+             $rock_stars_upload_error_msg = $rock_stars_upload['error'] ?? 'Unknown upload error';
+             error_log( 'Chat Upload Error: ' . $rock_stars_upload_error_msg );
         }
-    } else {
-        $debug_upload = 'No file provided or missing temp path';
     }
 
-    if ( empty( $message_text ) && !$attachment_url ) {
-        $error_detail = (isset($upload_error_msg)) ? ' (Error: ' . $upload_error_msg . ')' : '';
+    if ( empty( $rock_stars_message_text ) && ! $rock_stars_attachment_url ) {
+        $rock_stars_error_detail = ( isset( $rock_stars_upload_error_msg ) ) ? ' (Error: ' . $rock_stars_upload_error_msg . ')' : '';
         return new WP_REST_Response( array( 
             'success' => false,
-            'code' => 'missing_params', 
-            'message' => 'Message is empty' . $error_detail, 
-            'debug_upload' => isset($debug_upload) ? $debug_upload : null
+            'code'    => 'missing_params', 
+            'message' => 'Message is empty' . $rock_stars_error_detail, 
         ), 400 );
     }
 
     // 3. Find existing ticket for this session
-    $existing_ticket_id = null;
-    if ( $session_id ) {
-        $tickets = get_posts( array(
-            'post_type'  => 'ticket',
-            'meta_key'   => '_chat_session_id',
-            'meta_value' => $session_id,
+    $rock_stars_existing_ticket_id = null;
+    if ( $rock_stars_session_id ) {
+        $rock_stars_tickets = get_posts( array(
+            'post_type'      => 'rock_stars_ticket',
+            'meta_key'       => '_rock_stars_chat_session_id',
+            'meta_value'     => $rock_stars_session_id,
             'posts_per_page' => 1,
-            'post_status' => 'any'
+            'post_status'    => 'any'
         ) );
-        if ( ! empty( $tickets ) ) {
-            $existing_ticket_id = $tickets[0]->ID;
+        if ( ! empty( $rock_stars_tickets ) ) {
+            $rock_stars_existing_ticket_id = $rock_stars_tickets[0]->ID;
         }
     }
 
     // 4. Send Telegram using Bot Settings
-    $tg_text = $existing_ticket_id ? "💬 *New Message*\n" : "📩 *New Chat Inquiry*\n";
-    $tg_text .= "👤 *$name*\n";
-    if ($email !== 'no-email@provided.com') $tg_text .= "📧 $email\n";
-    if ($message_text) $tg_text .= "\n❓ " . $message_text;
+    $rock_stars_tg_text = $rock_stars_existing_ticket_id ? "💬 *New Message*\n" : "📩 *New Chat Inquiry*\n";
+    $rock_stars_tg_text .= "👤 *" . $rock_stars_name . "*\n";
+    if ( $rock_stars_email !== 'no-email@provided.com' ) {
+        $rock_stars_tg_text .= "📧 " . $rock_stars_email . "\n";
+    }
+    if ( $rock_stars_message_text ) {
+        $rock_stars_tg_text .= "\n❓ " . $rock_stars_message_text;
+    }
     
-    if ( $existing_ticket_id ) {
-        $tg_text .= "\n\n_Continues existing thread_";
+    if ( $rock_stars_existing_ticket_id ) {
+        $rock_stars_tg_text .= "\n\n_Continues existing thread_";
     }
 
-    if ($attachment_url) {
-        $prefix = $is_voice ? "🎤 Voice Message" : ($is_video ? "📹 Video Message" : "📎 [Attached File]");
-        $tg_text .= "\n\n" . $prefix . ($is_video || $is_voice ? "" : "(" . $attachment_url . ")");
+    if ( $rock_stars_attachment_url ) {
+        $rock_stars_prefix = $rock_stars_is_voice ? "🎤 Voice Message" : ( $rock_stars_is_video ? "📹 Video Message" : "📎 [Attached File]" );
+        $rock_stars_tg_text .= "\n\n" . $rock_stars_prefix . ( $rock_stars_is_video || $rock_stars_is_voice ? "" : "(" . $rock_stars_attachment_url . ")" );
     }
 
-    $tg_message_id = null;
-    if ( $local_path ) {
+    $rock_stars_tg_message_id = null;
+    if ( $rock_stars_local_path ) {
         // Telegram Bot API limit is 50MB. We use 49MB to be safe.
-        $filesize = file_exists($local_path) ? filesize($local_path) : 0;
+        $rock_stars_filesize = file_exists( $rock_stars_local_path ) ? filesize( $rock_stars_local_path ) : 0;
         
-        if ( $filesize > 49 * 1024 * 1024 ) {
+        if ( $rock_stars_filesize > 49 * 1024 * 1024 ) {
              // Too large for Telegram: Send Link instead
-             if (strpos($tg_text, $attachment_url) === false) {
-                 $tg_text .= "\n\n📥 File Link: " . $attachment_url . "\n(File > 50MB, cannot be sent to Telegram directly)";
+             if ( strpos( $rock_stars_tg_text, $rock_stars_attachment_url ) === false ) {
+                 $rock_stars_tg_text .= "\n\n📥 File Link: " . $rock_stars_attachment_url . "\n(File > 50MB, cannot be sent to Telegram directly)";
              } else {
-                 $tg_text .= "\n(File > 50MB, sent as link)";
+                 $rock_stars_tg_text .= "\n(File > 50MB, sent as link)";
              }
-             $tg_response = rock_stars_send_to_telegram( $tg_text );
-             $tg_message_id = $tg_response['result']['message_id'] ?? null;
+             $rock_stars_tg_response = rock_stars_send_to_telegram( $rock_stars_tg_text );
+             $rock_stars_tg_message_id = $rock_stars_tg_response['result']['message_id'] ?? null;
              
         } else {
             // Normal sending
-            if ( $is_voice ) {
-                $tg_response = rock_stars_send_voice_to_telegram( $local_path, $tg_text, $duration );
-            } elseif ( $is_video ) {
-                $tg_response = rock_stars_send_video_to_telegram( $local_path, $tg_text, $duration );
+            if ( $rock_stars_is_voice ) {
+                $rock_stars_tg_response = rock_stars_send_voice_to_telegram( $rock_stars_local_path, $rock_stars_tg_text, $rock_stars_duration );
+            } elseif ( $rock_stars_is_video ) {
+                $rock_stars_tg_response = rock_stars_send_video_to_telegram( $rock_stars_local_path, $rock_stars_tg_text, $rock_stars_duration );
             } else {
-                $tg_response = rock_stars_send_file_to_telegram( $local_path, $tg_text );
+                $rock_stars_tg_response = rock_stars_send_file_to_telegram( $rock_stars_local_path, $rock_stars_tg_text );
             }
             
             // Check for failure and fallback to link
-            if ( ! isset($tg_response['ok']) || ! $tg_response['ok'] ) {
+            if ( ! isset( $rock_stars_tg_response['ok'] ) || ! $rock_stars_tg_response['ok'] ) {
                  // Try sending just the link as fallback
-                 $fallback_text = $tg_text;
-                 if (strpos($fallback_text, $attachment_url) === false) {
-                     $fallback_text .= "\n\n📥 File Link: " . $attachment_url . "\n(File failed to upload to Telegram, here is the link)";
+                 $rock_stars_fallback_text = $rock_stars_tg_text;
+                 if ( strpos( $rock_stars_fallback_text, $rock_stars_attachment_url ) === false ) {
+                     $rock_stars_fallback_text .= "\n\n📥 File Link: " . $rock_stars_attachment_url . "\n(File failed to upload to Telegram, here is the link)";
                  } else {
-                     $fallback_text .= "\n(File upload failed, sent as link)";
+                     $rock_stars_fallback_text .= "\n(File upload failed, sent as link)";
                  }
-                 $tg_response = rock_stars_send_to_telegram( $fallback_text );
+                 $rock_stars_tg_response = rock_stars_send_to_telegram( $rock_stars_fallback_text );
             }
 
-            $tg_message_id = $tg_response['result']['message_id'] ?? null;
+            $rock_stars_tg_message_id = $rock_stars_tg_response['result']['message_id'] ?? null;
         }
     } else {
-        $tg_response = rock_stars_send_to_telegram( $tg_text );
-        $tg_message_id = $tg_response['result']['message_id'] ?? null;
+        $rock_stars_tg_response = rock_stars_send_to_telegram( $rock_stars_tg_text );
+        $rock_stars_tg_message_id = $rock_stars_tg_response['result']['message_id'] ?? null;
     }
     
-    $tg_response_debug = isset($tg_response) ? $tg_response : 'No request made';
-
     // 5. Create or Update Ticket
-    $history_text = $message_text ?: ($is_voice ? "🎤 Voice Message" : ($is_video ? "📹 Video Message" : "📎 Attached File"));
-    if ($attachment_url) {
-        $prefix = $is_voice ? "🎤 Voice: " : ($is_video ? "📹 Video: " : "📎 File: ");
-        $history_text .= ($message_text ? "\n\n" : "") . $prefix . "<a href='$attachment_url' target='_blank'>" . basename($attachment_url) . "</a>";
+    $rock_stars_history_text = $rock_stars_message_text ?: ( $rock_stars_is_voice ? "🎤 Voice Message" : ( $rock_stars_is_video ? "📹 Video Message" : "📎 Attached File" ) );
+    if ( $rock_stars_attachment_url ) {
+        $rock_stars_file_prefix = $rock_stars_is_voice ? "🎤 Voice: " : ( $rock_stars_is_video ? "📹 Video: " : "📎 File: " );
+        $rock_stars_history_text .= ( $rock_stars_message_text ? "\n\n" : "" ) . $rock_stars_file_prefix . "<a href='" . esc_url( $rock_stars_attachment_url ) . "' target='_blank'>" . esc_html( basename( $rock_stars_attachment_url ) ) . "</a>";
     }
 
-    if ( $existing_ticket_id ) {
-        $post_id = $existing_ticket_id;
-        if ($tg_message_id) add_post_meta( $post_id, '_tg_message_id', $tg_message_id );
+    if ( $rock_stars_existing_ticket_id ) {
+        $rock_stars_post_id = $rock_stars_existing_ticket_id;
+        if ( $rock_stars_tg_message_id ) {
+            add_post_meta( $rock_stars_post_id, '_rock_stars_tg_message_id', $rock_stars_tg_message_id );
+        }
 
         // Update Reply Button
-        $token = carbon_get_theme_option( 'chat_bot_token' );
-        if ($tg_message_id && $token) {
-            $btn_keyboard = array(
-                'inline_keyboard' => array( array( array( 'text' => '✍️ Ответить', 'callback_data' => 'reply:' . $post_id ) ) )
+        $rock_stars_token = carbon_get_theme_option( 'rock_stars_chat_bot_token' );
+        if ( $rock_stars_tg_message_id && $rock_stars_token ) {
+            $rock_stars_btn_keyboard = array(
+                'inline_keyboard' => array( array( array( 'text' => '✍️ Ответить', 'callback_data' => 'reply:' . $rock_stars_post_id ) ) )
             );
-            wp_remote_post( "https://api.telegram.org/bot{$token}/editMessageReplyMarkup", array(
+            wp_remote_post( "https://api.telegram.org/bot{$rock_stars_token}/editMessageReplyMarkup", array(
                 'body' => array(
-                    'chat_id' => carbon_get_theme_option( 'chat_admin_id' ),
-                    'message_id' => $tg_message_id,
-                    'reply_markup' => json_encode( $btn_keyboard )
+                    'chat_id'      => carbon_get_theme_option( 'rock_stars_chat_admin_id' ),
+                    'message_id'   => $rock_stars_tg_message_id,
+                    'reply_markup' => json_encode( $rock_stars_btn_keyboard )
                 )
             ) );
         }
         
-        $current_content = get_post_field( 'post_content', $post_id );
+        $rock_stars_current_content = get_post_field( 'post_content', $rock_stars_post_id );
         wp_update_post( array(
-            'ID' => $post_id,
-            'post_content' => $current_content . "\n\n---\n" . $history_text
+            'ID'           => $rock_stars_post_id,
+            'post_content' => $rock_stars_current_content . "\n\n---\n" . $rock_stars_history_text
         ) );
 
-        $history = get_post_meta( $post_id, '_chat_history', true ) ?: array();
-        $history[] = array(
-            'role' => 'user',
-            'text' => $message_text ?: ($is_voice ? '🎤 Voice Message' : ($is_video ? '📹 Video Message' : '')),
-            'attachment' => $attachment_url,
-            'is_voice' => $is_voice,
-            'is_video' => $is_video,
-            'time' => current_time( 'mysql' )
+        $rock_stars_history = get_post_meta( $rock_stars_post_id, '_rock_stars_chat_history', true ) ?: array();
+        $rock_stars_history[] = array(
+            'role'       => 'user',
+            'text'       => $rock_stars_message_text ?: ( $rock_stars_is_voice ? '🎤 Voice Message' : ( $rock_stars_is_video ? '📹 Video Message' : '' ) ),
+            'attachment' => $rock_stars_attachment_url,
+            'is_voice'   => $rock_stars_is_voice,
+            'is_video'   => $rock_stars_is_video,
+            'time'       => current_time( 'mysql' )
         );
-        update_post_meta( $post_id, '_chat_history', $history );
+        update_post_meta( $rock_stars_post_id, '_rock_stars_chat_history', $rock_stars_history );
         
     } else {
-        $post_data = array(
-            'post_title'   => 'Chat Inquiry: ' . $name . ' (' . ( $session_id ?: 'no session' ) . ')',
-            'post_content' => $history_text,
+        $rock_stars_post_data = array(
+            'post_title'   => 'Chat Inquiry: ' . $rock_stars_name . ' (' . ( $rock_stars_session_id ?: 'no session' ) . ')',
+            'post_content' => $rock_stars_history_text,
             'post_status'  => 'publish',
-            'post_type'    => 'ticket',
+            'post_type'    => 'rock_stars_ticket',
             'post_author'  => 1 
         );
 
-        $post_id = wp_insert_post( $post_data );
+        $rock_stars_post_id = wp_insert_post( $rock_stars_post_data );
 
-        if ( ! is_wp_error( $post_id ) ) {
-            update_post_meta( $post_id, '_wp_custom_sender_name', $name );
-            update_post_meta( $post_id, '_wp_custom_sender_email', $email );
-            update_post_meta( $post_id, '_chat_session_id', $session_id );
+        if ( ! is_wp_error( $rock_stars_post_id ) ) {
+            update_post_meta( $rock_stars_post_id, '_rock_stars_custom_sender_name', $rock_stars_name );
+            update_post_meta( $rock_stars_post_id, '_rock_stars_custom_sender_email', $rock_stars_email );
+            update_post_meta( $rock_stars_post_id, '_rock_stars_chat_session_id', $rock_stars_session_id );
             
-            if ($tg_message_id) add_post_meta( $post_id, '_tg_message_id', $tg_message_id );
+            if ( $rock_stars_tg_message_id ) {
+                add_post_meta( $rock_stars_post_id, '_rock_stars_tg_message_id', $rock_stars_tg_message_id );
+            }
             
-            $token = carbon_get_theme_option( 'chat_bot_token' );
-            if ($tg_message_id && $token) {
-                $btn_keyboard = array(
-                    'inline_keyboard' => array( array( array( 'text' => '✍️ Ответить', 'callback_data' => 'reply:' . $post_id ) ) )
+            $rock_stars_token = carbon_get_theme_option( 'rock_stars_chat_bot_token' );
+            if ( $rock_stars_tg_message_id && $rock_stars_token ) {
+                $rock_stars_btn_keyboard = array(
+                    'inline_keyboard' => array( array( array( 'text' => '✍️ Ответить', 'callback_data' => 'reply:' . $rock_stars_post_id ) ) )
                 );
-                wp_remote_post( "https://api.telegram.org/bot{$token}/editMessageReplyMarkup", array(
+                wp_remote_post( "https://api.telegram.org/bot{$rock_stars_token}/editMessageReplyMarkup", array(
                     'body' => array(
-                        'chat_id' => carbon_get_theme_option( 'chat_admin_id' ),
-                        'message_id' => $tg_message_id,
-                        'reply_markup' => json_encode( $btn_keyboard )
+                        'chat_id'      => carbon_get_theme_option( 'rock_stars_chat_admin_id' ),
+                        'message_id'   => $rock_stars_tg_message_id,
+                        'reply_markup' => json_encode( $rock_stars_btn_keyboard )
                     )
                 ) );
             }
 
-            $history = array(
+            $rock_stars_history = array(
                 array(
-                    'role' => 'user',
-                    'text' => $message_text ?: ($is_voice ? '🎤 Voice Message' : ($is_video ? '📹 Video Message' : '')),
-                    'attachment' => $attachment_url,
-                    'is_voice' => $is_voice,
-                    'is_video' => $is_video,
-                    'time' => current_time( 'mysql' )
+                    'role'       => 'user',
+                    'text'       => $rock_stars_message_text ?: ( $rock_stars_is_voice ? '🎤 Voice Message' : ( $rock_stars_is_video ? '📹 Video Message' : '' ) ),
+                    'attachment' => $rock_stars_attachment_url,
+                    'is_voice'   => $rock_stars_is_voice,
+                    'is_video'   => $rock_stars_is_video,
+                    'time'       => current_time( 'mysql' )
                 )
             );
-            update_post_meta( $post_id, '_chat_history', $history );
+            update_post_meta( $rock_stars_post_id, '_rock_stars_chat_history', $rock_stars_history );
         }
     }
 
     // 6. Send Email only for new inquiries
-    if ( ! $existing_ticket_id ) {
-        $to = get_option( 'admin_email' );
-        $subject = 'New Chat Inquiry: ' . $name;
-        $body = "Name: $name\nEmail: $email\nQuestion:\n$message_text";
-        wp_mail( $to, $subject, $body );
+    if ( ! $rock_stars_existing_ticket_id ) {
+        $rock_stars_to      = get_option( 'admin_email' );
+        $rock_stars_subject = 'New Chat Inquiry: ' . $rock_stars_name;
+        $rock_stars_body    = "Name: $rock_stars_name\nEmail: $rock_stars_email\nQuestion:\n$rock_stars_message_text";
+        wp_mail( $rock_stars_to, $rock_stars_subject, sanitize_textarea_field( $rock_stars_body ) );
     }
 
     return new WP_REST_Response( array( 
-        'success'      => true, 
-        'message'      => 'Message handled',
-        'debug_upload' => isset($debug_upload) ? $debug_upload : null,
-        'debug_tg'     => isset($tg_response_debug) ? $tg_response_debug : null
+        'success' => true, 
+        'message' => 'Message handled',
     ), 200 );
 }

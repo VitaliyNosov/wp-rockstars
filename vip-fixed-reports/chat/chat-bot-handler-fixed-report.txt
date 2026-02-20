@@ -1,0 +1,31 @@
+# WordPress VIP Compliance Report: chat-bot-handler.php
+
+**File:** `inc/chat/chat-bot-handler.php`
+**Status:** Completed
+**Date:** 2026-02-20
+
+## Changes Made:
+
+1.  **Bug Fix (Telegram Integration):**
+    *   Fixed the failure where Telegram replies weren't being recorded. This was due to a mismatch between old meta keys and new prefixed keys introduced in `chat-cpt.php`.
+    *   Updated the SQL query in `rock_stars_handle_telegram_webhook` to use the prefixed `_rock_stars_tg_message_id`.
+
+2.  **Prefixing:**
+    *   **Variables:** All local variables now have the `rock_stars_` prefix.
+    *   **Settings (Carbon Fields):** Updated all `carbon_get_theme_option` calls to use prefixed keys (e.g., `rock_stars_chat_bot_token`).
+    *   **Meta Keys:** Switched to prefixed keys like `_rock_stars_chat_history` and `_rock_stars_tg_message_id`.
+    *   **Options:** Updated `_rock_stars_chat_online_status`.
+
+3.  **Security:**
+    *   Replaced `file_get_contents` for API calls with `wp_remote_get()` for better security and compliance.
+    *   Added proper URL encoding for API parameters.
+
+4.  **Code Standards:**
+    *   Applied WordPress Coding Standards (strict equality, spacing).
+    *   Updated text domain to `rock-stars`.
+
+## Verification:
+- [x] PHP Syntax check (Manual review)
+- [x] Telegram reply logic verified (consistent meta keys)
+- [x] Variable prefixing verified
+- [x] Secure remote requests implemented

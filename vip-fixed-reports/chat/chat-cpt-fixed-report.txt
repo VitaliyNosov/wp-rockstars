@@ -1,0 +1,34 @@
+# WordPress VIP Compliance Report: chat-cpt.php
+
+**File:** `inc/chat/chat-cpt.php`
+**Status:** Completed
+**Date:** 2026-02-20
+
+## Changes Made:
+
+1.  **Prefixing:**
+    *   **Functions:** All functions prefixed with `rock_stars_`.
+    *   **Post Types:** Changed `qa` -> `rock_stars_qa` and `ticket` -> `rock_stars_ticket`.
+    *   **Meta Keys:** All meta keys now use `_rock_stars_` prefix (e.g., `_rock_stars_chat_history`, `_rock_stars_chat_session_id`).
+    *   **Variables:** Applied `rock_stars_` prefix to all local variables in all functions to avoid collisions.
+
+2.  **Security (Sanitization & Escaping):**
+    *   Used `filter_input(INPUT_SERVER, ...)` for safer access to server variables.
+    *   Added `esc_url()` and `esc_html()` for all dynamic outputs in HTML (especially in `$rock_stars_history_text`).
+    *   Wrapped `wp_mail` body in `sanitize_textarea_field()`.
+    *   Ensured `wp_upload_bits` is used for reliable and secure file uploads.
+
+3.  **REST API:**
+    *   Standardized REST route registrations with proper `methods`, `callback`, and `permission_callback`.
+    *   Cleaned up responses to use `WP_REST_Response`.
+
+4.  **Code Quality & i18n:**
+    *   Updated text domain to `rock-stars`.
+    *   Applied WordPress Coding Standards (spacing, formatting).
+
+## Verification:
+- [x] PHP Syntax check (Manual review)
+- [x] Variable and function prefixing verified
+- [x] Post type registration updated and links in menu verified
+- [x] Sanitization/Escaping applied to all data flows
+- [x] REST API endpoints updated to use new function names

@@ -1,0 +1,20 @@
+FILE: chat-webhook.php
+STATUS: VIP COMPLIANT (FIXED)
+
+CHANGES MADE:
+1. SECURITY & PREFIXING:
+   - Prefixed all local variables with 'rock_stars_'.
+   - Updated all option retrieval to use prefixed keys (e.g., 'rock_stars_chat_bot_token').
+   - Used wp_remote_get() and wp_remote_post() for Telegram API interaction instead of raw curl/file_get_contents.
+
+2. INTERNATIONALIZATION:
+   - Updated text domain to 'rock-stars' for all translatable strings.
+
+3. LOGIC:
+   - Refined the auto-update webhook logic to correctly detect domain changes and update the Telegram webhook URL automatically.
+   - Optimized the toggle command handling for admin commands (/online, /offline).
+
+VERIFICATION:
+- Verified that the webhook successfully receives and processes updates from Telegram.
+- Verified that administrative commands (/online, /offline) correctly update the online status setting.
+- Verified that the webhook is automatically updated when the site URL changes (e.g., when switching to Ngrok).

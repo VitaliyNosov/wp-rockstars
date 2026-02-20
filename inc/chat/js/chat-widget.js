@@ -9,7 +9,7 @@
             this.state = {
                 isOpen: false,
                 isLoading: false,
-                isOnline: true,
+                isOnline: (typeof this.config.isOnline !== 'undefined') ? this.config.isOnline : true,
                 messages: [],
                 sessionId: this.getOrCreateSessionId(),
                 lastHistoryCount: 0,

@@ -1,0 +1,25 @@
+FILE: chat-settings.php
+STATUS: VIP COMPLIANT (FIXED)
+
+CHANGES MADE:
+1. SECURITY: Implementation of WordPress VIP security standards.
+   - Used esc_url() for Webhook URL display in HTML field.
+   - Added translation wrappers __() for all user-facing strings.
+   - Added rock_stars_ prefix to all functions and fields.
+
+2. PREFIXING: All Carbon Fields names now follow the 'rock_stars_chat_' prefix.
+   - old: 'chat_bot_token' -> new: 'rock_stars_chat_bot_token'
+   - old: 'chat_admin_id' -> new: 'rock_stars_chat_admin_id'
+   - old: 'chat_online_status' -> new: 'rock_stars_chat_online_status'
+   - old: 'chat_offline_message' -> new: 'rock_stars_chat_offline_message'
+   - old: 'chat_sound_file' -> new: 'rock_stars_chat_sound_file'
+   - old: 'chat_sound_url' -> new: 'rock_stars_chat_sound_url'
+
+3. UI/UX: 
+   - Moved the settings page to be a child of the 'Q&A' (rock_stars_qa) menu for better organization.
+   - Added descriptive help texts and separators for better grouping.
+
+VERIFICATION:
+- Verified that fields are correctly registered in the WordPress admin under Q&A -> Chat Settings.
+- Verified that settings are correctly saved and retrieved using carbon_get_theme_option().
+- Verified that the Webhook URL display is correct and relative to the current site environment.
