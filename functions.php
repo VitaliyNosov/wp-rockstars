@@ -247,27 +247,6 @@ add_action('admin_head', 'rock_stars_admin_style');
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // AJAX Comment Handler included above in functions require block
 
 // Custom Comment Callback
@@ -317,3 +296,51 @@ function rock_stars_enqueue_comments_script() {
     ));
 }
 add_action('wp_enqueue_scripts', 'rock_stars_enqueue_comments_script');
+
+
+
+// Aniamtion text h1 front page
+
+
+function mytheme_typed_scripts() {
+    wp_enqueue_script(
+        'typed-js',
+        'https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.1.0/typed.umd.js',
+        [],
+        '2.1.0',
+        true
+    );
+
+    wp_add_inline_script('typed-js', "
+        document.addEventListener('DOMContentLoaded', function () {
+            var el = document.querySelector('.typed-heading');
+            if (!el) return;
+
+            var raw = el.innerText.trim();
+            var parts = raw.split('|').map(function(s){ 
+                return s.trim(); 
+            }).filter(Boolean);
+
+            if (parts.length < 2) return;
+
+            var staticText = parts[0];
+            var strings = parts.slice(1);
+
+            el.innerHTML = 
+                '<span>' + staticText + '</span>' +
+                '<br>' +
+                '<span class=\"typed-dynamic\"></span>';
+
+            new Typed(el.querySelector('.typed-dynamic'), {
+                strings: strings,
+                typeSpeed: 160,
+                backSpeed: 40,
+                backDelay: 2000,
+                loop: true,
+                showCursor: true,
+                cursorChar: '|'
+            });
+        });
+    ");
+}
+add_action('wp_enqueue_scripts', 'mytheme_typed_scripts');

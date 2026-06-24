@@ -25,7 +25,8 @@
               } else {
                   ?>
                   <img src="<?php echo esc_url( get_template_directory_uri() . '/images/logo-2.svg' ); ?>" alt="logo" class="w-full dark:hidden" />
-                  <img src="<?php echo esc_url( get_template_directory_uri() . '/images/logo.svg' ); ?>" alt="logo" class="w-full hidden dark:block" />
+                  <!-- <img src="<?php echo esc_url( get_template_directory_uri() . '/images/logo.svg' ); ?>" alt="logo" class="w-full hidden dark:block" /> -->
+                  <img src="<?php echo esc_url( get_template_directory_uri() . '/images/logo-2.png' ); ?>" alt="logo" class="w-full hidden dark:block" />
                   <?php
               }
               ?>
@@ -140,7 +141,8 @@
       </div>
     </div>
     <div class="absolute right-0 top-14 z-[-1]">
-      <svg width="55" height="99" viewBox="0 0 55 99" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- <svg width="55" height="99" viewBox="0 0 55 99" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle opacity="0.8" cx="49.5" cy="49.5" r="49.5" fill="#959CB1" />
         <mask id="mask0_94:899" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="99" height="99">
           <circle opacity="0.8" cx="49.5" cy="49.5" r="49.5" fill="#4A6CF7" />
@@ -164,10 +166,12 @@
             <stop offset="1" stop-opacity="0" />
           </radialGradient>
         </defs>
-      </svg>
+      </svg> -->
+
     </div>
     <div class="absolute left-0 bottom-24 z-[-1]">
-      <svg width="79" height="94" viewBox="0 0 79 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- <svg width="79" height="94" viewBox="0 0 79 94" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect opacity="0.3" x="-41" y="26.9426" width="66.6675" height="66.6675"
           transform="rotate(-22.9007 -41 26.9426)" fill="url(#paint0_linear_94:889)" />
         <rect x="-41" y="26.9426" width="66.6675" height="66.6675" transform="rotate(-22.9007 -41 26.9426)"
@@ -212,7 +216,8 @@
             <stop offset="1" stop-color="#4A6CF7" stop-opacity="0.51" />
           </linearGradient>
         </defs>
-      </svg>
+      </svg> -->
+
     </div>
   </footer>
   <!-- ====== Footer Section End -->

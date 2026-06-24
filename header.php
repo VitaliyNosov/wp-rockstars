@@ -19,7 +19,9 @@
         <div class="px-4 w-60 max-w-full">
           <a href="index.html" class="w-full block py-8 header-logo">
             <img src="http://localhost:8081/wp-content/uploads/2025/06/logo-2.svg" alt="logo" class="w-full dark:hidden" />
-            <img src="http://localhost:8081/wp-content/uploads/2025/06/logo.svg" alt="logo" class="w-full hidden dark:block" />
+            <!-- <img src="http://localhost:8081/wp-content/uploads/2025/06/logo.svg" alt="logo" class="w-full hidden dark:block" /> -->
+            <img src="http://localhost:8081/wp-content/uploads/2026/04/Logo-Rock-Star-Agency_03-removebg-preview.png" alt="logo" class="w-full hidden dark:block" />
+
           </a>
         </div>
         <div class="flex px-4 justify-between items-center w-full">

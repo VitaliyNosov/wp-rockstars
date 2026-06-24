@@ -487,3 +487,200 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // Аудио плеер для постов WordPress
+
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  const canvas = document.getElementById('c');
+  if (!canvas) {
+    console.warn('Canvas #c not found');
+    return;
+  }
+
+  const ctx = canvas.getContext('2d');
+
+  let W, H;
+  let particles = [];
+  let mouse = { x: -999, y: -999 };
+
+  // -------------------------
+  // RESIZE
+  // -------------------------
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  // -------------------------
+  // MOUSE
+  // -------------------------
+  canvas.addEventListener('mousemove', (e) => {
+    const r = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - r.left;
+    mouse.y = e.clientY - r.top;
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    mouse.x = -999;
+    mouse.y = -999;
+  });
+
+  // -------------------------
+  // UTILS
+  // -------------------------
+  function rand(a, b) {
+    return a + Math.random() * (b - a);
+  }
+
+  // -------------------------
+  // SHAPES
+  // -------------------------
+  function drawTriangle(x, y, size, angle, alpha) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.moveTo(0, -size);
+    ctx.lineTo(size * 0.866, size * 0.5);
+    ctx.lineTo(-size * 0.866, size * 0.5);
+    ctx.closePath();
+    ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawSquare(x, y, size, angle, alpha) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.rect(-size / 2, -size / 2, size, size);
+    ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // -------------------------
+  // PARTICLE CLASS
+  // -------------------------
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+
+    reset() {
+      this.x = rand(0, W);
+      this.y = rand(0, H);
+      this.size = rand(3, 9);
+      this.vx = rand(-0.9, 0.9);
+      this.vy = rand(-0.9, 0.9);
+      this.angle = rand(0, Math.PI * 2);
+      this.va = rand(-0.015, 0.015);
+      this.alpha = rand(0.25, 0.9);
+      this.shape = Math.random() < 0.5 ? 'tri' : 'sq';
+      this.ax = rand(-0.005, 0.005);
+      this.ay = rand(-0.005, 0.005);
+    }
+
+    update() {
+      const dx = this.x - mouse.x;
+      const dy = this.y - mouse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const rep = 100;
+
+      // mouse repel
+      if (dist < rep && dist > 0) {
+        const f = (rep - dist) / rep * 1.5;
+        this.vx += (dx / dist) * f * 0.5;
+        this.vy += (dy / dist) * f * 0.5;
+      }
+
+      this.vx += this.ax;
+      this.vy += this.ay;
+
+      // speed limit
+      const spd = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+      if (spd > 2.5) {
+        this.vx = (this.vx / spd) * 2.5;
+        this.vy = (this.vy / spd) * 2.5;
+      }
+
+      // friction
+      this.vx *= 0.995;
+      this.vy *= 0.995;
+
+      this.x += this.vx;
+      this.y += this.vy;
+      this.angle += this.va;
+
+      // wrap edges
+      if (this.x < -20) this.x = W + 20;
+      if (this.x > W + 20) this.x = -20;
+      if (this.y < -20) this.y = H + 20;
+      if (this.y > H + 20) this.y = -20;
+    }
+
+    draw() {
+      if (this.shape === 'tri') {
+        drawTriangle(this.x, this.y, this.size, this.angle, this.alpha);
+      } else {
+        drawSquare(this.x, this.y, this.size, this.angle, this.alpha);
+      }
+    }
+  }
+
+  // -------------------------
+  // INIT PARTICLES
+  // -------------------------
+  const COUNT = 120;
+  for (let i = 0; i < COUNT; i++) {
+    particles.push(new Particle());
+  }
+
+  // -------------------------
+  // CONNECTIONS
+  // -------------------------
+  function drawConnections() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+
+        if (d < 110) {
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(255,255,255,${(1 - d / 110) * 0.15})`;
+          ctx.lineWidth = 0.4;
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  // -------------------------
+  // LOOP
+  // -------------------------
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+
+    drawConnections();
+
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update();
+      particles[i].draw();
+    }
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+
+});

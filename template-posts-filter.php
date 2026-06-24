@@ -32,7 +32,8 @@ get_header();
     </div>
 
     <div>
-        <span class="absolute top-0 left-0 z-[-1]">
+
+        <!-- <span class="absolute top-0 left-0 z-[-1]">
             <svg width="287" height="254" viewBox="0 0 287 254" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path opacity="0.1" d="M286.5 0.5L-14.5 254.5V69.5L286.5 0.5Z" fill="url(#paint0_linear_111:578)" />
                 <defs>
@@ -42,8 +43,9 @@ get_header();
                     </linearGradient>
                 </defs>
             </svg>
-        </span>
-        <span class="absolute right-0 top-0 z-[-1]">
+        </span> -->
+
+        <!-- <span class="absolute right-0 top-0 z-[-1]">
             <svg width="628" height="258" viewBox="0 0 628 258" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path opacity="0.1" d="M669.125 257.002L345.875 31.9983L524.571 -15.8832L669.125 257.002Z" fill="url(#paint0_linear_0:1)" />
                 <path opacity="0.1" d="M0.0716344 182.78L101.988 -15.0769L142.154 81.4093L0.0716344 182.78Z" fill="url(#paint1_linear_0:1)" />
@@ -58,7 +60,10 @@ get_header();
                     </linearGradient>
                 </defs>
             </svg>
-        </span>
+        </span> -->
+
+        <div class="hero"><canvas id="c"></canvas></div>
+
     </div>
 </section>
 <!-- ====== Page Title Section End -->

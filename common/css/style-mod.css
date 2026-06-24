@@ -922,3 +922,31 @@ html body #rs-post-audio-player-container .plyr {
 .section-margin-top {
   margin-top: 100px;
 }
+
+
+#home {
+  /* border: 1px solid red; */
+  background-image: url("http://localhost:8081/wp-content/uploads/2026/04/front-1-page-top-section-2.png");
+  background-size: cover;
+  /* растягивает на весь блок */
+  background-position: center;
+  /* центрирует изображение */
+  background-repeat: no-repeat;
+  /* убирает повтор */
+}
+
+.hero {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* background: #000; */
+  cursor: crosshair;
+
+}

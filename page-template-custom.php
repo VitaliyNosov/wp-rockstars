@@ -36,7 +36,7 @@ $rock_stars_hero_btn2_url  = carbon_get_post_meta( get_the_ID(), 'hero_button2_u
       <div class="mx-auto max-w-[570px] text-center wow fadeInUp" data-wow-delay=".2s">
 
         <?php if ( $rock_stars_hero_title ) : ?>
-          <h1 class="text-black dark:text-white font-bold text-3xl sm:text-4xl md:text-5xl leading-tight sm:leading-tight md:leading-tight mb-5">
+          <h1 class="text-black dark:text-white font-bold text-3xl sm:text-4xl md:text-5xl leading-tight sm:leading-tight md:leading-tight mb-5 typed-heading">
             <?php echo esc_html( $rock_stars_hero_title ); ?>
           </h1>
         <?php endif; ?>
@@ -69,8 +69,9 @@ $rock_stars_hero_btn2_url  = carbon_get_post_meta( get_the_ID(), 'hero_button2_u
 </div>
 
 
-    <div class="absolute top-0 right-0 z-[-1]">
-      <svg width="450" height="556" viewBox="0 0 450 556" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <div class="absolute top-0 right-0 z-[-1] top-right">
+
+      <!-- <svg width="450" height="556" viewBox="0 0 450 556" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="277" cy="63" r="225" fill="url(#paint0_linear_25:217)" />
         <circle cx="17.9997" cy="182" r="18" fill="url(#paint1_radial_25:217)" />
         <circle cx="76.9997" cy="288" r="34" fill="url(#paint2_radial_25:217)" />
@@ -118,10 +119,12 @@ $rock_stars_hero_btn2_url  = carbon_get_post_meta( get_the_ID(), 'hero_button2_u
             <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
           </linearGradient>
         </defs>
-      </svg>
+      </svg> -->
+
     </div>
-    <div class="absolute bottom-0 left-0 z-[-1]">
-      <svg width="364" height="201" viewBox="0 0 364 201" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <div class="absolute bottom-0 left-0 z-[-1] bottom-left">
+
+      <!-- <svg width="364" height="201" viewBox="0 0 364 201" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M5.88928 72.3303C33.6599 66.4798 101.397 64.9086 150.178 105.427C211.155 156.076 229.59 162.093 264.333 166.607C299.076 171.12 337.718 183.657 362.889 212.24"
           stroke="url(#paint0_linear_25:218)" />
@@ -169,7 +172,8 @@ $rock_stars_hero_btn2_url  = carbon_get_post_meta( get_the_ID(), 'hero_button2_u
             <stop offset="1" stop-color="white" stop-opacity="0.08" />
           </radialGradient>
         </defs>
-      </svg>
+      </svg> -->
+
     </div>
 </section>
 
@@ -684,6 +688,7 @@ $rock_stars_pricing_plans               = carbon_get_theme_option( 'pricing_plan
                             
                             <!-- Декоративный элемент -->
                             <div class="absolute bottom-0 right-0 z-[-1]">
+
                                 <svg width="179" height="158" viewBox="0 0 179 158" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.5" d="M75.0002 63.256C115.229 82.3657 136.011 137.496 141.374 162.673C150.063 203.47 207.217 197.755 202.419 167.738C195.393 123.781 137.273 90.3579 75.0002 63.256Z" fill="url(#paint0_linear_70:153)" />
                                     <path opacity="0.3" d="M178.255 0.150879C129.388 56.5969 134.648 155.224 143.387 197.482C157.547 265.958 65.9705 295.709 53.1024 246.401C34.2588 174.197 100.939 83.7223 178.255 0.150879Z" fill="url(#paint1_linear_70:153)" />
@@ -698,6 +703,7 @@ $rock_stars_pricing_plans               = carbon_get_theme_option( 'pricing_plan
                                         </linearGradient>
                                     </defs>
                                 </svg>
+
                             </div>
                         </div>
                     </div>
@@ -710,7 +716,9 @@ $rock_stars_pricing_plans               = carbon_get_theme_option( 'pricing_plan
 
     <!-- Декоративный элемент слева внизу -->
     <div class="absolute left-0 bottom-0 z-[-1]">
-        <svg width="239" height="601" viewBox="0 0 239 601" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img src="<?php echo get_template_directory_uri(); ?>/images/front-bg-prace-block.png" alt="">
+
+        <!-- <svg width="239" height="601" viewBox="0 0 239 601" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect opacity="0.3" x="-184.451" y="600.973" width="196" height="541.607" rx="2" transform="rotate(-128.7 -184.451 600.973)" fill="url(#paint0_linear_93:235)" />
             <rect opacity="0.3" x="-188.201" y="385.272" width="59.7544" height="541.607" rx="2" transform="rotate(-128.7 -188.201 385.272)" fill="url(#paint1_linear_93:235)" />
             <defs>
@@ -723,7 +731,8 @@ $rock_stars_pricing_plans               = carbon_get_theme_option( 'pricing_plan
                     <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
                 </linearGradient>
             </defs>
-        </svg>
+        </svg> -->
+
     </div>
 </section>
 
