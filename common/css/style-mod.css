@@ -950,3 +950,7 @@ canvas {
   cursor: crosshair;
 
 }
+
+.max-w-\[770px\] {
+  max-width: 1200px !important;
+}
