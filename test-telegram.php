@@ -3,7 +3,7 @@
  * Test Telegram Bot Integration
  * 
  * This file tests if Telegram API is working correctly.
- * Open this file in browser: http://localhost:8081/wp-content/themes/rock-stars/test-telegram.php
+ * Open this file in browser: http://localhost:8080/wp-content/themes/rock-stars/test-telegram.php
  */
 
 // Telegram bot credentials

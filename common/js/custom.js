@@ -684,3 +684,101 @@ document.addEventListener('DOMContentLoaded', () => {
   loop();
 
 });
+
+
+
+console.log("test dev");
+
+// added video hero block
+
+(function () {
+  function initHeroVideo() {
+    const hero = document.querySelector('#home');
+
+    if (!hero) {
+      console.error('Hero video: element #home not found.');
+      return;
+    }
+
+    if (hero.querySelector('.hero-background-video')) return;
+
+    const video = document.createElement('video');
+
+    video.className = 'hero-background-video';
+    video.setAttribute('autoplay', '');
+    video.setAttribute('muted', '');
+    video.setAttribute('loop', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('aria-hidden', 'true');
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.loop = true;
+    video.autoplay = true;
+    video.playsInline = true;
+    video.preload = 'auto';
+
+    // Относительный путь внутри WordPress
+    video.src = '/wp-content/uploads/2026/10/hero.mp4';
+
+    // Все стили задаются непосредственно через JS
+    Object.assign(hero.style, {
+      position: getComputedStyle(hero).position === 'static'
+        ? 'relative'
+        : getComputedStyle(hero).position,
+      overflow: 'hidden'
+    });
+
+    Object.assign(video.style, {
+      position: 'absolute',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      objectPosition: 'center',
+      zIndex: '0',
+      pointerEvents: 'none'
+    });
+
+    // Видео первым элементом секции
+    hero.prepend(video);
+
+    // Контент секции выше видео
+    Array.from(hero.children).forEach(function (child) {
+      if (child === video) return;
+
+      if (getComputedStyle(child).position === 'static') {
+        child.style.position = 'relative';
+      }
+
+      child.style.zIndex = '1';
+    });
+
+    video.addEventListener('error', function () {
+      console.error(
+        'Hero video failed to load:',
+        video.currentSrc,
+        'Error code:',
+        video.error ? video.error.code : 'unknown'
+      );
+    });
+
+    video.addEventListener('canplay', function () {
+      video.play().catch(function (error) {
+        console.error('Hero video autoplay failed:', error);
+      });
+    }, { once: true });
+
+    // Запасной запуск
+    video.play().catch(function () {});
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeroVideo);
+  } else {
+    initHeroVideo();
+  }
+})();
+
+

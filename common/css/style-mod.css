@@ -926,7 +926,7 @@ html body #rs-post-audio-player-container .plyr {
 
 #home {
   /* border: 1px solid red; */
-  background-image: url("http://localhost:8081/wp-content/uploads/2026/04/front-1-page-top-section-2.png");
+  /* background-image: url("http://localhost:8080/wp-content/uploads/2026/04/front-1-page-top-section-2.png"); */
   background-size: cover;
   /* растягивает на весь блок */
   background-position: center;

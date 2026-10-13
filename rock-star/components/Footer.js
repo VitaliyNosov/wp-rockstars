@@ -57,8 +57,8 @@ const Footer = () => {
                         <div className="w-full md:w-1/2 lg:w-4/12 xl:w-5/12 px-4">
                             <div className="mb-16 max-w-[360px]">
                                 <a href="/" className="inline-block mb-8">
-                                    <img src="http://localhost:8081/wp-content/uploads/2025/06/logo-2.svg" alt="logo" className="w-full dark:hidden" />
-                                    <img src="http://localhost:8081/wp-content/uploads/2025/06/logo.svg" alt="logo" className="w-full hidden dark:block" />
+                                    <img src="http://localhost:8080/wp-content/uploads/2025/06/logo-2.svg" alt="logo" className="w-full dark:hidden" />
+                                    <img src="http://localhost:8080/wp-content/uploads/2025/06/logo.svg" alt="logo" className="w-full hidden dark:block" />
                                 </a>
                                 <p className="text-body-color text-base font-medium leading-relaxed mb-9">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lobortis.

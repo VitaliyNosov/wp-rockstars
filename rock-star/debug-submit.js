@@ -1,7 +1,7 @@
 
 // Using native fetch (Node 18+)
 
-const API_URL = 'http://localhost:8081/graphql';
+const API_URL = 'http://localhost:8080/graphql';
 
 const GET_SETTINGS_QUERY = `
 query GetQuizSettings {

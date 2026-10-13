@@ -34,7 +34,7 @@ const SectionEight = ({ data }) => {
             }
 
             // Using absolute URL for localhost environment
-            const ajaxUrl = 'http://localhost:8081/wp-admin/admin-ajax.php';
+            const ajaxUrl = 'http://localhost:8080/wp-admin/admin-ajax.php';
 
             const response = await fetch(ajaxUrl, {
                 method: 'POST',

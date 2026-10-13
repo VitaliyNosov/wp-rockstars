@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8081/graphql';
+const API_URL = 'http://localhost:8080/graphql';
 
 // 1. Query Chat Status (Online/Offline)
 const GET_CHAT_STATUS = `
